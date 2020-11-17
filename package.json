@@ -17,6 +17,7 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
+    "prettier": "npx prettier -c -w .",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -51,6 +52,7 @@
     "@storybook/preset-create-react-app": "^3.1.5",
     "@storybook/react": "^6.0.28",
     "babel-loader": "^8.2.1",
+    "prettier": "^2.1.2",
     "react-is": "^17.0.1"
   }
 }
