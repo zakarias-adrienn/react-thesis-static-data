@@ -1,18 +1,17 @@
-// MyTable.stories.tsx
 
 import React, { ComponentProps } from 'react';
 import { Story } from '@storybook/react/types-6-0';
 
-import MyTable from '../modules/thesis/components/MyTable';
+import CheckBoxSubject from './CheckBoxSubject'
 
 // This default export determines where your story goes in the story list
 export default {
-  title: 'Table',
-  component: MyTable,
+  title: 'CheckBoxSubject',
+  component: CheckBoxSubject,
 };
 
-const Template: Story<ComponentProps<typeof MyTable>> = (args) => (
-  <MyTable {...args} />
+const Template: Story<ComponentProps<typeof CheckBoxSubject>> = (args) => (
+  <CheckBoxSubject {...args} />
 );
 
 export const FirstStory = Template.bind({});
