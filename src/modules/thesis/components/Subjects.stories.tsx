@@ -1,17 +1,15 @@
-
 import React, { ComponentProps } from 'react';
-import { Story } from '@storybook/react/types-6-0';
 
-import CheckBoxSubject from './CheckBoxSubject'
+import Subjects from './Subjects';
 
 // This default export determines where your story goes in the story list
 export default {
-  title: 'CheckBoxSubject',
-  component: CheckBoxSubject,
+  title: 'SearchPage/SubjectsStory',
+  component: Subjects,
 };
 
-const Template: Story<ComponentProps<typeof CheckBoxSubject>> = (args) => (
-  <CheckBoxSubject {...args} />
+const Template = (args) => (
+  <Subjects {...args} />
 );
 
 export const FirstStory = Template.bind({});

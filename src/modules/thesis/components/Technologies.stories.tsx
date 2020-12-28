@@ -1,18 +1,15 @@
-// MyHello.stories.tsx
-
 import React, { ComponentProps } from 'react';
-import { Story } from '@storybook/react/types-6-0';
 
-import MyHello from './MyHello';
+import Technologies from './Technologies';
 
 // This default export determines where your story goes in the story list
 export default {
-  title: 'Hello-h1',
-  component: MyHello,
+  title: 'SearchPage/TechnologiesStory',
+  component: Technologies,
 };
 
-const Template: Story<ComponentProps<typeof MyHello>> = (args) => (
-  <MyHello {...args} />
+const Template = (args) => (
+  <Technologies {...args} />
 );
 
 export const FirstStory = Template.bind({});

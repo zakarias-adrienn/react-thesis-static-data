@@ -1,17 +1,15 @@
-
 import React, { ComponentProps } from 'react';
-import { Story } from '@storybook/react/types-6-0';
 
-import DropdownTeacher from './DropdownTeacher';
+import Button from './Button';
 
 // This default export determines where your story goes in the story list
 export default {
-  title: 'DropdownTeacher',
-  component: DropdownTeacher,
+  title: 'SearchPage/ButtonStory',
+  component: Button,
 };
 
-const Template: Story<ComponentProps<typeof DropdownTeacher>> = (args) => (
-  <DropdownTeacher {...args} />
+const Template = (args) => (
+  <Button {...args} />
 );
 
 export const FirstStory = Template.bind({});

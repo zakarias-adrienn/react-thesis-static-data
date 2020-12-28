@@ -1,16 +1,14 @@
-import React, { ComponentProps } from 'react';
+import React, { ComponentProps } from "react";
 
-import SearchPage from './SearchPage';
+import CreateThesis from "./CreateThesis";
 
 // This default export determines where your story goes in the story list
 export default {
-  title: 'SearchPage/SearchPage',
-  component: SearchPage,
+  title: "CreateThesis/CreateThesisStrory",
+  component: CreateThesis
 };
 
-const Template = (args) => (
-  <SearchPage {...args} />
-);
+const Template = (args) => <CreateThesis {...args} />;
 
 export const FirstStory = Template.bind({});
 FirstStory.args = {

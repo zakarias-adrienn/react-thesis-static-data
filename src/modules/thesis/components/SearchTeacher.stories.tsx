@@ -1,15 +1,15 @@
-import React, { ComponentProps } from 'react';
+import React from 'react';
 
-import SearchPage from './SearchPage';
+import SearchTeacher from './SearchTeacher';
 
 // This default export determines where your story goes in the story list
 export default {
-  title: 'SearchPage/SearchPage',
-  component: SearchPage,
+  title: 'SearchPage/SearchTeacherStory',
+  component: SearchTeacher,
 };
 
 const Template = (args) => (
-  <SearchPage {...args} />
+  <SearchTeacher {...args} />
 );
 
 export const FirstStory = Template.bind({});

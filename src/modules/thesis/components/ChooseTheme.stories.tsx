@@ -1,15 +1,15 @@
 import React, { ComponentProps } from 'react';
 
-import SearchPage from './SearchPage';
+import ChooseTheme from './ChooseTheme';
 
 // This default export determines where your story goes in the story list
 export default {
-  title: 'SearchPage/SearchPage',
-  component: SearchPage,
+  title: 'SearchPage/ChooseThemeStory',
+  component: ChooseTheme,
 };
 
 const Template = (args) => (
-  <SearchPage {...args} />
+  <ChooseTheme {...args} />
 );
 
 export const FirstStory = Template.bind({});
