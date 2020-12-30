@@ -6,24 +6,26 @@ import Technologies from './Technologies';
 import ChooseTheme from './ChooseTheme';
 import SearchTeacher from './SearchTeacher';
 import SearchByTitle from './SearchByTitle';
+import 'office-ui-fabric-react/dist/css/fabric.css';
 
 const SearchPage = () => (
+  <React.StrictMode>
       <div className="ms-Grid" dir="ltr">
           <div className="ms-Grid-row">
-              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">
+              <div className="ms-Grid-col ms-sm6">
                 <SearchByTitle></SearchByTitle>
                 <ChooseTheme></ChooseTheme>
                 <SearchTeacher></SearchTeacher>
               </div>
-              <div className="ms-Grid-col ms-sm6 ms-md4 ms-lg2">
+              <div className="ms-Grid-col ms-sm6">
                 <Subjects></Subjects>
                 <Technologies></Technologies>
               </div>
-              <br/>
-              <Button></Button>
           </div>
+          <br/>
+          <Button></Button>
       </div>
-
+  </React.StrictMode>
 );
 
 export default SearchPage;

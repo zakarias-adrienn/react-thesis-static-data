@@ -44,14 +44,14 @@ const CreateThesis: React.FunctionComponent = () => {
             label="Tantárgyak"
             multiSelect
             options={options}
-            styles={dropdownStyles}
+            //styles={dropdownStyles}
           />
           <Dropdown
             placeholder="Válassza ki a kapcsolódó technológiákat..."
             label="Technológiák"
             multiSelect
             options={options2}
-            styles={dropdownStyles}
+            //styles={dropdownStyles}
           />
           <PrimaryButton text="Keresés" onClick={_alertClicked} allowDisabledFocus />
       </Stack>
