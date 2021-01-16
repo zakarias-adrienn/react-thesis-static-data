@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { ComponentProps } from 'react';
 
-import UserThemes from './UserThemes';
+import ChooseLanguage from './ChooseLanguage';
 
 // This default export determines where your story goes in the story list
 export default {
-  title: 'StudentData/UserThemesStory',
-  component: UserThemes,
+  title: 'SearchPage/ChooseLanguageStory',
+  component: ChooseLanguage,
 };
 
 const Template = (args) => (
-  <UserThemes {...args} />
+  <ChooseLanguage {...args} />
 );
 
 export const FirstStory = Template.bind({});

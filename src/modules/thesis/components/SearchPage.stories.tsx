@@ -4,7 +4,7 @@ import SearchPage from './SearchPage';
 
 // This default export determines where your story goes in the story list
 export default {
-  title: 'SearchPage/SearchPage',
+  title: 'SearchPageFull/SearchPage',
   component: SearchPage,
 };
 

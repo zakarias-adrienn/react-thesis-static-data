@@ -10,6 +10,7 @@ import { initializeIcons } from '@uifabric/icons';
 
 initializeIcons();
 
+// abc szerinti rendezés itt?
 const comboBoxBasicOptions: IComboBoxOption[] = [
     { key: 'ADATTUDOMÁNYI ÉS ADATTECHNOLÓGIAI TANSZÉK', text: 'ADATTUDOMÁNYI ÉS ADATTECHNOLÓGIAI TANSZÉK', itemType: SelectableOptionMenuItemType.Header },
     { key: 'Dr. Horváth Tamás', text: 'Dr. Horváth Tamás' },
@@ -18,6 +19,8 @@ const comboBoxBasicOptions: IComboBoxOption[] = [
     { key: 'Dr. Csuhaj Varjú Erzsébet', text: 'Dr. Csuhaj Varjú Erzsébet' },
     { key: 'Vadász Péter', text: 'Vadász Péter' }
 ];
+
+
 
 const comboBoxMultiStyle = { maxWidth: 300, display: 'block', marginTop: '10px' };
 const comboBoxMultiStyle2 = { maxWidth: 300, display: 'block', marginTop: '10px' };
@@ -30,7 +33,6 @@ const SearchTeacher: React.FC = () => {
     <div>
       <ComboBox
         componentRef={comboBoxRef}
-        defaultSelectedKey="C"
         label="Tanár választása"
         allowFreeform
         autoComplete="on"

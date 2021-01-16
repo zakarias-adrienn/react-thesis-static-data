@@ -6,13 +6,15 @@ const dropdownStyles: Partial<IDropdownStyles> = {
   dropdown: { width: 300 },
 };
 
-const options: IDropdownOption[] = [
+let options: IDropdownOption[] = [
   { key: 'Webprogramozás', text: 'Webprogramozás' },
   { key: 'Mesterséges intelligencia', text: 'Mesterséges intelligencia' },
   { key: 'Telekommunikációs hálózatok', text: 'Telekommunikációs hálózatok' },
   { key: 'Konkurens programozás', text: 'Konkurens programozás' },
   { key: 'Algoritmusok és adatszerkezetek 1', text: 'Algoritmusok és adatszerkezetek 1' },
 ];
+
+options = options.sort((a, b) => (a.key > b.key) ? 1 : -1);
 
 const stackTokens: IStackTokens = { childrenGap: 20 };
 

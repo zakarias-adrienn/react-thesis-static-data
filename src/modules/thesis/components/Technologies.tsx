@@ -7,7 +7,7 @@ const dropdownStyles: Partial<IDropdownStyles> = {
   dropdown: { width: 300 },
 };
 
-const options: IDropdownOption[] = [
+let options: IDropdownOption[] = [
   { key: 'JAVA', text: 'JAVA' },
   { key: 'C++', text: 'C++' },
   { key: 'HTML5', text: 'HTML5' },
@@ -15,6 +15,8 @@ const options: IDropdownOption[] = [
   { key: 'Javascript', text: 'Javascript' },
   { key: 'React', text: 'React' },
 ];
+
+options = options.sort((a, b) => (a.key > b.key) ? 1 : -1);
 
 const stackTokens: IStackTokens = { childrenGap: 20 };
 

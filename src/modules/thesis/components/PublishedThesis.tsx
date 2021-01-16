@@ -18,7 +18,6 @@ const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: '300px' }
 export interface IDetailsListBasicExampleItem {
   key: string;
   title: string;
-  teacher: string;
   semester: string;
   technologies: string,
   subjects: string,
@@ -31,7 +30,7 @@ export interface IDetailsListBasicExampleState {
   selectionDetails: string;
 }
 
-class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
+class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState> {
   private _selection: Selection;
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
@@ -48,32 +47,29 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
     this._allItems.push({
         key: 'Garbage Collector működése Javában',
         title: 'Garbage Collector működése Javában',
-        teacher: 'Kozsik Tamás',
         semester: '2020/21-ősz',
         technologies: 'Java',
         subjects: 'Programozási nyelvek - Java',
         places: 2,
-        view:  <DefaultButton text="Megnézem" />
+        view:  <DefaultButton text="Szerkesztés" />
     });
     this._allItems.push({
         key: 'Youniversity',
         title: 'Youniversity',
-        teacher: 'Visnovitz Márton',
         semester: '2020/21-tavasz',
         technologies: 'React, Javascript',
         subjects: 'Webprogramozás, Kliensoldali webprogramozás',
         places: 4,
-        view: <DefaultButton text="Megnézem" />
+        view: <DefaultButton text="Szerkesztés" />
     });
 
     this._columns = [
       { key: 'column1', name: 'Cím', fieldName: 'title', minWidth: 20, maxWidth: 100, isResizable: true },
-      { key: 'column2', name: 'Tanár', fieldName: 'teacher', minWidth: 20, maxWidth: 100, isResizable: true },
       { key: 'column3', name: 'Félév', fieldName: 'semester', minWidth: 10, maxWidth: 100, isResizable: true },
       { key: 'column4', name: 'Technológiák', fieldName: 'technologies', minWidth: 30, maxWidth: 100, isResizable: true },
       { key: 'column5', name: 'Tantárgyak', fieldName: 'subjects', minWidth: 30, maxWidth: 200, isResizable: true },
-      { key: 'column6', name: 'Helyszám', fieldName: 'places', minWidth: 10, maxWidth: 10, isResizable: true },
-      { key: 'column7', name: 'Megtekintés', fieldName: 'view', minWidth: 30, maxWidth: 200, isResizable: true },
+      { key: 'column6', name: 'Helyszám', fieldName: 'places', minWidth: 10, maxWidth: 90, isResizable: true },
+      { key: 'column7', name: 'Szerkesztés', fieldName: 'view', minWidth: 30, maxWidth: 200, isResizable: true },
     ];
 
     this.state = {
@@ -139,4 +135,4 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
   };
 }
 
-export default SearchResult;
+export default PublishedThesis;

@@ -4,7 +4,7 @@ import CreateThesis from "./CreateThesis";
 
 // This default export determines where your story goes in the story list
 export default {
-  title: "CreateThesis/CreateThesisStrory",
+  title: "Teacher/CreateThesisStrory",
   component: CreateThesis
 };
 

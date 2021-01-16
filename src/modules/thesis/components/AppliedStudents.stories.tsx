@@ -1,16 +1,14 @@
-import React from 'react';
+import React from "react";
 
-import UserThemes from './UserThemes';
+import AppliedStudents from "./AppliedStudents";
 
 // This default export determines where your story goes in the story list
 export default {
-  title: 'StudentData/UserThemesStory',
-  component: UserThemes,
+  title: "Teacher/AppliedStudents",
+  component: AppliedStudents
 };
 
-const Template = (args) => (
-  <UserThemes {...args} />
-);
+const Template = (args) => <AppliedStudents {...args} />;
 
 export const FirstStory = Template.bind({});
 FirstStory.args = {

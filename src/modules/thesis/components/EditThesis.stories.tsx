@@ -1,16 +1,14 @@
-import React from 'react';
+import React, { ComponentProps } from "react";
 
-import UserThemes from './UserThemes';
+import EditThesis from "./EditThesis";
 
 // This default export determines where your story goes in the story list
 export default {
-  title: 'StudentData/UserThemesStory',
-  component: UserThemes,
+  title: "Teacher/EditThesisStory",
+  component: EditThesis
 };
 
-const Template = (args) => (
-  <UserThemes {...args} />
-);
+const Template = (args) => <EditThesis {...args} />;
 
 export const FirstStory = Template.bind({});
 FirstStory.args = {

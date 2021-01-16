@@ -1,15 +1,15 @@
 import React from 'react';
 
-import UserThemes from './UserThemes';
+import SeeTheme from './SeeTheme';
 
 // This default export determines where your story goes in the story list
 export default {
-  title: 'StudentData/UserThemesStory',
-  component: UserThemes,
+  title: 'SearchPage/SeeThemeStory',
+  component: SeeTheme,
 };
 
 const Template = (args) => (
-  <UserThemes {...args} />
+  <SeeTheme {...args} />
 );
 
 export const FirstStory = Template.bind({});
