@@ -7,6 +7,7 @@ import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
 import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { DefaultButton, PrimaryButton, Stack, IStackTokens } from 'office-ui-fabric-react';
+import { IconButton } from '@fluentui/react/lib/Button';
 
 const exampleChildClass = mergeStyles({
   display: 'block',
@@ -46,8 +47,8 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
         key: 'Garbage Collector működése Javában',
         title: 'Garbage Collector működése Javában',
         name: 'Zakariás Adrienn',
-        accept: <DefaultButton style={{ backgroundColor: '#73DA2A' }} text="Elfogad" />,
-        deny:  <DefaultButton style={{ backgroundColor: '#ff4d4d' }} text="Elutasít" />
+        accept: <IconButton iconProps={{ iconName: 'Accept' }} title="Elfogad" ariaLabel="Elfogad" />,
+        deny:  <IconButton iconProps={{ iconName: 'Clear' }} title="Elutasít" ariaLabel="Elutasít" />,
     });
     this._allItems.push({
         key: 'Youniversity',

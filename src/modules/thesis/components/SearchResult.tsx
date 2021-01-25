@@ -7,6 +7,7 @@ import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
 import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { DefaultButton, PrimaryButton, Stack, IStackTokens } from 'office-ui-fabric-react';
+import { IconButton } from '@fluentui/react/lib/Button';
 
 const exampleChildClass = mergeStyles({
   display: 'block',
@@ -53,7 +54,7 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
         technologies: 'Java',
         subjects: 'Programozási nyelvek - Java',
         places: 2,
-        view:  <DefaultButton text="Megnézem" />
+        view:  <IconButton iconProps={{ iconName: 'RedEye' }} title="Megtekint" ariaLabel="Megtekint" />
     });
     this._allItems.push({
         key: 'Youniversity',
@@ -63,7 +64,7 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
         technologies: 'React, Javascript',
         subjects: 'Webprogramozás, Kliensoldali webprogramozás',
         places: 4,
-        view: <DefaultButton text="Megnézem" />
+        view: <IconButton iconProps={{ iconName: 'RedEye' }} title="Megtekint" ariaLabel="Megtekint" />
     });
 
     this._columns = [

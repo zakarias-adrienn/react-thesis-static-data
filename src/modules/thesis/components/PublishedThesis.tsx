@@ -7,6 +7,7 @@ import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
 import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { DefaultButton, PrimaryButton, Stack, IStackTokens } from 'office-ui-fabric-react';
+import { IconButton } from '@fluentui/react/lib/Button';
 
 const exampleChildClass = mergeStyles({
   display: 'block',
@@ -51,7 +52,7 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
         technologies: 'Java',
         subjects: 'Programozási nyelvek - Java',
         places: 2,
-        view:  <DefaultButton text="Szerkesztés" />
+        view:  <IconButton iconProps={{ iconName: 'Edit' }} title="Szerkeszt" ariaLabel="Szerkeszt" />
     });
     this._allItems.push({
         key: 'Youniversity',
@@ -60,7 +61,7 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
         technologies: 'React, Javascript',
         subjects: 'Webprogramozás, Kliensoldali webprogramozás',
         places: 4,
-        view: <DefaultButton text="Szerkesztés" />
+        view: <IconButton iconProps={{ iconName: 'Edit' }} title="Szerkeszt" ariaLabel="Szerkeszt" />
     });
 
     this._columns = [
