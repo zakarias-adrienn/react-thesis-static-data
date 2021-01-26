@@ -26,11 +26,13 @@ const pickerSuggestionsProps: IBasePickerSuggestionsProps = {
   noResultsFoundText: 'Nincs találat',
 };
 
-const testTags: ITag[] = [
+let testTags: ITag[] = [
   'Visnovitz Márton',
   'Dr. Horváth Tamás',
   'Dr. Csuhaj Varjú Erzsébet'
 ].map(item => ({ key: item, name: item }));
+
+testTags = testTags.sort((a, b) => (a.key > b.key) ? 1 : -1);
 
 // érdekes algoritmus
 const withoutDrTags: ITag[] = testTags.map(function(item){
@@ -85,6 +87,11 @@ const filterSelectedTags = (filterText: string, tagList: ITag[]): ITag[] => {
  }
 };
 
+
+const returnMostRecentlyUsed = (currentPersonas: ITag[]): ITag[] | Promise<ITag[]> => {
+    return testTags;
+  };
+
 const getTextFromItem = (item: ITag) => item.name;
 
 const Teachers2: React.FunctionComponent = () => {
@@ -103,9 +110,11 @@ const Teachers2: React.FunctionComponent = () => {
     <div className={rootClass}>
       Tanárválasztó <br/>
       Kétszer nem engedi ugyanannak a tanárnak a kiválasztását.
+      Maximum 5 különböző tanár választható jelenleg.
       <TagPicker
         removeButtonAriaLabel="Remove"
         componentRef={picker}
+        onEmptyInputFocus={returnMostRecentlyUsed}
         onResolveSuggestions={filterSelectedTags}
         onItemSelected={onItemSelected}
         getTextFromItem={getTextFromItem}
@@ -113,6 +122,7 @@ const Teachers2: React.FunctionComponent = () => {
         itemLimit={5}
         disabled={tagPicker}
         inputProps={inputProps}
+        
       />
     </div>
   );
