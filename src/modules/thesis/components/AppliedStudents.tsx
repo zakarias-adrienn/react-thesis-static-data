@@ -8,7 +8,15 @@ import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { DefaultButton, PrimaryButton, Stack, IStackTokens } from 'office-ui-fabric-react';
 import { IconButton } from '@fluentui/react/lib/Button';
+import {
+  DetailsHeader,
+  IDetailsHeaderProps
+} from "office-ui-fabric-react/lib/components/DetailsList/DetailsHeader";
+import { ITooltipHostProps } from "office-ui-fabric-react/lib/Tooltip";
+import { DetailsRow, IDetailsRowStyles, IDetailsListProps } from 'office-ui-fabric-react/lib/DetailsList';
+// import { getTheme } from 'office-ui-fabric-react/lib/Styling';
 
+// const theme = getTheme();
 const exampleChildClass = mergeStyles({
   display: 'block',
   marginBottom: '10px',
@@ -41,6 +49,8 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
       onSelectionChanged: () => this.setState({ selectionDetails: this._getSelectionDetails() }),
     });
 
+    this.renderDetailsHeader = this.renderDetailsHeader.bind(this);
+
     // Populate with items for demos.
     this._allItems = [];
     this._allItems.push({
@@ -59,16 +69,50 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
     });
 
     this._columns = [
-      { key: 'column1', name: 'Cím', fieldName: 'title', minWidth: 20, maxWidth: 100, isResizable: true },
-      { key: 'column2', name: 'Hallgató', fieldName: 'name', minWidth: 10, maxWidth: 100, isResizable: true },
-      { key: 'column3', name: 'Elfogadás', fieldName: 'accept', minWidth: 10, maxWidth: 100, isResizable: true },
-      { key: 'column4', name: 'Elutasítás', fieldName: 'deny', minWidth: 10, maxWidth: 100, isResizable: true },
+      { key: 'column1', name: 'Cím', fieldName: 'title', minWidth: 200, maxWidth: 400, isResizable: true },
+      { key: 'column2', name: 'Hallgató', fieldName: 'name', minWidth: 50, maxWidth: 100, isResizable: true },
+      { key: 'column3', name: 'Elfogadás', fieldName: 'accept', minWidth: 50, maxWidth: 100, isResizable: true },
+      { key: 'column4', name: 'Elutasítás', fieldName: 'deny', minWidth: 50, maxWidth: 100, isResizable: true },
     ];
 
     this.state = {
       items: this._allItems,
       selectionDetails: this._getSelectionDetails(),
     };
+  }
+
+  private renderDetailsHeader(detailsHeaderProps: IDetailsHeaderProps) {
+    return (
+      <DetailsHeader
+        {...detailsHeaderProps}
+        onRenderColumnHeaderTooltip={this.renderCustomHeaderTooltip}
+      />
+    );
+  }
+
+  private renderRow: IDetailsListProps['onRenderRow'] = props => {
+    const customStyles: Partial<IDetailsRowStyles> = {};
+    if (props) {
+      customStyles.root = { textAlign: "center" };
+
+      return <DetailsRow {...props} styles={customStyles} />;
+    }
+    return null;
+  }
+
+  // így tudom stylingolni a headereket
+  private renderCustomHeaderTooltip(tooltipHostProps: ITooltipHostProps) {
+    return (
+      <span
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          fontSize: "12px",
+        }}
+      >
+        {tooltipHostProps.children}
+      </span>
+    );
   }
 
 
@@ -98,11 +142,15 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
             ariaLabelForSelectAllCheckbox="Toggle selection for all items"
             checkButtonAriaLabel="Row checkbox"
             onItemInvoked={this._onItemInvoked}
+            onRenderDetailsHeader={this.renderDetailsHeader}
+            onRenderRow={this.renderRow}
           />
         </MarqueeSelection>
       </Fabric>
     );
   }
+
+
 
   private _getSelectionDetails(): string {
     const selectionCount = this._selection.getSelectedCount();
