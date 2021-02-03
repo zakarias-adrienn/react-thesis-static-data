@@ -117,7 +117,7 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
         <TextField
           className={exampleChildClass}
           label="Cím szerinti szűrés:"
-          /*onChange={this._onFilter}*/
+          onChange={this._onFilter}
           styles={textFieldStyles}
         />
         <Announced message={`Number of items after filter applied: ${items.length}.`} />
@@ -157,11 +157,11 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
 
   private _onFilter = (
     ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-    text: string
+    text: string | undefined
   ): void => {
     this.setState({
       items: text
-        ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text) > -1)
+        ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text.toLowerCase()) > -1)
         : this._allItems
     });
   };

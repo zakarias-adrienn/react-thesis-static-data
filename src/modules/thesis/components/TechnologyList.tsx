@@ -7,6 +7,8 @@ import { TextField } from "office-ui-fabric-react/lib/TextField";
 import { createListItems, IExampleItem } from "@uifabric/example-data";
 import { mergeStyleSets, getTheme, normalize } from "office-ui-fabric-react/lib/Styling";
 import { useConst } from "@uifabric/react-hooks";
+import { Icon } from "office-ui-fabric-react/lib/Icon";
+import ConfirmDelete from "./ConfirmDelete";
 
 const evenItemHeight = 25;
 const oddItemHeight = 50;
@@ -27,13 +29,13 @@ const styles = mergeStyleSets({
     marginTop: 20,
     selectors: {
       ".ms-List-cell:nth-child(odd)": {
-        height: 30,
-        lineHeight: 30,
+        height: 40,
+        lineHeight: 40,
         background: theme.palette.neutralLighter
       },
       ".ms-List-cell:nth-child(even)": {
-        height: 25,
-        lineHeight: 25
+        height: 35,
+        lineHeight: 35
       }
     }
   },
@@ -45,9 +47,13 @@ const styles = mergeStyleSets({
       boxSizing: "border-box",
       display: "block",
       borderLeft: "3px solid " + theme.palette.themePrimary,
-      paddingLeft: 27
+      paddingLeft: 27,
+      clear: "both"
     }
-  ]
+  ],
+  right: {
+    float: "right"
+  }
 });
 
 const onRenderCell = (item: MyListItem | undefined, index: number | undefined): JSX.Element => {
@@ -56,6 +62,9 @@ const onRenderCell = (item: MyListItem | undefined, index: number | undefined): 
       <div className={styles.itemContent}>
         {index !== undefined ? index + 1 : undefined} &nbsp;{" "}
         {item !== undefined ? item.name : undefined}
+        <div className={styles.right}>
+          <ConfirmDelete text="technology"></ConfirmDelete>
+        </div>
       </div>
     </div>
   );

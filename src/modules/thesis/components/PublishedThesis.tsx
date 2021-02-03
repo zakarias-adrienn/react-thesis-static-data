@@ -14,6 +14,8 @@ import { Text } from "office-ui-fabric-react/lib/Text";
 import { DefaultButton, PrimaryButton, Stack, IStackTokens } from "office-ui-fabric-react";
 import { IconButton } from "@fluentui/react/lib/Button";
 import { useId, useBoolean } from "@uifabric/react-hooks";
+import { Link, BrowserRouter } from "react-router-dom";
+import ConfirmDelete from "./ConfirmDelete";
 
 const exampleChildClass = mergeStyles({
   display: "block",
@@ -59,8 +61,14 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
       technologies: "Java",
       subjects: "Programozási nyelvek - Java",
       places: 2,
-      view: <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />,
-      delete: <IconButton iconProps={{ iconName: "Delete" }} title="Töröl" ariaLabel="Töröl" />
+      view: (
+        <BrowserRouter>
+          <Link to="/editTopic/1">
+            <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
+          </Link>
+        </BrowserRouter>
+      ),
+      delete: <ConfirmDelete text="topic"></ConfirmDelete>
     });
     this._allItems.push({
       key: "Youniversity",
@@ -70,7 +78,7 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
       subjects: "Webprogramozás, Kliensoldali webprogramozás",
       places: 4,
       view: <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />,
-      delete: <IconButton iconProps={{ iconName: "Delete" }} title="Töröl" ariaLabel="Töröl" />
+      delete: <ConfirmDelete text="topic"></ConfirmDelete>
     });
 
     this._columns = [
@@ -148,7 +156,7 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
         <TextField
           className={exampleChildClass}
           label="Cím szerinti szűrés:"
-          /*onChange={this._onFilter}*/
+          onChange={this._onFilter}
           styles={textFieldStyles}
         />
         <Announced message={`Number of items after filter applied: ${items.length}.`} />
@@ -188,11 +196,11 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
 
   private _onFilter = (
     ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-    text: string
+    text: string | undefined
   ): void => {
     this.setState({
       items: text
-        ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text) > -1)
+        ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text.toLowerCase()) > -1)
         : this._allItems
     });
   };

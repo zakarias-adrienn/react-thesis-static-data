@@ -10,6 +10,7 @@ import MenuNavigate from "./modules/thesis/components/MenuNavigate";
 import PublishedThesis from "./modules/thesis/components/PublishedThesis";
 import UserThemes from "./modules/thesis/components/UserThemes";
 import AddNewTechnology from "./modules/thesis/components/AddNewTechnology";
+import EditThesis from "./modules/thesis/components/EditThesis";
 
 function App() {
   return (
@@ -45,6 +46,9 @@ function App() {
                 </Route>
                 <Route path="/addNewTechnology">
                   <AddNewTechnology />
+                </Route>
+                <Route path="/editTopic/1">
+                  <EditThesis />
                 </Route>
               </Switch>
             </div>

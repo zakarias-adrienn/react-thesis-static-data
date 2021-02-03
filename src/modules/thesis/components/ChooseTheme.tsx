@@ -10,7 +10,7 @@ const ChooseTheme: React.FunctionComponent = () => {
   return (
     <div>
       <p>Milyen témát keresel?</p>
-      <Stack tokens={stackTokens}>
+      <Stack tokens={stackTokens} id="chooseType">
         <Checkbox label="Szakdolgozati" /*onChange={_onChange}*/ />
         <Checkbox label="TDK" /*onChange={_onChange}*/ />
       </Stack>

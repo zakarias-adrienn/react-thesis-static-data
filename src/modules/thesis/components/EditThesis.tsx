@@ -46,7 +46,7 @@ const semesters: IChoiceGroupOption[] = [
 
 const columnProps: Partial<IStackProps> = {
   tokens: { childrenGap: 5 },
-  styles: { root: { width: 1000, alignItems: "center" as "center" } }
+  styles: { root: { width: 800, alignItems: "center" as "center" } }
 };
 
 const EditThesis: React.FunctionComponent = () => {
@@ -112,6 +112,7 @@ const EditThesis: React.FunctionComponent = () => {
             //styles={dropdownStyles}
           />
           <PrimaryButton text="Mentés" onClick={_alertClicked} allowDisabledFocus />
+          <br />
         </Stack>
       </Stack>
     </div>

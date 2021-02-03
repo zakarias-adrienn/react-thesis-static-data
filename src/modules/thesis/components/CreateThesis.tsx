@@ -100,6 +100,7 @@ const CreateThesis: React.FunctionComponent = () => {
             //styles={dropdownStyles}
           />
           <PrimaryButton text="Meghirdetés" onClick={_alertClicked} allowDisabledFocus />
+          <br />
         </Stack>
       </Stack>
     </div>

@@ -12,7 +12,8 @@ const Header: React.FunctionComponent = () => {
         height: "80px",
         backgroundColor: "#0078D7",
         color: "white",
-        fontSize: "30px"
+        fontSize: "30px",
+        marginTop: "0px"
       }}
     >
       Szakdolgozat és TDK témakereső modul

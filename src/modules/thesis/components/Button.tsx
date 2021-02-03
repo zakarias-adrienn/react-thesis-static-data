@@ -17,7 +17,8 @@ const Button: React.FunctionComponent<IButtonExampleProps> = (props) => {
     <Stack horizontal tokens={stackTokens}>
       <PrimaryButton
         text="Keresés"
-        onClick={_alertClicked}
+        // onClick={_alertClicked}
+        type="submit"
         allowDisabledFocus
         disabled={disabled}
         checked={checked}
