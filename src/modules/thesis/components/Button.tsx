@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { DefaultButton, PrimaryButton, Stack, IStackTokens } from 'office-ui-fabric-react';
+import * as React from "react";
+import { PrimaryButton, Stack, IStackTokens } from "office-ui-fabric-react";
 
 export interface IButtonExampleProps {
   // These are set based on the toggles shown above the examples (not needed in real code)
@@ -10,18 +10,24 @@ export interface IButtonExampleProps {
 // Example formatting
 const stackTokens: IStackTokens = { childrenGap: 40 };
 
-const Button: React.FunctionComponent<IButtonExampleProps> = props => {
+const Button: React.FunctionComponent<IButtonExampleProps> = (props) => {
   const { disabled, checked } = props;
 
   return (
     <Stack horizontal tokens={stackTokens}>
-      <PrimaryButton text="Keresés" onClick={_alertClicked} allowDisabledFocus disabled={disabled} checked={checked} />
+      <PrimaryButton
+        text="Keresés"
+        onClick={_alertClicked}
+        allowDisabledFocus
+        disabled={disabled}
+        checked={checked}
+      />
     </Stack>
   );
 };
 
 function _alertClicked(): void {
-  alert('Clicked');
+  alert("Clicked");
 }
 
 export default Button;

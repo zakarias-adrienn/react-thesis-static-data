@@ -1,3 +1,11 @@
 próba
 vscode próba
 vscode próba2
+
+data.ts
+---------
+
+const subjectSchema = 
+
+
+export default [];

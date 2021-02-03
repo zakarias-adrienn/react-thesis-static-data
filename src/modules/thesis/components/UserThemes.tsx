@@ -1,24 +1,31 @@
-import * as React from 'react';
-import { Announced } from 'office-ui-fabric-react/lib/Announced';
-import { TextField, ITextFieldStyles } from 'office-ui-fabric-react/lib/TextField';
-import { DetailsList, DetailsListLayoutMode, Selection, IColumn } from 'office-ui-fabric-react/lib/DetailsList';
-import { MarqueeSelection } from 'office-ui-fabric-react/lib/MarqueeSelection';
-import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
-import { mergeStyles } from 'office-ui-fabric-react/lib/Styling';
-import { Text } from 'office-ui-fabric-react/lib/Text';
+import * as React from "react";
+import { Announced } from "office-ui-fabric-react/lib/Announced";
+import { TextField, ITextFieldStyles } from "office-ui-fabric-react/lib/TextField";
+import {
+  DetailsList,
+  DetailsListLayoutMode,
+  Selection,
+  IColumn
+} from "office-ui-fabric-react/lib/DetailsList";
+import { MarqueeSelection } from "office-ui-fabric-react/lib/MarqueeSelection";
+import { Fabric } from "office-ui-fabric-react/lib/Fabric";
+import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
+import { Text } from "office-ui-fabric-react/lib/Text";
+import { IconButton } from "@fluentui/react/lib/Button";
 
 const exampleChildClass = mergeStyles({
-  display: 'block',
-  marginBottom: '10px',
+  display: "block",
+  marginBottom: "10px"
 });
 
-const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: '300px' } };
+const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "300px" } };
 
 export interface IDetailsListBasicExampleItem {
   key: string;
   title: string;
   teacher: string;
   status: string;
+  remove: any;
 }
 
 export interface IDetailsListBasicExampleState {
@@ -35,33 +42,68 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
     super(props);
 
     this._selection = new Selection({
-      onSelectionChanged: () => this.setState({ selectionDetails: this._getSelectionDetails() }),
+      onSelectionChanged: () => this.setState({ selectionDetails: this._getSelectionDetails() })
     });
 
     // Populate with items for demos.
     this._allItems = [];
     this._allItems.push({
-        key: 'Youniversity',
-        title: 'Youniversity',
-        teacher: 'Visnovitz Márton',
-        status: 'Elfogadva'
+      key: "Youniversity",
+      title: "Youniversity",
+      teacher: "Visnovitz Márton",
+      status: "Elfogadva",
+      remove: (
+        <IconButton iconProps={{ iconName: "Reply" }} title="Visszavonás" ariaLabel="Visszavonás" />
+      )
     });
     this._allItems.push({
-        key: 'TDK Dolgozat',
-        title: 'TDK Dolgozat',
-        teacher: 'Pusztai Kinga',
-        status: 'Függőben'
+      key: "TDK Dolgozat",
+      title: "TDK Dolgozat",
+      teacher: "Pusztai Kinga",
+      status: "Függőben",
+      remove: (
+        <IconButton iconProps={{ iconName: "Reply" }} title="Visszavonás" ariaLabel="Visszavonás" />
+      )
     });
 
     this._columns = [
-      { key: 'column1', name: 'Cím', fieldName: 'title', minWidth: 100, maxWidth: 200, isResizable: true },
-      { key: 'column2', name: 'Témavezető', fieldName: 'teacher', minWidth: 100, maxWidth: 200, isResizable: true },
-      { key: 'column3', name: 'Státusz', fieldName: 'status', minWidth: 100, maxWidth: 200, isResizable: true }
+      {
+        key: "column1",
+        name: "Cím",
+        fieldName: "title",
+        minWidth: 100,
+        maxWidth: 200,
+        isResizable: true
+      },
+      {
+        key: "column2",
+        name: "Témavezető",
+        fieldName: "teacher",
+        minWidth: 100,
+        maxWidth: 200,
+        isResizable: true
+      },
+      {
+        key: "column3",
+        name: "Státusz",
+        fieldName: "status",
+        minWidth: 100,
+        maxWidth: 200,
+        isResizable: true
+      },
+      {
+        key: "column4",
+        name: "Visszavonás",
+        fieldName: "remove",
+        minWidth: 100,
+        maxWidth: 200,
+        isResizable: true
+      }
     ];
 
     this.state = {
       items: this._allItems,
-      selectionDetails: this._getSelectionDetails(),
+      selectionDetails: this._getSelectionDetails()
     };
   }
 
@@ -75,7 +117,7 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
         <TextField
           className={exampleChildClass}
           label="Cím szerinti szűrés:"
-          onChange={this._onFilter}
+          /*onChange={this._onFilter}*/
           styles={textFieldStyles}
         />
         <Announced message={`Number of items after filter applied: ${items.length}.`} />
@@ -102,23 +144,31 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
 
     switch (selectionCount) {
       case 0:
-        return 'Nincs kiválasztva elem';
+        return "Nincs kiválasztva elem";
       case 1:
-        return '1 kiválasztott elem: ' + (this._selection.getSelection()[0] as IDetailsListBasicExampleItem).title;
+        return (
+          "1 kiválasztott elem: " +
+          (this._selection.getSelection()[0] as IDetailsListBasicExampleItem).title
+        );
       default:
         return `${selectionCount} darab elem kiválasztva`;
     }
   }
 
-  private _onFilter = (ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, text: string): void => {
+  private _onFilter = (
+    ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    text: string
+  ): void => {
     this.setState({
-      items: text ? this._allItems.filter(i => i.title.toLowerCase().indexOf(text) > -1) : this._allItems,
+      items: text
+        ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text) > -1)
+        : this._allItems
     });
   };
 
-//   private _onItemInvoked = (item: IDetailsListBasicExampleItem): void => {
-//     alert(`Item invoked: ${item.title}`);
-//   };
+  //   private _onItemInvoked = (item: IDetailsListBasicExampleItem): void => {
+  //     alert(`Item invoked: ${item.title}`);
+  //   };
 }
 
 export default UserThemes;

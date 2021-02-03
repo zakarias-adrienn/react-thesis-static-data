@@ -1,16 +1,14 @@
-import React from 'react';
+import React from "react";
 
-import SeeTheme from './SeeTheme';
+import Teachers2 from "../modules/thesis/components/Teachers2";
 
 // This default export determines where your story goes in the story list
 export default {
-  title: 'SearchPage/SeeThemeStory',
-  component: SeeTheme,
+  title: "SearchPage/Teachers2",
+  component: Teachers2
 };
 
-const Template = (args) => (
-  <SeeTheme {...args} />
-);
+const Template = (args) => <Teachers2 {...args} />;
 
 export const FirstStory = Template.bind({});
 FirstStory.args = {
