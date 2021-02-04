@@ -23,7 +23,6 @@ const AddNewTechnology: React.FunctionComponent = () => {
           <ConfirmAction></ConfirmAction>
         </Stack>
       </Stack>
-      <TechnologyList></TechnologyList>
     </div>
   );
 };

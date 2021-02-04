@@ -35,7 +35,7 @@ const navLinkGroups: INavLinkGroup[] = [
         key: "key4"
       },
       {
-        name: "Új technológia felvétele",
+        name: "Technológiák kezelése",
         url: "/addNewTechnology",
         key: "key5"
         //disabled: true

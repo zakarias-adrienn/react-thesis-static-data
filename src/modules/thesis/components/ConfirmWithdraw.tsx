@@ -14,31 +14,23 @@ const dragOptions = {
   keepInBounds: true
 };
 const screenReaderOnly = mergeStyles(hiddenContentStyle);
+const dialogContentProps = {
+  type: DialogType.normal,
+  title: "Jelentkezés visszavonása",
+  closeButtonAriaLabel: "Close",
+  subText: "Biztosan vissza akarja vonni a témára való jelentkezést?"
+};
 
-interface ConfirmDeleteProps {
-  text: string;
-  technologies?: any[];
-  which?: string;
-  onDelete?: any;
+interface ConfirmWithdrawProps {
+  myId: string;
+  onWithdraw: any;
 }
 
-const ConfirmAction: React.FunctionComponent<ConfirmDeleteProps> = (props) => {
-  console.log(props.technologies);
-  console.log(props.which);
+const ConfirmWithdraw: React.FunctionComponent<ConfirmWithdrawProps> = (props) => {
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
   const [isDraggable, { toggle: toggleIsDraggable }] = useBoolean(false);
   const labelId: string = useId("dialogLabel");
   const subTextId: string = useId("subTextLabel");
-  const dialogContentProps = {
-    type: DialogType.normal,
-    title:
-      props.text === "technology" ? "Meglevő technológia törlése" : "Meghirdetett téma törlése",
-    closeButtonAriaLabel: "Close",
-    subText:
-      props.text === "technology"
-        ? "Biztosan törölni szeretné a technológiát?"
-        : "Biztosan törölni szeretné a témát?"
-  };
 
   const modalProps = React.useMemo(
     () => ({
@@ -54,9 +46,9 @@ const ConfirmAction: React.FunctionComponent<ConfirmDeleteProps> = (props) => {
   return (
     <>
       <IconButton
-        iconProps={{ iconName: "Delete" }}
-        title="Töröl"
-        ariaLabel="Töröl"
+        iconProps={{ iconName: "Reply" }}
+        title="Visszavonás"
+        ariaLabel="Visszavonás"
         onClick={toggleHideDialog}
       />
 
@@ -68,8 +60,8 @@ const ConfirmAction: React.FunctionComponent<ConfirmDeleteProps> = (props) => {
       >
         <DialogFooter>
           <PrimaryButton
-            onClick={() => props.onDelete(props.which, toggleHideDialog)}
-            text="Törlés"
+            onClick={() => props.onWithdraw(props.myId, toggleHideDialog)}
+            text="Visszavonás"
           />
           <DefaultButton onClick={toggleHideDialog} text="Mégse" />
         </DialogFooter>
@@ -78,4 +70,4 @@ const ConfirmAction: React.FunctionComponent<ConfirmDeleteProps> = (props) => {
   );
 };
 
-export default ConfirmAction;
+export default ConfirmWithdraw;

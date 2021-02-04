@@ -52,34 +52,7 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
       onSelectionChanged: () => this.setState({ selectionDetails: this._getSelectionDetails() })
     });
 
-    // Populate with items for demos.
-    this._allItems = [];
-    this._allItems.push({
-      key: "Garbage Collector működése Javában",
-      title: "Garbage Collector működése Javában",
-      semester: "2020/21-ősz",
-      technologies: "Java",
-      subjects: "Programozási nyelvek - Java",
-      places: 2,
-      view: (
-        <BrowserRouter>
-          <Link to="/editTopic/1">
-            <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
-          </Link>
-        </BrowserRouter>
-      ),
-      delete: <ConfirmDelete text="topic"></ConfirmDelete>
-    });
-    this._allItems.push({
-      key: "Youniversity",
-      title: "Youniversity",
-      semester: "2020/21-tavasz",
-      technologies: "React, Javascript",
-      subjects: "Webprogramozás, Kliensoldali webprogramozás",
-      places: 4,
-      view: <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />,
-      delete: <ConfirmDelete text="topic"></ConfirmDelete>
-    });
+    this.onDelete = this.onDelete.bind(this);
 
     this._columns = [
       {
@@ -140,10 +113,55 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
       }
     ];
 
+    // Populate with items for demos.
+    this._allItems = [];
+    this._allItems.push({
+      key: "Garbage Collector működése Javában",
+      title: "Garbage Collector működése Javában",
+      semester: "2020/21-ősz",
+      technologies: "Java",
+      subjects: "Programozási nyelvek - Java",
+      places: 2,
+      view: (
+        <BrowserRouter>
+          <Link to="/editTopic/1">
+            <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
+          </Link>
+        </BrowserRouter>
+      ),
+      delete: (
+        <ConfirmDelete
+          text="topic"
+          which="Garbage Collector működése Javában"
+          onDelete={this.onDelete}
+        ></ConfirmDelete>
+      )
+    });
+    this._allItems.push({
+      key: "Youniversity",
+      title: "Youniversity",
+      semester: "2020/21-tavasz",
+      technologies: "React, Javascript",
+      subjects: "Webprogramozás, Kliensoldali webprogramozás",
+      places: 4,
+      view: <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />,
+      delete: (
+        <ConfirmDelete text="topic" which="Youniversity" onDelete={this.onDelete}></ConfirmDelete>
+      )
+    });
+
     this.state = {
       items: this._allItems,
       selectionDetails: this._getSelectionDetails()
     };
+  }
+
+  public onDelete(id: string, toggleHideDialog: any) {
+    toggleHideDialog();
+    this.setState({
+      items: this.state.items.filter((item) => item.key !== id),
+      selectionDetails: this._getSelectionDetails()
+    });
   }
 
   public render(): JSX.Element {
@@ -173,6 +191,11 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
             checkButtonAriaLabel="Row checkbox"
             onItemInvoked={this._onItemInvoked}
           />
+          {!this.state.items.length && (
+            <Stack horizontalAlign="center">
+              <Text>Nincsenek még meghirdetett témák!</Text>
+            </Stack>
+          )}
         </MarqueeSelection>
       </Fabric>
     );

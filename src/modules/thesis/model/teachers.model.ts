@@ -7,10 +7,16 @@ const Joi = require("joi");
 
 // }
 
+export type Department = {
+  id: string;
+  name: string;
+  shortName: string;
+};
+
 export type Teacher = {
   id: string;
   name: string;
-  department: string;
+  department: Department;
   announcedTopicIds: string[];
 };
 

@@ -11,9 +11,20 @@ import { MarqueeSelection } from "office-ui-fabric-react/lib/MarqueeSelection";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { Text } from "office-ui-fabric-react/lib/Text";
+import { DefaultButton, PrimaryButton, Stack, IStackTokens } from "office-ui-fabric-react";
+import {
+  DetailsHeader,
+  IDetailsHeaderProps
+} from "office-ui-fabric-react/lib/components/DetailsList/DetailsHeader";
+import { ITooltipHostProps } from "office-ui-fabric-react/lib/Tooltip";
+import {
+  DetailsRow,
+  IDetailsRowStyles,
+  IDetailsListProps
+} from "office-ui-fabric-react/lib/DetailsList";
+import ConfirmDelete from "./ConfirmDelete";
+import DialogToEditTechnology from "./DialogToEditTechnology";
 import { IconButton } from "@fluentui/react/lib/Button";
-import ConfirmWithdraw from "./ConfirmWithdraw";
-import { Stack } from "office-ui-fabric-react";
 
 const exampleChildClass = mergeStyles({
   display: "block",
@@ -24,10 +35,9 @@ const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "300px" }
 
 export interface IDetailsListBasicExampleItem {
   key: string;
-  title: string;
-  teacher: string;
-  status: string;
-  remove: any;
+  name: string;
+  edit: any;
+  delete: any;
 }
 
 export interface IDetailsListBasicExampleState {
@@ -35,7 +45,7 @@ export interface IDetailsListBasicExampleState {
   selectionDetails: string;
 }
 
-class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
+class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState> {
   private _selection: Selection;
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
@@ -47,64 +57,100 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
       onSelectionChanged: () => this.setState({ selectionDetails: this._getSelectionDetails() })
     });
 
-    this.onDelete = this.onDelete.bind(this);
-
-    // Populate with items for demos.
-    this._allItems = [];
-    this._allItems.push({
-      key: "Youniversity",
-      title: "Youniversity",
-      teacher: "Visnovitz Márton",
-      status: "Elfogadva",
-      remove: <ConfirmWithdraw myId="Youniversity" onWithdraw={this.onDelete}></ConfirmWithdraw>
-    });
-    this._allItems.push({
-      key: "TDK Dolgozat",
-      title: "TDK Dolgozat",
-      teacher: "Pusztai Kinga",
-      status: "Függőben",
-      remove: <ConfirmWithdraw myId="TDK Dolgozat" onWithdraw={this.onDelete}></ConfirmWithdraw>
-    });
+    //this.renderDetailsHeader = this.renderDetailsHeader.bind(this);
 
     this._columns = [
       {
         key: "column1",
-        name: "Cím",
-        fieldName: "title",
+        name: "Név",
+        fieldName: "name",
         minWidth: 100,
         maxWidth: 200,
         isResizable: true
       },
       {
         key: "column2",
-        name: "Témavezető",
-        fieldName: "teacher",
-        minWidth: 100,
-        maxWidth: 200,
+        name: "Szerkesztés",
+        fieldName: "edit",
+        minWidth: 50,
+        maxWidth: 100,
         isResizable: true
       },
       {
         key: "column3",
-        name: "Státusz",
-        fieldName: "status",
-        minWidth: 100,
-        maxWidth: 200,
-        isResizable: true
-      },
-      {
-        key: "column4",
-        name: "Visszavonás",
-        fieldName: "remove",
-        minWidth: 100,
-        maxWidth: 200,
+        name: "Törlés",
+        fieldName: "delete",
+        minWidth: 50,
+        maxWidth: 100,
         isResizable: true
       }
     ];
+
+    this.onChangeName = this.onChangeName.bind(this);
+    this.onDelete = this.onDelete.bind(this);
+
+    // Populate with items for demos.
+    this._allItems = [];
+    this._allItems.push(
+      {
+        key: "JAVA",
+        name: "JAVA",
+        edit: (
+          <DialogToEditTechnology
+            name="JAVA"
+            myId="JAVA"
+            onSave={this.onChangeName}
+          ></DialogToEditTechnology>
+        ),
+        delete: (
+          <ConfirmDelete text="technology" onDelete={this.onDelete} which={"JAVA"}></ConfirmDelete>
+        )
+      },
+      {
+        key: "C++",
+        name: "C++",
+        edit: (
+          <DialogToEditTechnology
+            name="C++"
+            myId="C++"
+            onSave={this.onChangeName}
+          ></DialogToEditTechnology>
+        ),
+        delete: (
+          <ConfirmDelete text="technology" onDelete={this.onDelete} which={"C++"}></ConfirmDelete>
+        )
+      },
+      {
+        key: "HTML5",
+        name: "HTML5",
+        edit: (
+          <DialogToEditTechnology
+            name="HTML5"
+            myId="JAVA"
+            onSave={this.onChangeName}
+          ></DialogToEditTechnology>
+        ),
+        delete: (
+          <ConfirmDelete text="technology" onDelete={this.onDelete} which={"HTML5"}></ConfirmDelete>
+        )
+      }
+    );
 
     this.state = {
       items: this._allItems,
       selectionDetails: this._getSelectionDetails()
     };
+  }
+
+  public onChangeName(name: string, id: string, toggleHideDialog: any) {
+    // console.log(name);
+    // console.log(id);
+    // console.log(this.state);
+    toggleHideDialog();
+    this.setState({
+      items: this.state.items.map((item) => (item.key === id ? { ...item, name } : item)),
+      selectionDetails: this._getSelectionDetails()
+    });
   }
 
   public onDelete(id: string, toggleHideDialog: any) {
@@ -140,11 +186,13 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
             ariaLabelForSelectionColumn="Toggle selection"
             ariaLabelForSelectAllCheckbox="Toggle selection for all items"
             checkButtonAriaLabel="Row checkbox"
-            // onItemInvoked={this._onItemInvoked}
+            onItemInvoked={this._onItemInvoked}
+            // onRenderDetailsHeader={this.renderDetailsHeader}
+            // onRenderRow={this.renderRow}
           />
           {!this.state.items.length && (
-            <Stack horizontalAlign="center">
-              <Text>Nem történt még egy témára sem jelentkezés!</Text>
+            <Stack style={{ marginLeft: "30px" }}>
+              <Text>Nincsenek még technológiák felvéve!</Text>
             </Stack>
           )}
         </MarqueeSelection>
@@ -161,7 +209,7 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
       case 1:
         return (
           "1 kiválasztott elem: " +
-          (this._selection.getSelection()[0] as IDetailsListBasicExampleItem).title
+          (this._selection.getSelection()[0] as IDetailsListBasicExampleItem).name
         );
       default:
         return `${selectionCount} darab elem kiválasztva`;
@@ -174,14 +222,14 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
   ): void => {
     this.setState({
       items: text
-        ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text.toLowerCase()) > -1)
+        ? this._allItems.filter((i) => i.name.toLowerCase().indexOf(text.toLowerCase()) === 0)
         : this._allItems
     });
   };
 
-  //   private _onItemInvoked = (item: IDetailsListBasicExampleItem): void => {
-  //     alert(`Item invoked: ${item.title}`);
-  //   };
+  private _onItemInvoked = (item: IDetailsListBasicExampleItem): void => {
+    alert(`Kattintottak: ${item.name}`);
+  };
 }
 
-export default UserThemes;
+export default TechnologyTable;
