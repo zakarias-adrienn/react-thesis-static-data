@@ -55,6 +55,12 @@ type MissingData = {
   description: boolean;
   semester: boolean;
   places: boolean;
+  language1: boolean;
+  language2: boolean;
+  type1: boolean;
+  type2: boolean;
+  type3: boolean;
+  type4: boolean;
 };
 
 class CreateThesis extends React.Component<{}, MissingData> {
@@ -74,7 +80,13 @@ class CreateThesis extends React.Component<{}, MissingData> {
       title: true,
       description: true,
       semester: true,
-      places: true
+      places: true,
+      language1: true,
+      language2: false,
+      type1: false,
+      type2: true,
+      type3: true,
+      type4: true
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.choiceGroupRef = React.createRef();
@@ -124,6 +136,10 @@ class CreateThesis extends React.Component<{}, MissingData> {
       console.log(this.state);
       return "";
     } else {
+      this.setState((state) => ({
+        ...state,
+        title: true
+      }));
       return `Cím megadása kötelező!`;
     }
     //return value.length >= 1 ? "" : `Cím megadása kötelező!`;
@@ -138,6 +154,10 @@ class CreateThesis extends React.Component<{}, MissingData> {
       console.log(this.state);
       return "";
     } else {
+      this.setState((state) => ({
+        ...state,
+        description: true
+      }));
       return `Leírás megadása kötelező!`;
     }
     // return value.length >= 1 ? "" : `Leírás megadása kötelező!`;
@@ -154,6 +174,10 @@ class CreateThesis extends React.Component<{}, MissingData> {
       console.log(this.state);
       return "";
     } else {
+      this.setState((state) => ({
+        ...state,
+        semester: true
+      }));
       return "Félév formátuma nem helyes! Példa helyes formátumra: 2020/21";
     }
     // return regex.test(value) ? "" : "Félév formátuma nem helyes! Példa helyes formátumra: 2020/21";
@@ -169,9 +193,52 @@ class CreateThesis extends React.Component<{}, MissingData> {
       console.log(this.state);
       return "";
     } else {
+      this.setState((state) => ({
+        ...state,
+        places: true
+      }));
       return `Helyek számának megadása kötelező!`;
     }
     //return value.length >= 1 ? "" : `Helyek számának megadása kötelező!`;
+  };
+
+  changeType1 = () => {
+    this.setState((state) => ({
+      ...state,
+      type1: !state.type1
+    }));
+  };
+  changeType2 = () => {
+    this.setState((state) => ({
+      ...state,
+      type2: !state.type2
+    }));
+  };
+  changeType3 = () => {
+    this.setState((state) => ({
+      ...state,
+      type3: !state.type3
+    }));
+  };
+  chanegType4 = () => {
+    this.setState((state) => ({
+      ...state,
+      type4: !state.type4
+    }));
+  };
+  changeLanguage1 = () => {
+    this.setState((state) => ({
+      ...state,
+      language1: !state.language1
+    }));
+    console.log(this.state);
+  };
+  changeLanguage2 = () => {
+    this.setState((state) => ({
+      ...state,
+      language2: !state.language2
+    }));
+    console.log(this.state);
   };
 
   render() {
@@ -228,28 +295,30 @@ class CreateThesis extends React.Component<{}, MissingData> {
                       name="bsc_szakdoga"
                       label="Bsc szakdolgozati"
                       title="Bsc szakdolgozati"
-                      /*onChange={_onChange}*/
-                      checked
+                      defaultChecked
                       componentRef={this.bscThesisRef}
+                      onChange={this.changeType1}
                     />
                     <Checkbox
                       name="bsc_tdk"
                       label="Bsc TDK"
-                      title="Bsc TDK" /*onChange={_onChange}*/
+                      title="Bsc TDK"
                       componentRef={this.bscTdkRef}
+                      onChange={this.changeType2}
                     />
                     <Checkbox
                       name="msc_szakdoga"
                       label="Msc szakdolgozati"
                       title="Msc szakdolgozati"
-                      /*onChange={_onChange}*/
+                      onChange={this.changeType3}
                       componentRef={this.mscThesisRef}
                     />
                     <Checkbox
                       name="msc_tdk"
                       label="Msc TDK"
-                      title="Msc TDK" /*onChange={_onChange}*/
+                      title="Msc TDK"
                       componentRef={this.mscTdkRef}
+                      onChange={this.chanegType4}
                     />
                   </div>
                   <div className="ms-Grid-col ms-sm6">
@@ -258,13 +327,15 @@ class CreateThesis extends React.Component<{}, MissingData> {
                       name="english"
                       label="angol"
                       title="angol"
-                      /*onChange={_onChange}*/ componentRef={this.englishRef}
+                      onChange={this.changeLanguage1}
+                      componentRef={this.englishRef}
                     />
                     <Checkbox
                       name="hungarian"
                       label="magyar"
                       title="magyar"
-                      checked /*onChange={_onChange}*/
+                      defaultChecked
+                      onChange={this.changeLanguage2}
                       componentRef={this.hungarianRef}
                     />
                   </div>
@@ -304,7 +375,9 @@ class CreateThesis extends React.Component<{}, MissingData> {
                   this.state.title ||
                   this.state.description ||
                   this.state.semester ||
-                  this.state.places
+                  this.state.places ||
+                  (this.state.language1 && this.state.language2) ||
+                  (this.state.type1 && this.state.type2 && this.state.type3 && this.state.type4)
                 }
               />
               <br />

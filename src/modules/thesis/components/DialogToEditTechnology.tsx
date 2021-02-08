@@ -24,7 +24,7 @@ const DialogToEditTechnology: React.FunctionComponent<DialogProps> = (props) => 
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
   const [name, setName] = React.useState(props.name);
 
-  function handleChange(e) {
+  function handleChange(e: any) {
     console.log(e.target);
     let element: React.ChangeEvent<HTMLInputElement> = e;
     console.log(element.target.value);
@@ -51,6 +51,7 @@ const DialogToEditTechnology: React.FunctionComponent<DialogProps> = (props) => 
           <PrimaryButton
             onClick={(e) => props.onSave(name, props.myId, toggleHideDialog)}
             text="Mentés"
+            disabled={name === ""}
           />
           <DefaultButton onClick={toggleHideDialog} text="Mégse" />
         </DialogFooter>

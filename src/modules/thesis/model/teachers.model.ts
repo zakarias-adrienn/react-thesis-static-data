@@ -2,11 +2,6 @@
 
 const Joi = require("joi");
 
-// Tanszékek hogy lesznek tárolva?
-// export enum Department = {
-
-// }
-
 export type Department = {
   id: string;
   name: string;
