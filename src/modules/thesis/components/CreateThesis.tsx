@@ -50,10 +50,6 @@ const columnProps: Partial<IStackProps> = {
   styles: { root: { width: 800, alignItems: "center" as "center" } }
 };
 
-function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-  console.log("Beküldték");
-}
-
 type MissingData = {
   title: boolean;
   description: boolean;
@@ -62,6 +58,16 @@ type MissingData = {
 };
 
 class CreateThesis extends React.Component<{}, MissingData> {
+  private choiceGroupRef: any;
+  private bscThesisRef: any;
+  private bscTdkRef: any;
+  private mscThesisRef: any;
+  private mscTdkRef: any;
+  private hungarianRef: any;
+  private englishRef: any;
+  private subjectsRef: any;
+  private technologiesRef: any;
+
   constructor(props: any) {
     super(props);
     this.state = {
@@ -70,6 +76,43 @@ class CreateThesis extends React.Component<{}, MissingData> {
       semester: true,
       places: true
     };
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.choiceGroupRef = React.createRef();
+    this.bscThesisRef = React.createRef();
+    this.bscTdkRef = React.createRef();
+    this.mscThesisRef = React.createRef();
+    this.mscTdkRef = React.createRef();
+    this.hungarianRef = React.createRef();
+    this.englishRef = React.createRef();
+    this.subjectsRef = React.createRef();
+    this.technologiesRef = React.createRef();
+  }
+
+  handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    console.log("Beküldték");
+    console.log(event.target);
+    const fields = Array.prototype.slice
+      .call(event.target)
+      .filter((el) => el.name)
+      .filter((el) => el.value !== "on")
+      .reduce(
+        (form, el) => ({
+          ...form,
+          [el.name]: el.value
+        }),
+        {}
+      );
+    console.log(fields);
+    console.log(this.choiceGroupRef.current.checkedOption);
+    console.log("BSC szakdoga: ", this.bscThesisRef.current.checked);
+    console.log("BSC tdk: ", this.bscTdkRef.current.checked);
+    console.log("MSC szakdoga: ", this.mscThesisRef.current.checked);
+    console.log("MSC tdk: ", this.mscTdkRef.current.checked);
+    console.log("Magyar nyelvű:", this.hungarianRef.current.checked);
+    console.log("Angol nyelvű: ", this.englishRef.current.checked);
+    console.log("Tantárgyak: ", this.subjectsRef.current.selectedOptions);
+    console.log("Technológiák: ", this.technologiesRef.current.selectedOptions);
   }
 
   getErrorMessage = (value: string): string => {
@@ -136,16 +179,18 @@ class CreateThesis extends React.Component<{}, MissingData> {
       <div>
         <Stack {...columnProps}>
           <h2>Téma kiírása</h2>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={this.handleSubmit}>
             <Stack tokens={stackTokens} styles={stackStyles}>
               <TextField
                 label="Cím"
+                name="Cím"
                 required
                 onGetErrorMessage={this.getErrorMessage}
                 validateOnLoad={false}
               />
               <TextField
                 label="Leírás"
+                name="Leírás"
                 multiline
                 rows={3}
                 required
@@ -157,6 +202,7 @@ class CreateThesis extends React.Component<{}, MissingData> {
                   <div className="ms-Grid-col ms-sm6">
                     <MaskedTextField
                       label="Félév"
+                      name="Félév"
                       mask="2099/99"
                       required
                       onGetErrorMessage={this.getErrorSemester}
@@ -164,7 +210,13 @@ class CreateThesis extends React.Component<{}, MissingData> {
                     />
                   </div>
                   <div className="ms-Grid-col ms-sm6">
-                    <ChoiceGroup defaultSelectedKey="autumn" options={semesters} required={true} />
+                    <ChoiceGroup
+                      name="autumnorspring"
+                      defaultSelectedKey="autumn"
+                      options={semesters}
+                      required={true}
+                      componentRef={this.choiceGroupRef}
+                    />
                   </div>
                 </div>
                 <br />
@@ -173,23 +225,48 @@ class CreateThesis extends React.Component<{}, MissingData> {
                   <div className="ms-Grid-col ms-sm6">
                     <Text>Téma jellege</Text>
                     <Checkbox
+                      name="bsc_szakdoga"
                       label="Bsc szakdolgozati"
                       title="Bsc szakdolgozati"
                       /*onChange={_onChange}*/
                       checked
+                      componentRef={this.bscThesisRef}
                     />
-                    <Checkbox label="Bsc TDK" title="Bsc TDK" /*onChange={_onChange}*/ />
                     <Checkbox
+                      name="bsc_tdk"
+                      label="Bsc TDK"
+                      title="Bsc TDK" /*onChange={_onChange}*/
+                      componentRef={this.bscTdkRef}
+                    />
+                    <Checkbox
+                      name="msc_szakdoga"
                       label="Msc szakdolgozati"
                       title="Msc szakdolgozati"
                       /*onChange={_onChange}*/
+                      componentRef={this.mscThesisRef}
                     />
-                    <Checkbox label="Msc TDK" title="Msc TDK" /*onChange={_onChange}*/ />
+                    <Checkbox
+                      name="msc_tdk"
+                      label="Msc TDK"
+                      title="Msc TDK" /*onChange={_onChange}*/
+                      componentRef={this.mscTdkRef}
+                    />
                   </div>
                   <div className="ms-Grid-col ms-sm6">
                     <Text>Témaírás nyelve</Text>
-                    <Checkbox label="angol" title="angol" /*onChange={_onChange}*/ />
-                    <Checkbox label="magyar" title="magyar" checked /*onChange={_onChange}*/ />
+                    <Checkbox
+                      name="english"
+                      label="angol"
+                      title="angol"
+                      /*onChange={_onChange}*/ componentRef={this.englishRef}
+                    />
+                    <Checkbox
+                      name="hungarian"
+                      label="magyar"
+                      title="magyar"
+                      checked /*onChange={_onChange}*/
+                      componentRef={this.hungarianRef}
+                    />
                   </div>
                 </div>
               </div>
@@ -198,26 +275,30 @@ class CreateThesis extends React.Component<{}, MissingData> {
                 type="number"
                 min="1"
                 required
+                name="numberofplaces"
                 onGetErrorMessage={this.getErrorNumPlaces}
                 validateOnLoad={false}
               />
               <Dropdown
+                //name="subjects"
                 placeholder="Válassza ki a kapcsolódó tantárgyakat..."
                 label="Tantárgyak"
                 multiSelect
                 options={options}
                 //styles={dropdownStyles}
+                componentRef={this.subjectsRef}
               />
               <Dropdown
                 placeholder="Válassza ki a kapcsolódó technológiákat..."
                 label="Technológiák"
                 multiSelect
                 options={options2}
-                //styles={dropdownStyles}
+                //styles={dropdownStyles
+                componentRef={this.technologiesRef}
               />
               <PrimaryButton
                 text="Meghirdetés"
-                onClick={_alertClicked}
+                type="submit"
                 allowDisabledFocus
                 disabled={
                   this.state.title ||

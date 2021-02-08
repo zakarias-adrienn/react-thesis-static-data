@@ -17,10 +17,15 @@ const dialogContentProps = {
   type: DialogType.normal,
   title: "Új technológia hozzáadása",
   closeButtonAriaLabel: "Close",
-  subText: "Biztosan hozzáakarja adni a választható technológiák listájához?"
+  subText: "Biztosan hozzá akarja adni a választható technológiák listájához?"
 };
 
-const ConfirmAction: React.FunctionComponent = () => {
+interface ConfirmActionProps {
+  notEmpty?: boolean;
+}
+
+const ConfirmAction: React.FunctionComponent<ConfirmActionProps> = (props) => {
+  console.log(props.notEmpty);
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
   const [isDraggable, { toggle: toggleIsDraggable }] = useBoolean(false);
   const labelId: string = useId("dialogLabel");
@@ -43,6 +48,7 @@ const ConfirmAction: React.FunctionComponent = () => {
         secondaryText="Opens the Sample Dialog"
         onClick={toggleHideDialog}
         text="Hozzáadás"
+        disabled={props.notEmpty}
       />
       {/* <label id={labelId} className={screenReaderOnly}>
         My sample label
