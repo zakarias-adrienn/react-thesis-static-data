@@ -20,6 +20,7 @@ const SearchByTitle = () => {
         styles={getStyles}
         placeholder="Keresés témacím alapján..."
         onSearch={(newValue) => console.log("value is " + newValue)}
+        id="titleSearch"
       />
     </Stack>
   );

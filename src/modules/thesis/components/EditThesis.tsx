@@ -83,14 +83,14 @@ const EditThesis: React.FunctionComponent = () => {
                   label="Szakdolgozati"
                   title="Szakdolgozati"
                   /*onChange={_onChange}*/
-                  checked
+                  defaultChecked
                 />
                 <Checkbox label="TDK" title="TDK" /*onChange={_onChange}*/ />
               </div>
               <div className="ms-Grid-col ms-sm6">
                 Témaírás nyelve
                 <Checkbox label="angol" title="angol" /*onChange={_onChange}*/ />
-                <Checkbox label="magyar" title="magyar" /*onChange={_onChange}*/ checked />
+                <Checkbox label="magyar" title="magyar" /*onChange={_onChange}*/ defaultChecked />
               </div>
             </div>
           </div>

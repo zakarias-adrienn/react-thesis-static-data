@@ -18,6 +18,10 @@ export type Teacher = {
 export const teacherSchema = Joi.object({
   id: Joi.string().required(),
   name: Joi.string().required(),
-  department: Joi.string().required(),
+  department: Joi.object({
+    id: Joi.string().required(),
+    name: Joi.string().required(),
+    shortName: Joi.string().required()
+  }).required(),
   announcedTopicIds: Joi.array().items(Joi.string())
 });

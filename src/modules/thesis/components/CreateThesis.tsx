@@ -50,6 +50,10 @@ const columnProps: Partial<IStackProps> = {
   styles: { root: { width: 800, alignItems: "center" as "center" } }
 };
 
+type Values = {
+  title: string;
+};
+
 type MissingData = {
   title: boolean;
   description: boolean;
@@ -63,7 +67,12 @@ type MissingData = {
   type4: boolean;
 };
 
-class CreateThesis extends React.Component<{}, MissingData> {
+type State = {
+  missingData: MissingData;
+  values: Values;
+};
+
+class CreateThesis extends React.Component<{}, State> {
   private choiceGroupRef: any;
   private bscThesisRef: any;
   private bscTdkRef: any;
@@ -77,16 +86,21 @@ class CreateThesis extends React.Component<{}, MissingData> {
   constructor(props: any) {
     super(props);
     this.state = {
-      title: true,
-      description: true,
-      semester: true,
-      places: true,
-      language1: true,
-      language2: false,
-      type1: false,
-      type2: true,
-      type3: true,
-      type4: true
+      missingData: {
+        title: true,
+        description: true,
+        semester: true,
+        places: true,
+        language1: true,
+        language2: false,
+        type1: false,
+        type2: true,
+        type3: true,
+        type4: true
+      },
+      values: {
+        title: "Youniversity"
+      }
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.choiceGroupRef = React.createRef();
@@ -130,15 +144,25 @@ class CreateThesis extends React.Component<{}, MissingData> {
   getErrorMessage = (value: string): string => {
     if (value.length >= 1) {
       this.setState((state) => ({
-        ...state,
-        title: false
+        missingData: {
+          ...state.missingData,
+          title: false
+        },
+        values: {
+          ...state.values
+        }
       }));
       console.log(this.state);
       return "";
     } else {
       this.setState((state) => ({
-        ...state,
-        title: true
+        missingData: {
+          ...state.missingData,
+          title: true
+        },
+        values: {
+          ...state.values
+        }
       }));
       return `Cím megadása kötelező!`;
     }
@@ -148,15 +172,25 @@ class CreateThesis extends React.Component<{}, MissingData> {
   getErrorDescription = (value: string): string => {
     if (value.length >= 1) {
       this.setState((state) => ({
-        ...state,
-        description: false
+        missingData: {
+          ...state.missingData,
+          description: false
+        },
+        values: {
+          ...this.state.values
+        }
       }));
       console.log(this.state);
       return "";
     } else {
       this.setState((state) => ({
-        ...state,
-        description: true
+        missingData: {
+          ...state.missingData,
+          description: true
+        },
+        values: {
+          ...state.values
+        }
       }));
       return `Leírás megadása kötelező!`;
     }
@@ -165,20 +199,44 @@ class CreateThesis extends React.Component<{}, MissingData> {
 
   getErrorSemester = (value: string): string => {
     console.log(value);
+    let first = parseInt(value.substring(2, 4));
+    let second = parseInt(value.substring(5, 7));
     const regex = new RegExp("[0-9][0-9][0-9][0-9]/[0-9][0-9]");
-    if (regex.test(value)) {
+    if (!regex.test(value)) {
       this.setState((state) => ({
-        ...state,
-        semester: false
+        missingData: {
+          ...state.missingData,
+          semester: true
+        },
+        values: {
+          ...state.values
+        }
+      }));
+      return "Félév formátuma nem helyes szintaktikailag! Példa helyes formátumra: 2020/21";
+    } else if (second !== first + 1) {
+      this.setState((state) => ({
+        missingData: {
+          ...state.missingData,
+          semester: true
+        },
+        values: {
+          ...state.values
+        }
+      }));
+      console.log(this.state);
+      return "Félév formátuma nem helyes szemantikailag! Példa helyes formátumra: 2020/21";
+    } else {
+      this.setState((state) => ({
+        missingData: {
+          ...state.missingData,
+          semester: false
+        },
+        values: {
+          ...state.values
+        }
       }));
       console.log(this.state);
       return "";
-    } else {
-      this.setState((state) => ({
-        ...state,
-        semester: true
-      }));
-      return "Félév formátuma nem helyes! Példa helyes formátumra: 2020/21";
     }
     // return regex.test(value) ? "" : "Félév formátuma nem helyes! Példa helyes formátumra: 2020/21";
     // TODO: azt is ellenőrizni kellene, hogy a második 2 számjegy pontosan 1-el legyen nagyobb mint az első 2 beírt
@@ -187,15 +245,25 @@ class CreateThesis extends React.Component<{}, MissingData> {
   getErrorNumPlaces = (value: string): string => {
     if (value.length >= 1) {
       this.setState((state) => ({
-        ...state,
-        places: false
+        missingData: {
+          ...state.missingData,
+          places: false
+        },
+        values: {
+          ...state.values
+        }
       }));
       console.log(this.state);
       return "";
     } else {
       this.setState((state) => ({
-        ...state,
-        places: true
+        missingData: {
+          ...state.missingData,
+          places: true
+        },
+        values: {
+          ...state.values
+        }
       }));
       return `Helyek számának megadása kötelező!`;
     }
@@ -204,41 +272,70 @@ class CreateThesis extends React.Component<{}, MissingData> {
 
   changeType1 = () => {
     this.setState((state) => ({
-      ...state,
-      type1: !state.type1
+      missingData: {
+        ...state.missingData,
+        type1: !state.missingData.type1
+      },
+      values: {
+        ...state.values
+      }
     }));
   };
   changeType2 = () => {
     this.setState((state) => ({
-      ...state,
-      type2: !state.type2
+      missingData: {
+        ...state.missingData,
+        type2: !state.missingData.type2
+      },
+      values: {
+        ...state.values
+      }
     }));
   };
   changeType3 = () => {
     this.setState((state) => ({
-      ...state,
-      type3: !state.type3
+      missingData: {
+        ...state.missingData,
+        type3: !state.missingData.type3
+      },
+      values: {
+        ...state.values
+      }
     }));
   };
   chanegType4 = () => {
     this.setState((state) => ({
-      ...state,
-      type4: !state.type4
+      missingData: {
+        ...state.missingData,
+        type4: !state.missingData.type4
+      },
+      values: {
+        ...state.values
+      }
     }));
   };
   changeLanguage1 = () => {
     this.setState((state) => ({
-      ...state,
-      language1: !state.language1
+      missingData: {
+        ...state.missingData,
+        language1: !state.missingData.language1
+      },
+      values: {
+        ...state.values
+      }
     }));
     console.log(this.state);
   };
   changeLanguage2 = () => {
     this.setState((state) => ({
-      ...state,
-      language2: !state.language2
+      missingData: {
+        ...state.missingData,
+        language2: !state.missingData.language2
+      },
+      values: {
+        ...state.values
+      }
     }));
-    console.log(this.state);
   };
 
   render() {
@@ -254,6 +351,18 @@ class CreateThesis extends React.Component<{}, MissingData> {
                 required
                 onGetErrorMessage={this.getErrorMessage}
                 validateOnLoad={false}
+                value={this.state.values.title}
+                onChange={(e) => {
+                  this.setState((state) => ({
+                    missingData: {
+                      ...state.missingData
+                    },
+                    values: {
+                      ...state.values,
+                      title: (e.target as HTMLInputElement).value
+                    }
+                  }));
+                }}
               />
               <TextField
                 label="Leírás"
@@ -320,6 +429,23 @@ class CreateThesis extends React.Component<{}, MissingData> {
                       componentRef={this.mscTdkRef}
                       onChange={this.chanegType4}
                     />
+                    {this.state.missingData.type1 &&
+                    this.state.missingData.type2 &&
+                    this.state.missingData.type3 &&
+                    this.state.missingData.type4 ? (
+                      <span
+                        style={{
+                          fontSize: "13px",
+                          color: "#A72037",
+                          marginTop: "7px",
+                          display: "inline-block"
+                        }}
+                      >
+                        Téma jellegének megadása kötelező!
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </div>
                   <div className="ms-Grid-col ms-sm6">
                     <Text>Témaírás nyelve</Text>
@@ -338,6 +464,20 @@ class CreateThesis extends React.Component<{}, MissingData> {
                       onChange={this.changeLanguage2}
                       componentRef={this.hungarianRef}
                     />
+                    {this.state.missingData.language1 && this.state.missingData.language2 ? (
+                      <span
+                        style={{
+                          fontSize: "13px",
+                          color: "#A72037",
+                          marginTop: "7px",
+                          display: "inline-block"
+                        }}
+                      >
+                        Témaírás nyelvének megadása kötelező!
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
               </div>
@@ -372,12 +512,15 @@ class CreateThesis extends React.Component<{}, MissingData> {
                 type="submit"
                 allowDisabledFocus
                 disabled={
-                  this.state.title ||
-                  this.state.description ||
-                  this.state.semester ||
-                  this.state.places ||
-                  (this.state.language1 && this.state.language2) ||
-                  (this.state.type1 && this.state.type2 && this.state.type3 && this.state.type4)
+                  this.state.missingData.title ||
+                  this.state.missingData.description ||
+                  this.state.missingData.semester ||
+                  this.state.missingData.places ||
+                  (this.state.missingData.language1 && this.state.missingData.language2) ||
+                  (this.state.missingData.type1 &&
+                    this.state.missingData.type2 &&
+                    this.state.missingData.type3 &&
+                    this.state.missingData.type4)
                 }
               />
               <br />
