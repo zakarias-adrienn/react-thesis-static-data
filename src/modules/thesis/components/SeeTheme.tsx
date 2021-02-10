@@ -47,7 +47,7 @@ const semesters: IChoiceGroupOption[] = [
 const columnProps: Partial<IStackProps> = {
   tokens: { childrenGap: 2 },
   styles: {
-    root: { width: 1000, alignItems: "center" as "center", alignSelf: "center" as "center" }
+    // root: { width: 1000, alignItems: "center" as "center", alignSelf: "center" as "center" }
   }
 };
 
@@ -93,6 +93,7 @@ const SeeTheme: React.FunctionComponent = () => {
             <li>Számításelmélet</li>
           </ul>
         </p>
+        {/* ha diák a bejelentkezett felhasználó és nem teltek be a helyek erre a témára */}
         <PrimaryButton text="Jelentkezés" onClick={_alertClicked} allowDisabledFocus />
       </Stack>
     </div>

@@ -38,6 +38,7 @@ export interface IDetailsListBasicExampleItem {
 export interface IDetailsListBasicExampleState {
   items: IDetailsListBasicExampleItem[];
   selectionDetails: string;
+  isFilter: boolean;
 }
 
 class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState> {
@@ -152,7 +153,8 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
 
     this.state = {
       items: this._allItems,
-      selectionDetails: this._getSelectionDetails()
+      selectionDetails: this._getSelectionDetails(),
+      isFilter: false
     };
   }
 
@@ -160,8 +162,10 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
     toggleHideDialog();
     this.setState({
       items: this.state.items.filter((item) => item.key !== id),
-      selectionDetails: this._getSelectionDetails()
+      selectionDetails: this._getSelectionDetails(),
+      isFilter: this.state.isFilter
     });
+    this._allItems = this._allItems.filter((item) => item.key !== id);
   }
 
   public render(): JSX.Element {
@@ -191,9 +195,14 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
             checkButtonAriaLabel="Row checkbox"
             onItemInvoked={this._onItemInvoked}
           />
-          {!this.state.items.length && (
+          {!this.state.items.length && !this.state.isFilter && (
             <Stack horizontalAlign="center">
               <Text>Nincsenek még meghirdetett témák!</Text>
+            </Stack>
+          )}
+          {!this.state.items.length && this.state.isFilter && (
+            <Stack horizontalAlign="center">
+              <Text>Nincs a keresésnek megfelelő téma!</Text>
             </Stack>
           )}
         </MarqueeSelection>
@@ -224,7 +233,8 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
     this.setState({
       items: text
         ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text.toLowerCase()) > -1)
-        : this._allItems
+        : this._allItems,
+      isFilter: text ? true : false
     });
   };
 

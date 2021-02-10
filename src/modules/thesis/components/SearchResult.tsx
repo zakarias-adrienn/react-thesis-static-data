@@ -10,9 +10,8 @@ import {
 import { MarqueeSelection } from "office-ui-fabric-react/lib/MarqueeSelection";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
-import { Text } from "office-ui-fabric-react/lib/Text";
-import { DefaultButton, PrimaryButton, Stack, IStackTokens } from "office-ui-fabric-react";
 import { IconButton } from "@fluentui/react/lib/Button";
+import { MessageBar } from "office-ui-fabric-react";
 
 const exampleChildClass = mergeStyles({
   display: "block",
@@ -29,7 +28,7 @@ export interface IDetailsListBasicExampleItem {
   language: string;
   technologies: string;
   subjects: string;
-  places: number;
+  places: number | string;
   view: any;
 }
 
@@ -60,7 +59,7 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
       language: "magyar",
       technologies: "Java",
       subjects: "Programozási nyelvek - Java",
-      places: 2,
+      places: "Betelt",
       view: (
         <IconButton iconProps={{ iconName: "RedEye" }} title="Megtekint" ariaLabel="Megtekint" />
       )
@@ -162,10 +161,10 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
         <TextField
           className={exampleChildClass}
           label="Cím szerinti szűrés:"
-          /*onChange={this._onFilter}*/
+          onChange={this._onFilter}
           styles={textFieldStyles}
         />
-        <Announced message={`Number of items after filter applied: ${items.length}.`} />
+        <MessageBar>Jelentkezni a téma részleteinek megtekintése során lehet.</MessageBar>
         <MarqueeSelection selection={this._selection}>
           <DetailsList
             items={items}
@@ -202,11 +201,11 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
 
   private _onFilter = (
     ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-    text: string
+    text: string | undefined
   ): void => {
     this.setState({
       items: text
-        ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text) > -1)
+        ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text?.toLowerCase()) > -1)
         : this._allItems
     });
   };

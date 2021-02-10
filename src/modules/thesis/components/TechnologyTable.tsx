@@ -43,6 +43,7 @@ export interface IDetailsListBasicExampleItem {
 export interface IDetailsListBasicExampleState {
   items: IDetailsListBasicExampleItem[];
   selectionDetails: string;
+  isFilter: boolean;
 }
 
 class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState> {
@@ -56,8 +57,6 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
     this._selection = new Selection({
       onSelectionChanged: () => this.setState({ selectionDetails: this._getSelectionDetails() })
     });
-
-    //this.renderDetailsHeader = this.renderDetailsHeader.bind(this);
 
     this._columns = [
       {
@@ -138,7 +137,8 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
 
     this.state = {
       items: this._allItems,
-      selectionDetails: this._getSelectionDetails()
+      selectionDetails: this._getSelectionDetails(),
+      isFilter: false
     };
   }
 
@@ -149,7 +149,8 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
     toggleHideDialog();
     this.setState({
       items: this.state.items.map((item) => (item.key === id ? { ...item, name } : item)),
-      selectionDetails: this._getSelectionDetails()
+      selectionDetails: this._getSelectionDetails(),
+      isFilter: this.state.isFilter
     });
   }
 
@@ -157,8 +158,10 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
     toggleHideDialog();
     this.setState({
       items: this.state.items.filter((item) => item.key !== id),
-      selectionDetails: this._getSelectionDetails()
+      selectionDetails: this._getSelectionDetails(),
+      isFilter: this.state.isFilter
     });
+    this._allItems = this._allItems.filter((item) => item.key !== id);
   }
 
   public render(): JSX.Element {
@@ -186,13 +189,16 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
             ariaLabelForSelectionColumn="Toggle selection"
             ariaLabelForSelectAllCheckbox="Toggle selection for all items"
             checkButtonAriaLabel="Row checkbox"
-            onItemInvoked={this._onItemInvoked}
-            // onRenderDetailsHeader={this.renderDetailsHeader}
-            // onRenderRow={this.renderRow}
+            // onItemInvoked={this._onItemInvoked}
           />
-          {!this.state.items.length && (
+          {!this.state.items.length && !this.state.isFilter && (
             <Stack style={{ marginLeft: "30px" }}>
               <Text>Nincsenek még technológiák felvéve!</Text>
+            </Stack>
+          )}
+          {!this.state.items.length && this.state.isFilter && (
+            <Stack style={{ marginLeft: "30px" }}>
+              <Text>Nincsen a keresésnek megfelelő eredmény!</Text>
             </Stack>
           )}
         </MarqueeSelection>
@@ -223,13 +229,14 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
     this.setState({
       items: text
         ? this._allItems.filter((i) => i.name.toLowerCase().indexOf(text.toLowerCase()) === 0)
-        : this._allItems
+        : this._allItems,
+      isFilter: text ? true : false
     });
   };
 
-  private _onItemInvoked = (item: IDetailsListBasicExampleItem): void => {
-    alert(`Kattintottak: ${item.name}`);
-  };
+  // private _onItemInvoked = (item: IDetailsListBasicExampleItem): void => {
+  //   alert(`Kattintottak: ${item.name}`);
+  // };
 }
 
 export default TechnologyTable;

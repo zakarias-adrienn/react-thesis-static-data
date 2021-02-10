@@ -9,10 +9,8 @@ import {
 } from "office-ui-fabric-react/lib/DetailsList";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
-import { DefaultButton, PrimaryButton, Stack } from "office-ui-fabric-react";
-import AcceptedStudents from "./AcceptedStudents";
 import { Text } from "office-ui-fabric-react/lib/Text";
-import ConfirmDeny from "./ConfirmDeny";
+import { Stack } from "office-ui-fabric-react";
 
 const exampleChildClass = mergeStyles({
   display: "block",
@@ -24,9 +22,8 @@ const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "300px" }
 export interface IDetailsListBasicExampleItem {
   key: string;
   title: string;
+  semester: string;
   name: string;
-  accept: any;
-  deny: any;
 }
 
 export interface IDetailsListBasicExampleState {
@@ -34,43 +31,28 @@ export interface IDetailsListBasicExampleState {
   isFilter: boolean;
 }
 
-class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState> {
+class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState> {
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
-  private acceptedStudents: any;
 
   constructor(props: {}) {
     super(props);
 
-    this.onDeny = this.onDeny.bind(this);
-    this.handleAccept = this.handleAccept.bind(this);
+    this.updateState = this.updateState.bind(this);
 
     // Populate with items for demos.
     this._allItems = [];
     this._allItems.push({
-      key: "Garbage Collector működése Javában",
-      title: "Garbage Collector működése Javában",
+      key: "Régi projekt 1",
+      title: "Régi projekt 1",
       name: "Zakariás Adrienn",
-      accept: (
-        <DefaultButton
-          text="Elfogad"
-          onClick={() => this.handleAccept("Garbage Collector működése Javában")}
-        />
-      ),
-      deny: (
-        <ConfirmDeny
-          name="Zakariás Adrienn"
-          myId="Garbage Collector működése Javában"
-          onDeny={this.onDeny}
-        ></ConfirmDeny>
-      )
+      semester: "2020/21-tavasz"
     });
     this._allItems.push({
-      key: "Youniversity",
-      title: "Youniversity",
+      key: "Régi projekt 2",
+      title: "Régi projekt 2",
       name: "Zöld Elek",
-      accept: <DefaultButton text="Elfogad" onClick={() => this.handleAccept("Youniversity")} />,
-      deny: <ConfirmDeny name="Zöld Elek" myId="Youniversity" onDeny={this.onDeny}></ConfirmDeny>
+      semester: "2019-20-ősz"
     });
 
     this._columns = [
@@ -92,16 +74,8 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
       },
       {
         key: "column3",
-        name: "Elfogadás",
-        fieldName: "accept",
-        minWidth: 50,
-        maxWidth: 100,
-        isResizable: true
-      },
-      {
-        key: "column4",
-        name: "Elutasítás",
-        fieldName: "deny",
+        name: "Félév",
+        fieldName: "semester",
         minWidth: 50,
         maxWidth: 100,
         isResizable: true
@@ -114,66 +88,25 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
     };
   }
 
-  onDeny(myId: string, toggleHideDialog: any) {
-    toggleHideDialog();
+  public updateState(key: string, title: string, name: string) {
+    let acceptedItem: IDetailsListBasicExampleItem = {
+      key: key,
+      title: title,
+      name: name,
+      semester: "2020/21-ősz" // TODO: aktuális félévet kellene
+    };
     this.setState({
-      items: this.state.items.filter((item) => item.key !== myId)
+      items: [...this.state.items, acceptedItem]
     });
-    this._allItems = this._allItems.filter((item) => item.key !== myId);
+    this._allItems.push(acceptedItem);
   }
-
-  handleAccept(key: string) {
-    console.log(key);
-    this.setState({
-      items: this.state.items.filter((item) => item.key !== key)
-    });
-    let title: string = this._allItems.filter((item) => item.key === key)[0].title;
-    let student: string = this._allItems.filter((item) => item.key === key)[0].name;
-    this._allItems = this._allItems.filter((item) => item.key !== key);
-    this.acceptedStudents.updateState(key, title, student);
-  }
-
-  // KÖZÉPRE TEVÉS
-  // private renderDetailsHeader(detailsHeaderProps: IDetailsHeaderProps) {
-  //   return (
-  //     <DetailsHeader
-  //       {...detailsHeaderProps}
-  //       onRenderColumnHeaderTooltip={this.renderCustomHeaderTooltip}
-  //     />
-  //   );
-  // }
-
-  // private renderRow: IDetailsListProps["onRenderRow"] = (props) => {
-  //   const customStyles: Partial<IDetailsRowStyles> = {};
-  //   if (props) {
-  //     customStyles.root = { textAlign: "center" };
-
-  //     return <DetailsRow {...props} styles={customStyles} />;
-  //   }
-  //   return null;
-  // };
-
-  // // így tudom stylingolni a headereket
-  // private renderCustomHeaderTooltip(tooltipHostProps: ITooltipHostProps) {
-  //   return (
-  //     <span
-  //       style={{
-  //         display: "flex",
-  //         justifyContent: "center",
-  //         fontSize: "12px"
-  //       }}
-  //     >
-  //       {tooltipHostProps.children}
-  //     </span>
-  //   );
-  // }
 
   public render(): JSX.Element {
     const { items } = this.state;
 
     return (
       <>
-        <h3>Függőben levő jelentkezések</h3>
+        <h3>Elfogadott jelentkezések</h3>
         <Fabric>
           <TextField
             className={exampleChildClass}
@@ -188,6 +121,7 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
             setKey="none"
             selectionMode={SelectionMode.none}
             layoutMode={DetailsListLayoutMode.justified}
+            selectionPreservedOnEmptyClick={true}
           />
           {!this.state.items.length && !this.state.isFilter && (
             <Stack horizontalAlign="center">
@@ -202,9 +136,6 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
             </Stack>
           )}
         </Fabric>
-        <br />
-        <br />
-        <AcceptedStudents ref={(ele) => (this.acceptedStudents = ele)}></AcceptedStudents>
       </>
     );
   }
@@ -213,6 +144,7 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
     ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     text: string | undefined
   ): void => {
+    console.log(this.state.items);
     this.setState({
       items: text
         ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text?.toLowerCase()) > -1)
@@ -222,4 +154,4 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
   };
 }
 
-export default AppliedStudents;
+export default AcceptedStudents;
