@@ -30,7 +30,7 @@ const navLinkGroups: INavLinkGroup[] = [
         key: "key3"
       },
       {
-        name: "Témáim",
+        name: "Jelentkezéseim",
         url: "/myTopics",
         key: "key4"
       },

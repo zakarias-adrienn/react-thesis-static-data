@@ -4,7 +4,7 @@ import "semantic-ui-css/semantic.min.css";
 import WelcomePage from "./modules/thesis/components/WelcomePage";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import SearchPage from "./modules/thesis/components/SearchPage";
-import CreateThesis from "./modules/thesis/components/CreateThesis";
+import CreateThesis from "./modules/thesis/components/TopicForm";
 import Header from "./modules/thesis/components/Header";
 import MenuNavigate from "./modules/thesis/components/MenuNavigate";
 import PublishedThesis from "./modules/thesis/components/PublishedThesis";

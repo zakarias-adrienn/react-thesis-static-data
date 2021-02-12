@@ -23,13 +23,13 @@ const dialogContentProps = (name: string) => {
   };
 };
 
-interface ConfirmWithdrawProps {
+interface ConfirmDenyProps {
   myId: string;
   name: string;
-  onDeny: any;
+  onDeny: Function;
 }
 
-const ConfirmDeny: React.FunctionComponent<ConfirmWithdrawProps> = (props) => {
+const ConfirmDeny: React.FunctionComponent<ConfirmDenyProps> = (props) => {
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
   const [isDraggable, { toggle: toggleIsDraggable }] = useBoolean(false);
   const labelId: string = useId("dialogLabel");

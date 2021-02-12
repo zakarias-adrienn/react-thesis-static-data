@@ -27,7 +27,7 @@ export interface IDetailsListBasicExampleItem {
   title: string;
   teacher: string;
   status: string;
-  remove: any;
+  remove: JSX.Element;
 }
 
 export interface IDetailsListBasicExampleState {
@@ -109,7 +109,7 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
     };
   }
 
-  public onDelete(id: string, toggleHideDialog: any) {
+  public onDelete(id: string, toggleHideDialog: Function) {
     toggleHideDialog();
     this.setState({
       items: this.state.items.filter((item) => item.key !== id),

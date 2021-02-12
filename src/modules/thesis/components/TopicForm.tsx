@@ -8,9 +8,11 @@ import {
   IDropdownStyles,
   IDropdownOption
 } from "office-ui-fabric-react/lib/Dropdown";
-import { DefaultButton, PrimaryButton } from "office-ui-fabric-react";
+import { DefaultButton, PrimaryButton, IIconProps } from "office-ui-fabric-react";
 import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
 import { Text } from "office-ui-fabric-react/lib/Text";
+import { Language, Semester, TopicStatus, TopicType } from "../model/topics.model";
+import ConfirmModify from "./ConfirmModify";
 
 const stackTokens = { childrenGap: 10 };
 const stackStyles: Partial<IStackStyles> = { root: { width: 650 } };
@@ -50,10 +52,6 @@ const columnProps: Partial<IStackProps> = {
   styles: { root: { width: 800, alignItems: "center" as "center" } }
 };
 
-type Values = {
-  title: string;
-};
-
 type MissingData = {
   title: boolean;
   description: boolean;
@@ -72,7 +70,25 @@ type State = {
   values: Values;
 };
 
-class CreateThesis extends React.Component<{}, State> {
+type Prop = {
+  values?: Values;
+};
+
+type Values = {
+  title: string;
+  description: string;
+  numOfPlaces: number;
+  startYear: number;
+  // TODO: félév hónapja
+  // TODO: tantárgyak
+  // TODO: technológiák
+  // TODO: téma jellege
+  // TODO: témaírás nyelve
+};
+
+const publishIcon: IIconProps = { iconName: "PublishContent" };
+
+class TopicForm extends React.Component<Prop, State> {
   private choiceGroupRef: any;
   private bscThesisRef: any;
   private bscTdkRef: any;
@@ -82,6 +98,7 @@ class CreateThesis extends React.Component<{}, State> {
   private englishRef: any;
   private subjectsRef: any;
   private technologiesRef: any;
+  private plusOneYear: string;
 
   constructor(props: any) {
     super(props);
@@ -99,9 +116,32 @@ class CreateThesis extends React.Component<{}, State> {
         type4: true
       },
       values: {
-        title: "Youniversity"
+        title: "",
+        description: "",
+        numOfPlaces: 0,
+        startYear: 0
       }
     };
+    // ha valamelyik nincs megadva akkor egyiket sem állítja be,
+    // de jobb lenne ha mindet kötelező lenne megadni
+    // olyan kellene hogy vagy megadok propot vagy nem
+    if (this.props.values) {
+      console.log("itt");
+      this.state = {
+        ...this.state,
+        missingData: {
+          ...this.state.missingData,
+          title: false,
+          description: false,
+          places: false,
+          semester: false
+        },
+        values: this.props?.values
+      };
+    }
+    this.plusOneYear = (this.state.values.startYear + 1).toString().substring(2);
+    console.log(this.plusOneYear);
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.choiceGroupRef = React.createRef();
     this.bscThesisRef = React.createRef();
@@ -112,6 +152,8 @@ class CreateThesis extends React.Component<{}, State> {
     this.englishRef = React.createRef();
     this.subjectsRef = React.createRef();
     this.technologiesRef = React.createRef();
+
+    console.log(this.state.values);
   }
 
   handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -139,62 +181,109 @@ class CreateThesis extends React.Component<{}, State> {
     console.log("Angol nyelvű: ", this.englishRef.current.checked);
     console.log("Tantárgyak: ", this.subjectsRef.current.selectedOptions);
     console.log("Technológiák: ", this.technologiesRef.current.selectedOptions);
+
+    // az összeállított téma
+    let types: TopicType[] = [];
+    if (this.bscThesisRef.current.checked) {
+      types.push(TopicType.BScThesis);
+    }
+    if (this.bscTdkRef.current.checked) {
+      types.push(TopicType.BScTDK);
+    }
+    if (this.mscThesisRef.current.checked) {
+      types.push(TopicType.MScThesis);
+    }
+    if (this.mscTdkRef.current.cheched) {
+      types.push(TopicType.MScTDK);
+    }
+
+    let languages: Language[] = [];
+    if (this.hungarianRef.current.checked) {
+      languages.push(Language.Hungarian);
+    }
+    if (this.englishRef.current.cheched) {
+      languages.push(Language.English);
+    }
+
+    let semester = fields["Félév"];
+    let year = parseInt(semester.substring(0, 4));
+    let half =
+      this.choiceGroupRef.current.checkedOption.key === "autumn"
+        ? Semester.Autumn
+        : Semester.Spring;
+
+    let subjectIds: string[] = this.subjectsRef.current.selectedOptions.map(
+      (subject: any) => subject.key
+    );
+
+    let technologyIds: string[] = this.technologiesRef.current.selectedOptions.map(
+      (technology: any) => technology.key
+    );
+
+    let newTopic = {
+      // id: string;
+      type: types,
+      title: fields["Cím"],
+      description: fields["Leírás"],
+      // teacherId: string;
+      connectedSubjectIds: subjectIds,
+      connectedTechnologyIds: technologyIds,
+      numberOfPlaces: parseInt(fields["numberofplaces"]),
+      schoolSemester: {
+        year: year,
+        half: half
+      },
+      status: TopicStatus.Announced,
+      appliedStudentIds: [],
+      language: languages
+    };
+    console.log(newTopic);
   }
 
   getErrorMessage = (value: string): string => {
     if (value.length >= 1) {
       this.setState((state) => ({
+        ...this.state,
         missingData: {
           ...state.missingData,
           title: false
-        },
-        values: {
-          ...state.values
         }
       }));
       console.log(this.state);
       return "";
     } else {
       this.setState((state) => ({
+        ...this.state,
         missingData: {
           ...state.missingData,
           title: true
-        },
-        values: {
-          ...state.values
         }
       }));
       return `Cím megadása kötelező!`;
     }
-    //return value.length >= 1 ? "" : `Cím megadása kötelező!`;
   };
 
   getErrorDescription = (value: string): string => {
     if (value.length >= 1) {
       this.setState((state) => ({
+        ...this.state,
         missingData: {
           ...state.missingData,
           description: false
-        },
-        values: {
-          ...this.state.values
         }
       }));
       console.log(this.state);
       return "";
     } else {
       this.setState((state) => ({
+        ...this.state,
         missingData: {
           ...state.missingData,
           description: true
-        },
-        values: {
-          ...state.values
         }
       }));
       return `Leírás megadása kötelező!`;
     }
-    // return value.length >= 1 ? "" : `Leírás megadása kötelező!`;
   };
 
   getErrorSemester = (value: string): string => {
@@ -204,65 +293,53 @@ class CreateThesis extends React.Component<{}, State> {
     const regex = new RegExp("[0-9][0-9][0-9][0-9]/[0-9][0-9]");
     if (!regex.test(value)) {
       this.setState((state) => ({
+        ...this.state,
         missingData: {
           ...state.missingData,
           semester: true
-        },
-        values: {
-          ...state.values
         }
       }));
       return "Félév formátuma nem helyes szintaktikailag! Példa helyes formátumra: 2020/21";
     } else if (second !== first + 1) {
       this.setState((state) => ({
+        ...this.state,
         missingData: {
           ...state.missingData,
           semester: true
-        },
-        values: {
-          ...state.values
         }
       }));
       console.log(this.state);
       return "Félév formátuma nem helyes szemantikailag! Példa helyes formátumra: 2020/21";
     } else {
       this.setState((state) => ({
+        ...this.state,
         missingData: {
           ...state.missingData,
           semester: false
-        },
-        values: {
-          ...state.values
         }
       }));
       console.log(this.state);
       return "";
     }
-    // return regex.test(value) ? "" : "Félév formátuma nem helyes! Példa helyes formátumra: 2020/21";
-    // TODO: azt is ellenőrizni kellene, hogy a második 2 számjegy pontosan 1-el legyen nagyobb mint az első 2 beírt
   };
 
   getErrorNumPlaces = (value: string): string => {
-    if (value.length >= 1) {
+    if (!isNaN(parseInt(value))) {
       this.setState((state) => ({
+        ...this.state,
         missingData: {
           ...state.missingData,
           places: false
-        },
-        values: {
-          ...state.values
         }
       }));
       console.log(this.state);
       return "";
     } else {
       this.setState((state) => ({
+        ...this.state,
         missingData: {
           ...state.missingData,
           places: true
-        },
-        values: {
-          ...state.values
         }
       }));
       return `Helyek számának megadása kötelező!`;
@@ -272,68 +349,56 @@ class CreateThesis extends React.Component<{}, State> {
 
   changeType1 = () => {
     this.setState((state) => ({
+      ...this.state,
       missingData: {
         ...state.missingData,
         type1: !state.missingData.type1
-      },
-      values: {
-        ...state.values
       }
     }));
   };
   changeType2 = () => {
     this.setState((state) => ({
+      ...this.state,
       missingData: {
         ...state.missingData,
         type2: !state.missingData.type2
-      },
-      values: {
-        ...state.values
       }
     }));
   };
   changeType3 = () => {
     this.setState((state) => ({
+      ...this.state,
       missingData: {
         ...state.missingData,
         type3: !state.missingData.type3
-      },
-      values: {
-        ...state.values
       }
     }));
   };
   chanegType4 = () => {
     this.setState((state) => ({
+      ...this.state,
       missingData: {
         ...state.missingData,
         type4: !state.missingData.type4
-      },
-      values: {
-        ...state.values
       }
     }));
   };
   changeLanguage1 = () => {
     this.setState((state) => ({
+      ...this.state,
       missingData: {
         ...state.missingData,
         language1: !state.missingData.language1
-      },
-      values: {
-        ...state.values
       }
     }));
     console.log(this.state);
   };
   changeLanguage2 = () => {
     this.setState((state) => ({
+      ...this.state,
       missingData: {
         ...state.missingData,
         language2: !state.missingData.language2
-      },
-      values: {
-        ...state.values
       }
     }));
   };
@@ -342,7 +407,7 @@ class CreateThesis extends React.Component<{}, State> {
     return (
       <div>
         <Stack {...columnProps}>
-          <h2>Téma kiírása</h2>
+          <h2>Téma {this.props.values ? <>módosítása</> : <>kiírása</>}</h2>
           <form onSubmit={this.handleSubmit}>
             <Stack tokens={stackTokens} styles={stackStyles}>
               <TextField
@@ -354,9 +419,7 @@ class CreateThesis extends React.Component<{}, State> {
                 value={this.state.values.title}
                 onChange={(e) => {
                   this.setState((state) => ({
-                    missingData: {
-                      ...state.missingData
-                    },
+                    ...state,
                     values: {
                       ...state.values,
                       title: (e.target as HTMLInputElement).value
@@ -366,12 +429,22 @@ class CreateThesis extends React.Component<{}, State> {
               />
               <TextField
                 label="Leírás"
+                value={this.state.values.description}
                 name="Leírás"
                 multiline
                 rows={3}
                 required
                 onGetErrorMessage={this.getErrorDescription}
                 validateOnLoad={false}
+                onChange={(e) => {
+                  this.setState((state) => ({
+                    ...state,
+                    values: {
+                      ...state.values,
+                      description: (e.target as HTMLInputElement).value
+                    }
+                  }));
+                }}
               />
               <div className="ms-Grid" dir="ltr">
                 <div className="ms-Grid-row">
@@ -383,6 +456,13 @@ class CreateThesis extends React.Component<{}, State> {
                       required
                       onGetErrorMessage={this.getErrorSemester}
                       validateOnLoad={false}
+                      value={
+                        this.state.values.startYear === 0
+                          ? ""
+                          : this.state.values.startYear.toString().substring(2) +
+                            "/" +
+                            this.plusOneYear
+                      }
                     />
                   </div>
                   <div className="ms-Grid-col ms-sm6">
@@ -489,6 +569,20 @@ class CreateThesis extends React.Component<{}, State> {
                 name="numberofplaces"
                 onGetErrorMessage={this.getErrorNumPlaces}
                 validateOnLoad={false}
+                value={
+                  this.state.values.numOfPlaces === 0
+                    ? ""
+                    : this.state.values.numOfPlaces.toString()
+                }
+                onChange={(e) => {
+                  this.setState((state) => ({
+                    ...state,
+                    values: {
+                      ...state.values,
+                      numOfPlaces: parseInt((e.target as HTMLInputElement).value)
+                    }
+                  }));
+                }}
               />
               <Dropdown
                 //name="subjects"
@@ -507,22 +601,40 @@ class CreateThesis extends React.Component<{}, State> {
                 //styles={dropdownStyles
                 componentRef={this.technologiesRef}
               />
-              <PrimaryButton
-                text="Meghirdetés"
-                type="submit"
-                allowDisabledFocus
-                disabled={
-                  this.state.missingData.title ||
-                  this.state.missingData.description ||
-                  this.state.missingData.semester ||
-                  this.state.missingData.places ||
-                  (this.state.missingData.language1 && this.state.missingData.language2) ||
-                  (this.state.missingData.type1 &&
-                    this.state.missingData.type2 &&
-                    this.state.missingData.type3 &&
-                    this.state.missingData.type4)
-                }
-              />
+              {this.props.values ? (
+                <ConfirmModify
+                  disabled={
+                    this.state.missingData.title ||
+                    this.state.missingData.description ||
+                    this.state.missingData.semester ||
+                    this.state.missingData.places ||
+                    (this.state.missingData.language1 && this.state.missingData.language2) ||
+                    (this.state.missingData.type1 &&
+                      this.state.missingData.type2 &&
+                      this.state.missingData.type3 &&
+                      this.state.missingData.type4)
+                  }
+                ></ConfirmModify>
+              ) : (
+                <PrimaryButton
+                  text="Meghirdetés"
+                  type="submit"
+                  iconProps={publishIcon}
+                  allowDisabledFocus
+                  disabled={
+                    this.state.missingData.title ||
+                    this.state.missingData.description ||
+                    this.state.missingData.semester ||
+                    this.state.missingData.places ||
+                    (this.state.missingData.language1 && this.state.missingData.language2) ||
+                    (this.state.missingData.type1 &&
+                      this.state.missingData.type2 &&
+                      this.state.missingData.type3 &&
+                      this.state.missingData.type4)
+                  }
+                />
+              )}
+
               <br />
             </Stack>
           </form>
@@ -532,12 +644,4 @@ class CreateThesis extends React.Component<{}, State> {
   }
 }
 
-function _onChange(ev: React.FormEvent<HTMLElement>, isChecked: boolean) {
-  console.log(`The option has been changed to ${isChecked}.`);
-}
-
-function _alertClicked(): void {
-  alert("Clicked");
-}
-
-export default CreateThesis;
+export default TopicForm;

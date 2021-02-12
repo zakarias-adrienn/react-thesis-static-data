@@ -52,7 +52,7 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
       key: "Régi projekt 2",
       title: "Régi projekt 2",
       name: "Zöld Elek",
-      semester: "2019-20-ősz"
+      semester: "2019/20-ősz"
     });
 
     this._columns = [
@@ -68,8 +68,8 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
         key: "column2",
         name: "Hallgató",
         fieldName: "name",
-        minWidth: 50,
-        maxWidth: 100,
+        minWidth: 200,
+        maxWidth: 250,
         isResizable: true
       },
       {
@@ -108,13 +108,26 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
       <>
         <h3>Elfogadott jelentkezések</h3>
         <Fabric>
-          <TextField
-            className={exampleChildClass}
-            label="Cím szerinti szűrés:"
-            onChange={this._onFilter}
-            styles={textFieldStyles}
-          />
-          <Announced message={`Number of items after filter applied: ${items.length}.`} />
+          <div className="ms-Grid" dir="ltr">
+            <div className="ms-Grid-row">
+              <div className="ms-Grid-col ms-sm4">
+                <TextField
+                  className={exampleChildClass}
+                  label="Cím szerinti szűrés:"
+                  onChange={this._onFilter}
+                  styles={textFieldStyles}
+                />
+              </div>
+              <div className="ms-Grid-col ms-sm8">
+                <TextField
+                  className={exampleChildClass}
+                  label="Hallgató szerinti szűrés:"
+                  onChange={this._onFilter2}
+                  styles={textFieldStyles}
+                />
+              </div>
+            </div>
+          </div>
           <DetailsList
             items={items}
             columns={this._columns}
@@ -148,6 +161,19 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
     this.setState({
       items: text
         ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text?.toLowerCase()) > -1)
+        : this._allItems,
+      isFilter: text ? true : false
+    });
+  };
+
+  private _onFilter2 = (
+    ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    text: string | undefined
+  ): void => {
+    console.log(this.state.items);
+    this.setState({
+      items: text
+        ? this._allItems.filter((i) => i.name.toLowerCase().indexOf(text?.toLowerCase()) > -1)
         : this._allItems,
       isFilter: text ? true : false
     });

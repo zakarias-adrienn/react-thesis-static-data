@@ -36,8 +36,8 @@ const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "300px" }
 export interface IDetailsListBasicExampleItem {
   key: string;
   name: string;
-  edit: any;
-  delete: any;
+  edit: JSX.Element;
+  delete: JSX.Element;
 }
 
 export interface IDetailsListBasicExampleState {
@@ -142,7 +142,7 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
     };
   }
 
-  public onChangeName(name: string, id: string, toggleHideDialog: any) {
+  public onChangeName(name: string, id: string, toggleHideDialog: Function) {
     // console.log(name);
     // console.log(id);
     // console.log(this.state);
@@ -154,7 +154,7 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
     });
   }
 
-  public onDelete(id: string, toggleHideDialog: any) {
+  public onDelete(id: string, toggleHideDialog: Function) {
     toggleHideDialog();
     this.setState({
       items: this.state.items.filter((item) => item.key !== id),

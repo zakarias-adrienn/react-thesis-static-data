@@ -20,6 +20,8 @@ const exampleChildClass = mergeStyles({
 
 const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "300px" } };
 
+// tanár is tudjon menteni? nem kellene
+
 export interface IDetailsListBasicExampleItem {
   key: string;
   title: string;
@@ -29,7 +31,8 @@ export interface IDetailsListBasicExampleItem {
   technologies: string;
   subjects: string;
   places: number | string;
-  view: any;
+  view: JSX.Element;
+  addFavourite: JSX.Element;
 }
 
 export interface IDetailsListBasicExampleState {
@@ -62,6 +65,13 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
       places: "Betelt",
       view: (
         <IconButton iconProps={{ iconName: "RedEye" }} title="Megtekint" ariaLabel="Megtekint" />
+      ),
+      addFavourite: (
+        <IconButton
+          iconProps={{ iconName: "AddFavorite" }}
+          title="Kedvencekhez ad"
+          ariaLabel="Kedvencekhez ad"
+        ></IconButton>
       )
     });
     this._allItems.push({
@@ -75,6 +85,13 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
       places: 4,
       view: (
         <IconButton iconProps={{ iconName: "RedEye" }} title="Megtekint" ariaLabel="Megtekint" />
+      ),
+      addFavourite: (
+        <IconButton
+          iconProps={{ iconName: "AddFavorite" }}
+          title="Kedvencekhez ad"
+          ariaLabel="Kedvencekhez ad"
+        ></IconButton>
       )
     });
 
@@ -140,7 +157,15 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
         name: "Megtekintés",
         fieldName: "view",
         minWidth: 30,
-        maxWidth: 200,
+        maxWidth: 100,
+        isResizable: true
+      },
+      {
+        key: "column8",
+        name: "Mentés",
+        fieldName: "addFavourite",
+        minWidth: 30,
+        maxWidth: 100,
         isResizable: true
       }
     ];

@@ -31,8 +31,8 @@ export interface IDetailsListBasicExampleItem {
   technologies: string;
   subjects: string;
   places: number;
-  view: any;
-  delete: any;
+  view: JSX.Element;
+  delete: JSX.Element;
 }
 
 export interface IDetailsListBasicExampleState {
@@ -158,7 +158,7 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
     };
   }
 
-  public onDelete(id: string, toggleHideDialog: any) {
+  public onDelete(id: string, toggleHideDialog: Function) {
     toggleHideDialog();
     this.setState({
       items: this.state.items.filter((item) => item.key !== id),

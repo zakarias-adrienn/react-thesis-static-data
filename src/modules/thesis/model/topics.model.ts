@@ -25,13 +25,13 @@ export enum TopicStatus {
 }
 
 export enum Language {
-  Humgarian,
+  Hungarian,
   English
 }
 
 export type Topic = {
   id: string;
-  type: TopicType;
+  type: TopicType[];
   title: string;
   description: string;
   teacherId: string;
@@ -41,7 +41,7 @@ export type Topic = {
   schoolSemester: SchoolSemester;
   status: TopicStatus;
   appliedStudentIds: string[];
-  language: Language;
+  language: Language[];
 };
 
 export const topicSchema = Joi.object({

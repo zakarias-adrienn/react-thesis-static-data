@@ -16,6 +16,7 @@ import {
   TopicStatus,
   Language
 } from "../model/topics.model";
+import { Link } from "office-ui-fabric-react";
 
 const topics: Topic[] = [
   {
@@ -39,6 +40,7 @@ const topics: Topic[] = [
 
 type State = {
   selectedTeacher: { key: string; text: string };
+  isFiltered: boolean;
 };
 
 class SearchPage extends React.Component<{}, State> {
@@ -50,7 +52,8 @@ class SearchPage extends React.Component<{}, State> {
       selectedTeacher: {
         key: "",
         text: ""
-      }
+      },
+      isFiltered: false
     };
   }
 
@@ -123,15 +126,32 @@ class SearchPage extends React.Component<{}, State> {
         <div className="ms-Grid" dir="ltr">
           <div className="ms-Grid-row">
             <div className="ms-Grid-col ms-sm6">
-              <ChooseTheme></ChooseTheme>
-              <ChooseLanguage></ChooseLanguage>
-              <br />
               <SearchByTitle></SearchByTitle>
+              {this.state.isFiltered && (
+                <>
+                  <ChooseTheme></ChooseTheme>
+                  <ChooseLanguage></ChooseLanguage>
+                </>
+              )}
             </div>
             <div className="ms-Grid-col ms-sm6">
-              <SearchTeacher onChange={this.handleChange}></SearchTeacher>
-              <Subjects></Subjects>
-              <Technologies></Technologies>
+              <Link
+                onClick={() =>
+                  this.setState({
+                    ...this.state,
+                    isFiltered: !this.state.isFiltered
+                  })
+                }
+              >
+                Szűrők {!this.state.isFiltered ? <>megjelenítése</> : <>elrejtése</>}
+              </Link>
+              {this.state.isFiltered && (
+                <>
+                  <SearchTeacher onChange={this.handleChange}></SearchTeacher>
+                  <Subjects></Subjects>
+                  <Technologies></Technologies>
+                </>
+              )}
             </div>
           </div>
           <br />

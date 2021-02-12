@@ -23,7 +23,7 @@ const dialogContentProps = {
 
 interface ConfirmWithdrawProps {
   myId: string;
-  onWithdraw: any;
+  onWithdraw: Function;
 }
 
 const ConfirmWithdraw: React.FunctionComponent<ConfirmWithdrawProps> = (props) => {

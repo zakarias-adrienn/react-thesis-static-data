@@ -7,7 +7,6 @@ import {
   SelectableOptionMenuItemType
 } from "office-ui-fabric-react/lib/index";
 import { initializeIcons } from "@uifabric/icons";
-import { any } from "joi";
 
 initializeIcons();
 

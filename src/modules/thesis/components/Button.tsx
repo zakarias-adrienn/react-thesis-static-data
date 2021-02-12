@@ -1,14 +1,15 @@
 import * as React from "react";
 import { PrimaryButton, Stack, IStackTokens } from "office-ui-fabric-react";
+import { IIconProps } from "office-ui-fabric-react";
 
 export interface IButtonExampleProps {
-  // These are set based on the toggles shown above the examples (not needed in real code)
   disabled?: boolean;
   checked?: boolean;
 }
 
-// Example formatting
 const stackTokens: IStackTokens = { childrenGap: 40 };
+
+const searchIcon: IIconProps = { iconName: "SearchBookmark" };
 
 const Button: React.FunctionComponent<IButtonExampleProps> = (props) => {
   const { disabled, checked } = props;
@@ -16,6 +17,7 @@ const Button: React.FunctionComponent<IButtonExampleProps> = (props) => {
   return (
     <Stack horizontal tokens={stackTokens}>
       <PrimaryButton
+        iconProps={searchIcon}
         text="Keresés"
         // onClick={_alertClicked}
         type="submit"

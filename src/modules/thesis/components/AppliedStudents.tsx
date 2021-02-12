@@ -25,8 +25,8 @@ export interface IDetailsListBasicExampleItem {
   key: string;
   title: string;
   name: string;
-  accept: any;
-  deny: any;
+  accept: JSX.Element;
+  deny: JSX.Element;
 }
 
 export interface IDetailsListBasicExampleState {
