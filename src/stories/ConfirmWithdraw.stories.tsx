@@ -8,4 +8,8 @@ export default {
   component: ConfirmWithdraw
 };
 
-export const First = () => <ConfirmWithdraw />;
+const onWithDraw = () => {
+  console.log("Visszavonás");
+};
+
+export const First = () => <ConfirmWithdraw myId={"valami"} onWithdraw={onWithDraw} />;

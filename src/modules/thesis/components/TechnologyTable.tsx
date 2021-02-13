@@ -31,7 +31,7 @@ const exampleChildClass = mergeStyles({
   marginBottom: "10px"
 });
 
-const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "300px" } };
+const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "200px" } };
 
 export interface IDetailsListBasicExampleItem {
   key: string;
@@ -177,7 +177,6 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
           onChange={this._onFilter}
           styles={textFieldStyles}
         />
-        <Announced message={`Number of items after filter applied: ${items.length}.`} />
         <MarqueeSelection selection={this._selection}>
           <DetailsList
             items={items}
@@ -211,7 +210,7 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
 
     switch (selectionCount) {
       case 0:
-        return "Nincs kiválasztva elem";
+        return "";
       case 1:
         return (
           "1 kiválasztott elem: " +

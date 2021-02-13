@@ -13,9 +13,9 @@ import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import { DefaultButton, PrimaryButton, Stack, IStackTokens } from "office-ui-fabric-react";
 import { IconButton } from "@fluentui/react/lib/Button";
-import { useId, useBoolean } from "@uifabric/react-hooks";
-import { Link, BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Link } from "react-router-dom";
 import ConfirmDelete from "./ConfirmDelete";
+import { SelectionMode } from "@fluentui/react";
 
 const exampleChildClass = mergeStyles({
   display: "block",
@@ -37,21 +37,15 @@ export interface IDetailsListBasicExampleItem {
 
 export interface IDetailsListBasicExampleState {
   items: IDetailsListBasicExampleItem[];
-  selectionDetails: string;
   isFilter: boolean;
 }
 
 class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState> {
-  private _selection: Selection;
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
 
   constructor(props: {}) {
     super(props);
-
-    this._selection = new Selection({
-      onSelectionChanged: () => this.setState({ selectionDetails: this._getSelectionDetails() })
-    });
 
     this.onDelete = this.onDelete.bind(this);
 
@@ -124,11 +118,9 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
       subjects: "Programozási nyelvek - Java",
       places: 2,
       view: (
-        <BrowserRouter>
-          <Link to="/editTopic/1">
-            <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
-          </Link>
-        </BrowserRouter>
+        <Link to={{ pathname: "/editTopic/" + "1" }}>
+          <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
+        </Link>
       ),
       delete: (
         <ConfirmDelete
@@ -145,7 +137,11 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
       technologies: "React, Javascript",
       subjects: "Webprogramozás, Kliensoldali webprogramozás",
       places: 4,
-      view: <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />,
+      view: (
+        <Link to={{ pathname: "/editTopic/" + "2" }}>
+          <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
+        </Link>
+      ),
       delete: (
         <ConfirmDelete text="topic" which="Youniversity" onDelete={this.onDelete}></ConfirmDelete>
       )
@@ -153,7 +149,6 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
 
     this.state = {
       items: this._allItems,
-      selectionDetails: this._getSelectionDetails(),
       isFilter: false
     };
   }
@@ -162,68 +157,41 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
     toggleHideDialog();
     this.setState({
       items: this.state.items.filter((item) => item.key !== id),
-      selectionDetails: this._getSelectionDetails(),
       isFilter: this.state.isFilter
     });
     this._allItems = this._allItems.filter((item) => item.key !== id);
   }
 
   public render(): JSX.Element {
-    const { items, selectionDetails } = this.state;
+    const { items } = this.state;
 
     return (
       <Fabric>
-        <div className={exampleChildClass}>{selectionDetails}</div>
-        <Announced message={selectionDetails} />
         <TextField
           className={exampleChildClass}
           label="Cím szerinti szűrés:"
           onChange={this._onFilter}
           styles={textFieldStyles}
         />
-        <Announced message={`Number of items after filter applied: ${items.length}.`} />
-        <MarqueeSelection selection={this._selection}>
-          <DetailsList
-            items={items}
-            columns={this._columns}
-            setKey="set"
-            layoutMode={DetailsListLayoutMode.justified}
-            selection={this._selection}
-            selectionPreservedOnEmptyClick={true}
-            ariaLabelForSelectionColumn="Toggle selection"
-            ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-            checkButtonAriaLabel="Row checkbox"
-            onItemInvoked={this._onItemInvoked}
-          />
-          {!this.state.items.length && !this.state.isFilter && (
-            <Stack horizontalAlign="center">
-              <Text>Nincsenek még meghirdetett témák!</Text>
-            </Stack>
-          )}
-          {!this.state.items.length && this.state.isFilter && (
-            <Stack horizontalAlign="center">
-              <Text>Nincs a keresésnek megfelelő téma!</Text>
-            </Stack>
-          )}
-        </MarqueeSelection>
+        <DetailsList
+          items={items}
+          columns={this._columns}
+          layoutMode={DetailsListLayoutMode.justified}
+          setKey="none"
+          selectionMode={SelectionMode.none}
+        />
+        {!this.state.items.length && !this.state.isFilter && (
+          <Stack horizontalAlign="center">
+            <Text>Nincsenek még meghirdetett témák!</Text>
+          </Stack>
+        )}
+        {!this.state.items.length && this.state.isFilter && (
+          <Stack horizontalAlign="center">
+            <Text>Nincs a keresésnek megfelelő téma!</Text>
+          </Stack>
+        )}
       </Fabric>
     );
-  }
-
-  private _getSelectionDetails(): string {
-    const selectionCount = this._selection.getSelectedCount();
-
-    switch (selectionCount) {
-      case 0:
-        return "Nincs kiválasztva elem";
-      case 1:
-        return (
-          "1 kiválasztott elem: " +
-          (this._selection.getSelection()[0] as IDetailsListBasicExampleItem).title
-        );
-      default:
-        return `${selectionCount} darab elem kiválasztva`;
-    }
   }
 
   private _onFilter = (
@@ -236,10 +204,6 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
         : this._allItems,
       isFilter: text ? true : false
     });
-  };
-
-  private _onItemInvoked = (item: IDetailsListBasicExampleItem): void => {
-    alert(`Kattintottak: ${item.title}`);
   };
 }
 

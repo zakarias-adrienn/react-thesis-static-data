@@ -2,7 +2,7 @@ import React from "react";
 import "./App.css";
 import "semantic-ui-css/semantic.min.css";
 import WelcomePage from "./modules/thesis/components/WelcomePage";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, withRouter } from "react-router-dom";
 import SearchPage from "./modules/thesis/components/SearchPage";
 import CreateThesis from "./modules/thesis/components/TopicForm";
 import Header from "./modules/thesis/components/Header";
@@ -11,8 +11,19 @@ import PublishedThesis from "./modules/thesis/components/PublishedThesis";
 import UserThemes from "./modules/thesis/components/UserThemes";
 import AddNewTechnology from "./modules/thesis/components/AddNewTechnology";
 import EditThesis from "./modules/thesis/components/EditThesis";
+import TopicForm from "./modules/thesis/components/TopicForm";
+import TechnologyTable from "./modules/thesis/components/TechnologyTable";
 
 function App() {
+  let fakeTopic = {
+    title: "FAKE-valami",
+    description: "FAKE-hali",
+    numOfPlaces: 3,
+    startYear: 2020
+  };
+
+  console.log();
+
   return (
     <Router>
       <React.StrictMode>
@@ -46,9 +57,11 @@ function App() {
                 </Route>
                 <Route path="/addNewTechnology">
                   <AddNewTechnology />
+                  <h3>Adatbázisban levő technológiák</h3>
+                  <TechnologyTable></TechnologyTable>
                 </Route>
-                <Route path="/editTopic/1">
-                  <EditThesis />
+                <Route exact path="/editTopic/:id">
+                  <TopicForm values={fakeTopic} />
                 </Route>
               </Switch>
             </div>

@@ -8,5 +8,9 @@ export default {
   component: ConfirmDelete
 };
 
-export const Topic = () => <ConfirmDelete text="topic" />;
-export const Technology = () => <ConfirmDelete text="technology" />;
+const onDelete = (id: string, toggleHideDialog: Function) => {
+  console.log("nem tudom ez mi lenne");
+};
+
+export const Topic = () => <ConfirmDelete text="topic" onDelete={onDelete} />;
+export const Technology = () => <ConfirmDelete text="technology" onDelete={onDelete} />;

@@ -56,6 +56,10 @@ const styles = mergeStyleSets({
   }
 });
 
+const onDelete = (id: string, toggleHideDialog: Function) => {
+  console.log("nem tudom ez mi lenne");
+};
+
 const onRenderCell = (item: MyListItem | undefined, index: number | undefined): JSX.Element => {
   return (
     <div data-is-focusable>
@@ -63,7 +67,7 @@ const onRenderCell = (item: MyListItem | undefined, index: number | undefined): 
         {index !== undefined ? index + 1 : undefined} &nbsp;{" "}
         {item !== undefined ? item.name : undefined}
         <div className={styles.right}>
-          <ConfirmDelete text="technology"></ConfirmDelete>
+          <ConfirmDelete text="technology" onDelete={onDelete}></ConfirmDelete>
         </div>
       </div>
     </div>

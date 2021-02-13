@@ -13,6 +13,8 @@ import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/Choi
 import { Text } from "office-ui-fabric-react/lib/Text";
 import { Language, Semester, TopicStatus, TopicType } from "../model/topics.model";
 import ConfirmModify from "./ConfirmModify";
+import { withRouter } from "react-router";
+import { RouteComponentProps } from "react-router";
 
 const stackTokens = { childrenGap: 10 };
 const stackStyles: Partial<IStackStyles> = { root: { width: 650 } };
@@ -88,7 +90,7 @@ type Values = {
 
 const publishIcon: IIconProps = { iconName: "PublishContent" };
 
-class TopicForm extends React.Component<Prop, State> {
+class TopicForm extends React.Component<Prop & RouteComponentProps, State> {
   private choiceGroupRef: any;
   private bscThesisRef: any;
   private bscTdkRef: any;
@@ -99,6 +101,12 @@ class TopicForm extends React.Component<Prop, State> {
   private subjectsRef: any;
   private technologiesRef: any;
   private plusOneYear: string;
+
+  componentDidMount() {
+    const id = (this.props.match.params as any).id;
+    console.log(id);
+    // ha ez nem undefined, akkor id alapján le tudnám kérni a témát nem kellene paraméterben megadni
+  }
 
   constructor(props: any) {
     super(props);
@@ -644,4 +652,4 @@ class TopicForm extends React.Component<Prop, State> {
   }
 }
 
-export default TopicForm;
+export default withRouter(TopicForm);

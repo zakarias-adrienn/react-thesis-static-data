@@ -21,7 +21,7 @@ import { Link } from "office-ui-fabric-react";
 const topics: Topic[] = [
   {
     id: "aaa",
-    type: TopicType.BScThesis,
+    type: [TopicType.BScThesis],
     title: "Youniversity",
     description: "Oktatásszervezési csomag fejlesztése egyetemünk számára",
     teacherId: "Vadász Péter",
@@ -34,7 +34,7 @@ const topics: Topic[] = [
     },
     status: TopicStatus.Announced,
     appliedStudentIds: [],
-    language: Language.Humgarian
+    language: [Language.Hungarian]
   }
 ];
 
