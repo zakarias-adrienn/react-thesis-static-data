@@ -1,13 +1,9 @@
 import * as React from "react";
 import { FocusZone, FocusZoneDirection } from "office-ui-fabric-react/lib/FocusZone";
-import { DefaultButton } from "office-ui-fabric-react/lib/Button";
-import { Dropdown, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 import { List, ScrollToMode, IList } from "office-ui-fabric-react/lib/List";
 import { TextField } from "office-ui-fabric-react/lib/TextField";
-import { createListItems, IExampleItem } from "@uifabric/example-data";
 import { mergeStyleSets, getTheme, normalize } from "office-ui-fabric-react/lib/Styling";
-import { useConst } from "@uifabric/react-hooks";
-import { Icon } from "office-ui-fabric-react/lib/Icon";
 import ConfirmDelete from "./ConfirmDelete";
 
 const evenItemHeight = 25;

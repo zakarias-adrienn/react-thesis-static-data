@@ -1,12 +1,6 @@
 import * as React from "react";
 import { IStackTokens, Stack } from "office-ui-fabric-react/lib/Stack";
-import {
-  Dropdown,
-  DropdownMenuItemType,
-  IDropdownStyles,
-  IDropdownOption
-} from "office-ui-fabric-react/lib/Dropdown";
-import TechnologiesStories from "../../../stories/Technologies.stories";
+import { Dropdown, IDropdownStyles, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 
 const dropdownStyles: Partial<IDropdownStyles> = {
   dropdown: { width: 300 }

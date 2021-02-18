@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Dialog, DialogType, DialogFooter } from "office-ui-fabric-react/lib/Dialog";
 import { PrimaryButton, DefaultButton } from "office-ui-fabric-react/lib/Button";
-import { hiddenContentStyle, mergeStyles } from "office-ui-fabric-react/lib/Styling";
+//import { hiddenContentStyle, mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { ContextualMenu } from "office-ui-fabric-react/lib/ContextualMenu";
 import { useId, useBoolean } from "@uifabric/react-hooks";
 
@@ -12,7 +12,7 @@ const dragOptions = {
   menu: ContextualMenu,
   keepInBounds: true
 };
-const screenReaderOnly = mergeStyles(hiddenContentStyle);
+//const screenReaderOnly = mergeStyles(hiddenContentStyle);
 const dialogContentProps = {
   type: DialogType.normal,
   title: "Új technológia hozzáadása",
@@ -50,12 +50,6 @@ const ConfirmAction: React.FunctionComponent<ConfirmActionProps> = (props) => {
         text="Hozzáadás"
         disabled={props.notEmpty}
       />
-      {/* <label id={labelId} className={screenReaderOnly}>
-        My sample label
-      </label>
-      <label id={subTextId} className={screenReaderOnly}>
-        My sample description
-      </label> */}
 
       <Dialog
         hidden={hideDialog}

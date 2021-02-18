@@ -9,18 +9,20 @@ import {
 } from "office-ui-fabric-react/lib/DetailsList";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
-import { DefaultButton, PrimaryButton, Stack } from "office-ui-fabric-react";
+import { DefaultButton, Stack } from "office-ui-fabric-react";
 import AcceptedStudents from "./AcceptedStudents";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import ConfirmDeny from "./ConfirmDeny";
 
+// STYLES
 const exampleChildClass = mergeStyles({
   display: "block",
   marginBottom: "10px"
 });
 
-const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "300px" } };
+const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "150px" } };
 
+// TYPES
 export interface IDetailsListBasicExampleItem {
   key: string;
   title: string;
@@ -35,6 +37,7 @@ export interface IDetailsListBasicExampleState {
 }
 
 class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState> {
+  // FIELDS
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
   private acceptedStudents: any;
@@ -78,8 +81,8 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
         key: "column1",
         name: "Cím",
         fieldName: "title",
-        minWidth: 200,
-        maxWidth: 400,
+        minWidth: 100,
+        maxWidth: 200,
         isResizable: true
       },
       {
@@ -114,6 +117,8 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
     };
   }
 
+  // FUNCTIONS
+
   onDeny(myId: string, toggleHideDialog: any) {
     toggleHideDialog();
     this.setState({
@@ -132,6 +137,18 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
     this._allItems = this._allItems.filter((item) => item.key !== key);
     this.acceptedStudents.updateState(key, title, student);
   }
+
+  private _onFilter = (
+    ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    text: string | undefined
+  ): void => {
+    this.setState({
+      items: text
+        ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text?.toLowerCase()) > -1)
+        : this._allItems,
+      isFilter: text ? true : false
+    });
+  };
 
   // KÖZÉPRE TEVÉS
   // private renderDetailsHeader(detailsHeaderProps: IDetailsHeaderProps) {
@@ -172,54 +189,46 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
     const { items } = this.state;
 
     return (
-      <>
-        <h3>Függőben levő jelentkezések</h3>
-        <Fabric>
-          <TextField
-            className={exampleChildClass}
-            label="Cím szerinti szűrés:"
-            onChange={this._onFilter}
-            styles={textFieldStyles}
-          />
-          <Announced message={`Number of items after filter applied: ${items.length}.`} />
-          <DetailsList
-            items={items}
-            columns={this._columns}
-            setKey="none"
-            selectionMode={SelectionMode.none}
-            layoutMode={DetailsListLayoutMode.justified}
-          />
-          {!this.state.items.length && !this.state.isFilter && (
-            <Stack horizontalAlign="center">
-              <Text>
-                Jelenleg nincsen függőben levő jelentkezés egyetlen meghirdetett saját témára sem!
-              </Text>
-            </Stack>
-          )}
-          {!this.state.items.length && this.state.isFilter && (
-            <Stack horizontalAlign="center">
-              <Text>Nincs a keresésnek megfelelő jelentkezés!</Text>
-            </Stack>
-          )}
-        </Fabric>
-        <br />
-        <br />
-        <AcceptedStudents ref={(ele) => (this.acceptedStudents = ele)}></AcceptedStudents>
-      </>
+      <div className="ms-Grid" dir="ltr">
+        <div className="ms-Grid-row">
+          <div className="ms-Grid-col ms-sm6">
+            <h3>Függőben levő jelentkezések</h3>
+            <Fabric>
+              <TextField
+                className={exampleChildClass}
+                label="Cím szerinti szűrés:"
+                onChange={this._onFilter}
+                styles={textFieldStyles}
+              />
+              <DetailsList
+                items={items}
+                columns={this._columns}
+                setKey="none"
+                selectionMode={SelectionMode.none}
+                layoutMode={DetailsListLayoutMode.justified}
+              />
+              {!this.state.items.length && !this.state.isFilter && (
+                <Stack horizontalAlign="center">
+                  <Text>
+                    Jelenleg nincsen függőben levő jelentkezés egyetlen meghirdetett saját témára
+                    sem!
+                  </Text>
+                </Stack>
+              )}
+              {!this.state.items.length && this.state.isFilter && (
+                <Stack horizontalAlign="center">
+                  <Text>Nincs a keresésnek megfelelő jelentkezés!</Text>
+                </Stack>
+              )}
+            </Fabric>
+          </div>
+          <div className="ms-Grid-col ms-sm6">
+            <AcceptedStudents ref={(ele) => (this.acceptedStudents = ele)}></AcceptedStudents>
+          </div>
+        </div>
+      </div>
     );
   }
-
-  private _onFilter = (
-    ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-    text: string | undefined
-  ): void => {
-    this.setState({
-      items: text
-        ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text?.toLowerCase()) > -1)
-        : this._allItems,
-      isFilter: text ? true : false
-    });
-  };
 }
 
 export default AppliedStudents;

@@ -1,22 +1,8 @@
 import * as React from "react";
-import { TextField, MaskedTextField } from "office-ui-fabric-react/lib/TextField";
 import { Stack, IStackProps, IStackStyles } from "office-ui-fabric-react/lib/Stack";
-import { Checkbox } from "office-ui-fabric-react/lib/Checkbox";
-import {
-  Dropdown,
-  DropdownMenuItemType,
-  IDropdownStyles,
-  IDropdownOption
-} from "office-ui-fabric-react/lib/Dropdown";
-import { DefaultButton, PrimaryButton } from "office-ui-fabric-react";
-import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
-
-const stackTokens = { childrenGap: 10 };
-const stackStyles: Partial<IStackStyles> = { root: { width: 650 } };
-
-const dropdownStyles: Partial<IDropdownStyles> = {
-  dropdown: { width: 300 }
-};
+import { IDropdownStyles, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { PrimaryButton } from "office-ui-fabric-react";
+import { IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
 
 let options: IDropdownOption[] = [
   { key: "Webprogramozás", text: "Webprogramozás" },

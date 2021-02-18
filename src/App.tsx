@@ -1,8 +1,7 @@
 import React from "react";
 import "./App.css";
 import "semantic-ui-css/semantic.min.css";
-import WelcomePage from "./modules/thesis/components/WelcomePage";
-import { BrowserRouter as Router, Switch, Route, withRouter } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import SearchPage from "./modules/thesis/components/SearchPage";
 import CreateThesis from "./modules/thesis/components/TopicForm";
 import Header from "./modules/thesis/components/Header";
@@ -10,7 +9,6 @@ import MenuNavigate from "./modules/thesis/components/MenuNavigate";
 import PublishedThesis from "./modules/thesis/components/PublishedThesis";
 import UserThemes from "./modules/thesis/components/UserThemes";
 import AddNewTechnology from "./modules/thesis/components/AddNewTechnology";
-import EditThesis from "./modules/thesis/components/EditThesis";
 import TopicForm from "./modules/thesis/components/TopicForm";
 import TechnologyTable from "./modules/thesis/components/TechnologyTable";
 
@@ -47,7 +45,7 @@ function App() {
                   <SearchPage />
                 </Route>
                 <Route path="/createThesis">
-                  <CreateThesis />
+                  <TopicForm />
                 </Route>
                 <Route path="/publishedThesis">
                   <PublishedThesis />

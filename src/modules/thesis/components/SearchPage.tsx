@@ -8,14 +8,7 @@ import SearchTeacher from "./SearchTeacher";
 import SearchByTitle from "./SearchByTitle";
 import ChooseLanguage from "./ChooseLanguage";
 import "office-ui-fabric-react/dist/css/fabric.css";
-import {
-  Topic,
-  TopicType,
-  SchoolSemester,
-  Semester,
-  TopicStatus,
-  Language
-} from "../model/topics.model";
+import { Topic, TopicType, Semester, TopicStatus, Language } from "../model/topics.model";
 import { Link } from "office-ui-fabric-react";
 
 const topics: Topic[] = [

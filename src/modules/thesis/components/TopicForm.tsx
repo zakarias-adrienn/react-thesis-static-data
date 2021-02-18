@@ -2,25 +2,20 @@ import * as React from "react";
 import { TextField, MaskedTextField } from "office-ui-fabric-react/lib/TextField";
 import { Stack, IStackProps, IStackStyles } from "office-ui-fabric-react/lib/Stack";
 import { Checkbox } from "office-ui-fabric-react/lib/Checkbox";
-import {
-  Dropdown,
-  DropdownMenuItemType,
-  IDropdownStyles,
-  IDropdownOption
-} from "office-ui-fabric-react/lib/Dropdown";
-import { DefaultButton, PrimaryButton, IIconProps } from "office-ui-fabric-react";
+import { Dropdown, IDropdownStyles, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { PrimaryButton, IIconProps } from "office-ui-fabric-react";
 import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import { Language, Semester, TopicStatus, TopicType } from "../model/topics.model";
 import ConfirmModify from "./ConfirmModify";
-import { withRouter } from "react-router";
 import { RouteComponentProps } from "react-router";
 
-const stackTokens = { childrenGap: 10 };
+const stackTokens = { childrenGap: 5 };
 const stackStyles: Partial<IStackStyles> = { root: { width: 650 } };
-
-const dropdownStyles: Partial<IDropdownStyles> = {
-  dropdown: { width: 300 }
+const horizontalChoiceGroupStyles = {
+  flexContainer: { display: "flex", flexDirection: "row" },
+  marginTop: "0px",
+  paddingTop: "0px"
 };
 
 let options: IDropdownOption[] = [
@@ -45,8 +40,8 @@ let options2: IDropdownOption[] = [
 options2 = options2.sort((a, b) => (a.key > b.key ? 1 : -1));
 
 const semesters: IChoiceGroupOption[] = [
-  { key: "autumn", text: "Ősz" },
-  { key: "spring", text: "Tavasz" }
+  { key: "autumn", text: "Ősz", styles: { root: { marginRight: "10px", marginTop: "0px" } } },
+  { key: "spring", text: "Tavasz", styles: { root: { marginTop: "0px" } } }
 ];
 
 const columnProps: Partial<IStackProps> = {
@@ -90,7 +85,7 @@ type Values = {
 
 const publishIcon: IIconProps = { iconName: "PublishContent" };
 
-class TopicForm extends React.Component<Prop & RouteComponentProps, State> {
+class TopicForm extends React.Component<Prop, State> {
   private choiceGroupRef: any;
   private bscThesisRef: any;
   private bscTdkRef: any;
@@ -102,11 +97,12 @@ class TopicForm extends React.Component<Prop & RouteComponentProps, State> {
   private technologiesRef: any;
   private plusOneYear: string;
 
-  componentDidMount() {
-    const id = (this.props.match.params as any).id;
-    console.log(id);
-    // ha ez nem undefined, akkor id alapján le tudnám kérni a témát nem kellene paraméterben megadni
-  }
+  // nem működik megfelelően
+  // componentDidMount() {
+  //   const id = (this.props.match.params as any).id;
+  //   console.log(id);
+  //   // ha ez nem undefined, akkor id alapján le tudnám kérni a témát nem kellene paraméterben megadni
+  // }
 
   constructor(props: any) {
     super(props);
@@ -307,7 +303,7 @@ class TopicForm extends React.Component<Prop & RouteComponentProps, State> {
           semester: true
         }
       }));
-      return "Félév formátuma nem helyes szintaktikailag! Példa helyes formátumra: 2020/21";
+      return "Tanév formátuma nem helyes szintaktikailag! Példa helyes formátumra: 2020/21";
     } else if (second !== first + 1) {
       this.setState((state) => ({
         ...this.state,
@@ -317,7 +313,7 @@ class TopicForm extends React.Component<Prop & RouteComponentProps, State> {
         }
       }));
       console.log(this.state);
-      return "Félév formátuma nem helyes szemantikailag! Példa helyes formátumra: 2020/21";
+      return "Tanév formátuma nem helyes szemantikailag! Példa helyes formátumra: 2020/21";
     } else {
       this.setState((state) => ({
         ...this.state,
@@ -456,10 +452,10 @@ class TopicForm extends React.Component<Prop & RouteComponentProps, State> {
               />
               <div className="ms-Grid" dir="ltr">
                 <div className="ms-Grid-row">
-                  <div className="ms-Grid-col ms-sm6">
+                  <div className="ms-Grid-col ms-sm6" style={{ paddingLeft: "0px" }}>
                     <MaskedTextField
-                      label="Félév"
-                      name="Félév"
+                      label="Tanév"
+                      name="Tanév"
                       mask="2099/99"
                       required
                       onGetErrorMessage={this.getErrorSemester}
@@ -473,8 +469,12 @@ class TopicForm extends React.Component<Prop & RouteComponentProps, State> {
                       }
                     />
                   </div>
-                  <div className="ms-Grid-col ms-sm6">
+                  <div className="ms-Grid-col ms-sm6" style={{ paddingTop: "10px" }}>
+                    <Text style={{ fontWeight: 500, paddingTop: "60px", marginBottom: "0px" }}>
+                      Félév
+                    </Text>
                     <ChoiceGroup
+                      styles={horizontalChoiceGroupStyles}
                       name="autumnorspring"
                       defaultSelectedKey="autumn"
                       options={semesters}
@@ -486,37 +486,39 @@ class TopicForm extends React.Component<Prop & RouteComponentProps, State> {
                 <br />
 
                 <div className="ms-Grid-row">
-                  <div className="ms-Grid-col ms-sm6">
-                    <Text>Téma jellege</Text>
-                    <Checkbox
-                      name="bsc_szakdoga"
-                      label="Bsc szakdolgozati"
-                      title="Bsc szakdolgozati"
-                      defaultChecked
-                      componentRef={this.bscThesisRef}
-                      onChange={this.changeType1}
-                    />
-                    <Checkbox
-                      name="bsc_tdk"
-                      label="Bsc TDK"
-                      title="Bsc TDK"
-                      componentRef={this.bscTdkRef}
-                      onChange={this.changeType2}
-                    />
-                    <Checkbox
-                      name="msc_szakdoga"
-                      label="Msc szakdolgozati"
-                      title="Msc szakdolgozati"
-                      onChange={this.changeType3}
-                      componentRef={this.mscThesisRef}
-                    />
-                    <Checkbox
-                      name="msc_tdk"
-                      label="Msc TDK"
-                      title="Msc TDK"
-                      componentRef={this.mscTdkRef}
-                      onChange={this.chanegType4}
-                    />
+                  <div className="ms-Grid-col ms-sm6" style={{ paddingLeft: "0px" }}>
+                    <Text style={{ fontWeight: 500 }}>Téma jellege</Text>
+                    <Stack tokens={stackTokens} id="chooseType" style={{ paddingLeft: "5px" }}>
+                      <Checkbox
+                        name="bsc_szakdoga"
+                        label="Bsc szakdolgozati"
+                        title="Bsc szakdolgozati"
+                        defaultChecked
+                        componentRef={this.bscThesisRef}
+                        onChange={this.changeType1}
+                      />
+                      <Checkbox
+                        name="bsc_tdk"
+                        label="Bsc TDK"
+                        title="Bsc TDK"
+                        componentRef={this.bscTdkRef}
+                        onChange={this.changeType2}
+                      />
+                      <Checkbox
+                        name="msc_szakdoga"
+                        label="Msc szakdolgozati"
+                        title="Msc szakdolgozati"
+                        onChange={this.changeType3}
+                        componentRef={this.mscThesisRef}
+                      />
+                      <Checkbox
+                        name="msc_tdk"
+                        label="Msc TDK"
+                        title="Msc TDK"
+                        componentRef={this.mscTdkRef}
+                        onChange={this.chanegType4}
+                      />
+                    </Stack>
                     {this.state.missingData.type1 &&
                     this.state.missingData.type2 &&
                     this.state.missingData.type3 &&
@@ -536,22 +538,24 @@ class TopicForm extends React.Component<Prop & RouteComponentProps, State> {
                     )}
                   </div>
                   <div className="ms-Grid-col ms-sm6">
-                    <Text>Témaírás nyelve</Text>
-                    <Checkbox
-                      name="english"
-                      label="angol"
-                      title="angol"
-                      onChange={this.changeLanguage1}
-                      componentRef={this.englishRef}
-                    />
-                    <Checkbox
-                      name="hungarian"
-                      label="magyar"
-                      title="magyar"
-                      defaultChecked
-                      onChange={this.changeLanguage2}
-                      componentRef={this.hungarianRef}
-                    />
+                    <Text style={{ fontWeight: 500 }}>Témaírás nyelve</Text>
+                    <Stack tokens={stackTokens} id="chooseLanguage">
+                      <Checkbox
+                        name="english"
+                        label="angol"
+                        title="angol"
+                        onChange={this.changeLanguage1}
+                        componentRef={this.englishRef}
+                      />
+                      <Checkbox
+                        name="hungarian"
+                        label="magyar"
+                        title="magyar"
+                        defaultChecked
+                        onChange={this.changeLanguage2}
+                        componentRef={this.hungarianRef}
+                      />
+                    </Stack>
                     {this.state.missingData.language1 && this.state.missingData.language2 ? (
                       <span
                         style={{
@@ -652,4 +656,4 @@ class TopicForm extends React.Component<Prop & RouteComponentProps, State> {
   }
 }
 
-export default withRouter(TopicForm);
+export default TopicForm;

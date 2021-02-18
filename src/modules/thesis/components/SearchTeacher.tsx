@@ -3,7 +3,6 @@ import {
   ComboBox,
   IComboBox,
   IComboBoxOption,
-  PrimaryButton,
   SelectableOptionMenuItemType
 } from "office-ui-fabric-react/lib/index";
 import { initializeIcons } from "@uifabric/icons";
@@ -29,7 +28,6 @@ const comboBoxBasicOptions: IComboBoxOption[] = [
 ];
 
 const comboBoxMultiStyle = { maxWidth: 300, display: "block", marginTop: "10px" };
-const comboBoxMultiStyle2 = { maxWidth: 300, display: "block", marginTop: "10px" };
 
 interface TeacherProps {
   onChange?: any;
@@ -37,7 +35,7 @@ interface TeacherProps {
 
 const SearchTeacher: React.FC<TeacherProps> = (props) => {
   const comboBoxRef = React.useRef<IComboBox>(null);
-  const onOpenClick = React.useCallback(() => comboBoxRef.current?.focus(true), []);
+  //const onOpenClick = React.useCallback(() => comboBoxRef.current?.focus(true), []);
 
   return (
     <div>
@@ -47,7 +45,7 @@ const SearchTeacher: React.FC<TeacherProps> = (props) => {
         allowFreeform
         autoComplete="on"
         options={comboBoxBasicOptions}
-        style={comboBoxMultiStyle2}
+        style={comboBoxMultiStyle}
         id="teacherSearch"
         onItemClick={(e, selectedItem) => props.onChange(selectedItem)}
         // onChange={(e, selectedItem) => console.log(selectedItem)}

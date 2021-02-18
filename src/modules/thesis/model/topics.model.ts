@@ -14,7 +14,8 @@ export enum TopicType {
   BScThesis,
   BScTDK,
   MScThesis,
-  MScTDK
+  MScTDK,
+  Project
 }
 
 export enum TopicStatus {
@@ -42,23 +43,40 @@ export type Topic = {
   status: TopicStatus;
   appliedStudentIds: string[];
   language: Language[];
+  denyReason?: string;
 };
+
+// JOI-s sémák
+
+export const schoolSemesterSchema = Joi.object({
+  year: Joi.number().min(2021).required(),
+  half: Joi.string().valid("autumn", "spring").required()
+});
+
+export const topicTypeSchema = Joi.array()
+  .items(Joi.string().valid("bsc-thesis", "bsc-tdk", "msc-thesis", "msc-tdk", "project"))
+  .required();
+
+export const topicStatusSchema = Joi.string()
+  .valid("accepted", "denied", "pending", "announced")
+  .required();
+
+export const languageSchema = Joi.array()
+  .items(Joi.string().valid("english", "hungarian"))
+  .required();
 
 export const topicSchema = Joi.object({
   id: Joi.string().required(),
-  // ezt a jelleget jobban szét kellene szedni? bsc? msc majd ezen belül?
-  type: Joi.array()
-    .items(Joi.string().valid("bsc-thesis", "bsc-tdk", "msc-thesis", "msc-tdk"))
-    .required(),
+  type: topicTypeSchema,
   title: Joi.string().required(),
   description: Joi.string().required(),
   teacherId: Joi.string().required(),
-  connectedSubjectIds: Joi.array().items(Joi.string()), // ez nem required?,
-  connectedTechnologyIds: Joi.array().items(Joi.string()), // ez nem required?,
+  connectedSubjectIds: Joi.array().items(Joi.string()),
+  connectedTechnologyIds: Joi.array().items(Joi.string()),
   numberOfPlaces: Joi.number().min(1).required(),
-  schoolSemester: Joi.string().required(), //ehhez valami regexp? - ketté szedni hogy tavaszi, őszi?
-  // a diák szempontjából kellenek állapotok
-  status: Joi.string().valid("accepted", "denied", "pending", "announced").required(), //amikor csak meg lett hirdetve s még senki nem jelentkezett? vagy ne legyen required s akkor indulásból semmi ez?
+  schoolSemester: schoolSemesterSchema,
+  status: topicStatusSchema, // a diák szempontjából kellenek állapotok
   appliedStudentIds: Joi.array().items(Joi.string()),
-  language: Joi.string().valid("english", "hungarian").required() // lehet egyszerre angol és magyar is?
+  language: languageSchema,
+  denyReason: Joi.string()
 });

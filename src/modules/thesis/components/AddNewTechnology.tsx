@@ -3,9 +3,7 @@ import { TextField } from "office-ui-fabric-react/lib/TextField";
 import { IStackProps, IStackStyles, Stack } from "@fluentui/react";
 import ConfirmAction from "./ConfirmAction";
 
-import TechnologyList from "./TechnologyList";
-import { not } from "joi";
-
+// STYLES
 const stackTokens = { childrenGap: 50 };
 const stackStyles: Partial<IStackStyles> = {
   root: { width: 800 }
@@ -26,7 +24,6 @@ const AddNewTechnology: React.FunctionComponent = () => {
       setEmpty(true);
       return `Cím megadása kötelező!`;
     }
-    //return value.length >= 1 ? "" : `Cím megadása kötelező!`;
   };
 
   return (

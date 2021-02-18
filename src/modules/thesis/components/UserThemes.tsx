@@ -11,7 +11,6 @@ import { MarqueeSelection } from "office-ui-fabric-react/lib/MarqueeSelection";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { Text } from "office-ui-fabric-react/lib/Text";
-import { IconButton } from "@fluentui/react/lib/Button";
 import ConfirmWithdraw from "./ConfirmWithdraw";
 import { Stack } from "office-ui-fabric-react";
 
@@ -35,6 +34,41 @@ export interface IDetailsListBasicExampleState {
   selectionDetails: string;
   isFilter: boolean;
 }
+
+// const KeyCellWithHoverCard: React.FunctionComponent<{ item: IExampleItem }> = ({ item }) => {
+//   const [contentRendered, { toggle: toggleContentRendered }] = useBoolean(false);
+//   const targetElementRef: React.RefObject<HTMLDivElement> = React.useRef<HTMLDivElement>(null);
+//   const expandingCardProps: IExpandingCardProps = useConst({
+//     onRenderCompactCard,
+//     onRenderExpandedCard,
+//     renderData: item,
+//     directionalHint: DirectionalHint.rightTopEdge,
+//     gapSpace: 16,
+//     calloutProps: {
+//       isBeakVisible: true
+//     }
+//   });
+//   React.useEffect(toggleContentRendered, [toggleContentRendered]);
+
+//   return (
+//     <div className={classNames.item}>
+//       <div ref={targetElementRef} data-is-focusable>
+//         {item.key}
+//         {contentRendered && (
+//           <HoverCard
+//             expandingCardProps={expandingCardProps}
+//             target={targetElementRef.current}
+//             cardDismissDelay={300}
+//             onCardVisible={log("onCardVisible")}
+//             onCardHide={log("onCardHide")}
+//             trapFocus
+//             openHotKey={KeyCodes.enter}
+//           />
+//         )}
+//       </div>
+//     </div>
+//   );
+// };
 
 class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
   private _selection: Selection;
@@ -63,7 +97,7 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
       key: "TDK Dolgozat",
       title: "TDK Dolgozat",
       teacher: "Pusztai Kinga",
-      status: "Függőben",
+      status: "Elutasítva",
       remove: <ConfirmWithdraw myId="TDK Dolgozat" onWithdraw={this.onDelete}></ConfirmWithdraw>
     });
 
@@ -119,6 +153,17 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
     this._allItems = this._allItems.filter((item) => item.key !== id);
   }
 
+  // public renderRow(
+  //   item: IDetailsListBasicExampleItem,
+  //   index: number,
+  //   column: IColumn
+  // ): JSX.Element | React.ReactText {
+  //   if (column.key === "key") {
+  //     return <KeyCellWithHoverCard item={item} />;
+  //   }
+  //   return item;
+  // }
+
   public render(): JSX.Element {
     const { items, selectionDetails } = this.state;
 
@@ -144,7 +189,7 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
             ariaLabelForSelectionColumn="Toggle selection"
             ariaLabelForSelectAllCheckbox="Toggle selection for all items"
             checkButtonAriaLabel="Row checkbox"
-            // onItemInvoked={this._onItemInvoked}
+            // onRenderRow={this.renderRow}
           />
           {!this.state.items.length && !this.state.isFilter && (
             <Stack horizontalAlign="center">
@@ -188,10 +233,8 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
       isFilter: text ? true : false
     });
   };
-
-  //   private _onItemInvoked = (item: IDetailsListBasicExampleItem): void => {
-  //     alert(`Item invoked: ${item.title}`);
-  //   };
 }
 
 export default UserThemes;
+
+// TODO: ha elutasítva, hogy jelenjen meg az indoklás?

@@ -1,0 +1,26 @@
+const Joi = require("joi");
+
+// kell külön a teacherId? vagy az a topic-ban benne van?
+export type denyApplianceAction = {
+  type: "deny-appliance";
+  payload: {
+    studentId: string;
+    topicId: string;
+    teacherId: string;
+  };
+  response: {
+    success: boolean;
+  };
+};
+
+export const denyApplianceActionSchema = {
+  type: "deny-appliance",
+  payload: {
+    studentId: Joi.string().required(),
+    topicId: Joi.string().required(),
+    teacherId: Joi.string().required()
+  },
+  response: {
+    success: Joi.boolean()
+  }
+};

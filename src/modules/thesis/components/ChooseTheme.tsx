@@ -11,8 +11,11 @@ const ChooseTheme: React.FunctionComponent = () => {
     <div>
       <p>Milyen témát keresel?</p>
       <Stack tokens={stackTokens} id="chooseType">
-        <Checkbox label="Szakdolgozati" /*onChange={_onChange}*/ />
-        <Checkbox label="TDK" /*onChange={_onChange}*/ />
+        <Checkbox label="BSc Szakdolgozati" /*onChange={_onChange}*/ />
+        <Checkbox label="BSc TDK" /*onChange={_onChange}*/ />
+        <Checkbox label="MSc Szakdolgozati" />
+        <Checkbox label="MSc TDK" />
+        <Checkbox label="Projekt" />
       </Stack>
     </div>
   );

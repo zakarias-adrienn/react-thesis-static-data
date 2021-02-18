@@ -4,8 +4,6 @@ import { PrimaryButton, DefaultButton, IIconProps } from "office-ui-fabric-react
 import { hiddenContentStyle, mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { ContextualMenu } from "office-ui-fabric-react/lib/ContextualMenu";
 import { useId, useBoolean } from "@uifabric/react-hooks";
-import { IconButton } from "@fluentui/react/lib/Button";
-import { Icon } from "@fluentui/react";
 
 const dialogStyles = { main: { maxWidth: 450 } };
 const dragOptions = {

@@ -4,7 +4,7 @@ import { PrimaryButton, DefaultButton } from "office-ui-fabric-react/lib/Button"
 import { hiddenContentStyle, mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { ContextualMenu } from "office-ui-fabric-react/lib/ContextualMenu";
 import { useId, useBoolean } from "@uifabric/react-hooks";
-import { IconButton } from "@fluentui/react/lib/Button";
+import { TextField } from "office-ui-fabric-react/lib/TextField";
 
 const dialogStyles = { main: { maxWidth: 450 } };
 const dragOptions = {
@@ -56,6 +56,7 @@ const ConfirmDeny: React.FunctionComponent<ConfirmDenyProps> = (props) => {
         dialogContentProps={dialogContentProps(props.name)}
         modalProps={modalProps}
       >
+        <TextField label="Indoklás" multiline rows={3} />
         <DialogFooter>
           <PrimaryButton
             onClick={() => props.onDeny(props.myId, toggleHideDialog)}

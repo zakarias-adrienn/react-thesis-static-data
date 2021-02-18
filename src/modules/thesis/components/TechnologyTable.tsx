@@ -11,20 +11,9 @@ import { MarqueeSelection } from "office-ui-fabric-react/lib/MarqueeSelection";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { Text } from "office-ui-fabric-react/lib/Text";
-import { DefaultButton, PrimaryButton, Stack, IStackTokens } from "office-ui-fabric-react";
-import {
-  DetailsHeader,
-  IDetailsHeaderProps
-} from "office-ui-fabric-react/lib/components/DetailsList/DetailsHeader";
-import { ITooltipHostProps } from "office-ui-fabric-react/lib/Tooltip";
-import {
-  DetailsRow,
-  IDetailsRowStyles,
-  IDetailsListProps
-} from "office-ui-fabric-react/lib/DetailsList";
+import { Stack } from "office-ui-fabric-react";
 import ConfirmDelete from "./ConfirmDelete";
 import DialogToEditTechnology from "./DialogToEditTechnology";
-import { IconButton } from "@fluentui/react/lib/Button";
 
 const exampleChildClass = mergeStyles({
   display: "block",

@@ -1,17 +1,14 @@
 import * as React from "react";
-import { Announced } from "office-ui-fabric-react/lib/Announced";
 import { TextField, ITextFieldStyles } from "office-ui-fabric-react/lib/TextField";
 import {
   DetailsList,
   DetailsListLayoutMode,
-  Selection,
   IColumn
 } from "office-ui-fabric-react/lib/DetailsList";
-import { MarqueeSelection } from "office-ui-fabric-react/lib/MarqueeSelection";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { Text } from "office-ui-fabric-react/lib/Text";
-import { DefaultButton, PrimaryButton, Stack, IStackTokens } from "office-ui-fabric-react";
+import { Stack } from "office-ui-fabric-react";
 import { IconButton } from "@fluentui/react/lib/Button";
 import { BrowserRouter, Link } from "react-router-dom";
 import ConfirmDelete from "./ConfirmDelete";
@@ -118,9 +115,12 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
       subjects: "Programozási nyelvek - Java",
       places: 2,
       view: (
-        <Link to={{ pathname: "/editTopic/" + "1" }}>
-          <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
-        </Link>
+        <BrowserRouter>
+          {/* de a react futtatáskor nem kell ez ide, mert egy új routert használ nem az App.tsx belit */}
+          <Link to={{ pathname: "/editTopic/" + "1" }}>
+            <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
+          </Link>
+        </BrowserRouter>
       ),
       delete: (
         <ConfirmDelete
@@ -138,9 +138,11 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
       subjects: "Webprogramozás, Kliensoldali webprogramozás",
       places: 4,
       view: (
-        <Link to={{ pathname: "/editTopic/" + "2" }}>
-          <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
-        </Link>
+        <BrowserRouter>
+          <Link to={{ pathname: "/editTopic/" + "2" }}>
+            <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
+          </Link>
+        </BrowserRouter>
       ),
       delete: (
         <ConfirmDelete text="topic" which="Youniversity" onDelete={this.onDelete}></ConfirmDelete>

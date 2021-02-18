@@ -1,0 +1,23 @@
+const Joi = require("joi");
+
+import { technologiesSchema, Technology } from "../model/technologies.model";
+
+export type addNewTechnologyAction = {
+  type: "add-technology";
+  payload: {
+    name: string;
+  };
+  response: {
+    technologyCreated: Technology;
+  };
+};
+
+export const addNewTechnologyActionSchema = {
+  type: "add-technology",
+  payload: {
+    name: Joi.string().required()
+  },
+  response: {
+    technologyCreated: technologiesSchema
+  }
+};

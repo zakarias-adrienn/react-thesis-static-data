@@ -12,12 +12,14 @@ import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import { Stack } from "office-ui-fabric-react";
 
+// STYLES
+
 const exampleChildClass = mergeStyles({
   display: "block",
   marginBottom: "10px"
 });
 
-const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "300px" } };
+const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "150px" } };
 
 export interface IDetailsListBasicExampleItem {
   key: string;
@@ -32,6 +34,7 @@ export interface IDetailsListBasicExampleState {
 }
 
 class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState> {
+  // FIELDS
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
 
@@ -60,16 +63,16 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
         key: "column1",
         name: "Cím",
         fieldName: "title",
-        minWidth: 200,
-        maxWidth: 400,
+        minWidth: 100,
+        maxWidth: 200,
         isResizable: true
       },
       {
         key: "column2",
         name: "Hallgató",
         fieldName: "name",
-        minWidth: 200,
-        maxWidth: 250,
+        minWidth: 50,
+        maxWidth: 100,
         isResizable: true
       },
       {
@@ -88,6 +91,7 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
     };
   }
 
+  // FUNCTIONS
   public updateState(key: string, title: string, name: string) {
     let acceptedItem: IDetailsListBasicExampleItem = {
       key: key,
@@ -100,6 +104,32 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
     });
     this._allItems.push(acceptedItem);
   }
+
+  private _onFilter = (
+    ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    text: string | undefined
+  ): void => {
+    console.log(this.state.items);
+    this.setState({
+      items: text
+        ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text?.toLowerCase()) > -1)
+        : this._allItems,
+      isFilter: text ? true : false
+    });
+  };
+
+  private _onFilter2 = (
+    ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    text: string | undefined
+  ): void => {
+    console.log(this.state.items);
+    this.setState({
+      items: text
+        ? this._allItems.filter((i) => i.name.toLowerCase().indexOf(text?.toLowerCase()) > -1)
+        : this._allItems,
+      isFilter: text ? true : false
+    });
+  };
 
   public render(): JSX.Element {
     const { items } = this.state;
@@ -152,32 +182,6 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
       </>
     );
   }
-
-  private _onFilter = (
-    ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-    text: string | undefined
-  ): void => {
-    console.log(this.state.items);
-    this.setState({
-      items: text
-        ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text?.toLowerCase()) > -1)
-        : this._allItems,
-      isFilter: text ? true : false
-    });
-  };
-
-  private _onFilter2 = (
-    ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-    text: string | undefined
-  ): void => {
-    console.log(this.state.items);
-    this.setState({
-      items: text
-        ? this._allItems.filter((i) => i.name.toLowerCase().indexOf(text?.toLowerCase()) > -1)
-        : this._allItems,
-      isFilter: text ? true : false
-    });
-  };
 }
 
 export default AcceptedStudents;
