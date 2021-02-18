@@ -14,12 +14,9 @@ import { Stack } from "office-ui-fabric-react";
 
 // STYLES
 
-const exampleChildClass = mergeStyles({
-  display: "block",
-  marginBottom: "10px"
-});
-
-const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "150px" } };
+const textFieldStyles: Partial<ITextFieldStyles> = {
+  root: { maxWidth: "200px", float: "left", paddingRight: "20px", paddingLeft: "0px" }
+};
 
 export interface IDetailsListBasicExampleItem {
   key: string;
@@ -63,7 +60,7 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
         key: "column1",
         name: "Cím",
         fieldName: "title",
-        minWidth: 100,
+        minWidth: 200,
         maxWidth: 200,
         isResizable: true
       },
@@ -71,8 +68,8 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
         key: "column2",
         name: "Hallgató",
         fieldName: "name",
-        minWidth: 50,
-        maxWidth: 100,
+        minWidth: 100,
+        maxWidth: 200,
         isResizable: true
       },
       {
@@ -138,25 +135,17 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
       <>
         <h3>Elfogadott jelentkezések</h3>
         <Fabric>
-          <div className="ms-Grid" dir="ltr">
-            <div className="ms-Grid-row">
-              <div className="ms-Grid-col ms-sm4">
-                <TextField
-                  className={exampleChildClass}
-                  label="Cím szerinti szűrés:"
-                  onChange={this._onFilter}
-                  styles={textFieldStyles}
-                />
-              </div>
-              <div className="ms-Grid-col ms-sm8">
-                <TextField
-                  className={exampleChildClass}
-                  label="Hallgató szerinti szűrés:"
-                  onChange={this._onFilter2}
-                  styles={textFieldStyles}
-                />
-              </div>
-            </div>
+          <div className="ms-Grid" dir="ltr" style={{ overflow: "hidden" }}>
+            <TextField
+              label="Cím szerinti szűrés:"
+              onChange={this._onFilter}
+              styles={textFieldStyles}
+            />
+            <TextField
+              label="Hallgató szerinti szűrés:"
+              onChange={this._onFilter2}
+              styles={textFieldStyles}
+            />
           </div>
           <DetailsList
             items={items}
@@ -174,7 +163,7 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
             </Stack>
           )}
           {!this.state.items.length && this.state.isFilter && (
-            <Stack horizontalAlign="center">
+            <Stack>
               <Text>Nincs a keresésnek megfelelő jelentkezés!</Text>
             </Stack>
           )}

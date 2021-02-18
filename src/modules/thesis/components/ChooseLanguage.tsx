@@ -9,7 +9,7 @@ const ChooseLanguage: React.FunctionComponent = () => {
   // These checkboxes are uncontrolled because they don't set the `checked` prop.
   return (
     <div>
-      <p>Milyen nyelvű témát keresel?</p>
+      <p style={{ fontWeight: 600 }}>Milyen nyelvű témát keresel?</p>
       <Stack tokens={stackTokens}>
         <Checkbox label="magyar" /*onChange={_onChange}*/ />
         <Checkbox label="angol" /*onChange={_onChange}*/ />

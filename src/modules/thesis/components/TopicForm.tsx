@@ -2,13 +2,12 @@ import * as React from "react";
 import { TextField, MaskedTextField } from "office-ui-fabric-react/lib/TextField";
 import { Stack, IStackProps, IStackStyles } from "office-ui-fabric-react/lib/Stack";
 import { Checkbox } from "office-ui-fabric-react/lib/Checkbox";
-import { Dropdown, IDropdownStyles, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { Dropdown, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 import { PrimaryButton, IIconProps } from "office-ui-fabric-react";
 import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
 import { Text } from "office-ui-fabric-react/lib/Text";
-import { Language, Semester, TopicStatus, TopicType } from "../model/topics.model";
+import { Language, Semester, TopicType } from "../model/topics.model";
 import ConfirmModify from "./ConfirmModify";
-import { RouteComponentProps } from "react-router";
 
 const stackTokens = { childrenGap: 5 };
 const stackStyles: Partial<IStackStyles> = { root: { width: 650 } };
@@ -60,6 +59,7 @@ type MissingData = {
   type2: boolean;
   type3: boolean;
   type4: boolean;
+  type5: boolean;
 };
 
 type State = {
@@ -96,6 +96,7 @@ class TopicForm extends React.Component<Prop, State> {
   private subjectsRef: any;
   private technologiesRef: any;
   private plusOneYear: string;
+  private projectRef: any;
 
   // nem működik megfelelően
   // componentDidMount() {
@@ -117,7 +118,8 @@ class TopicForm extends React.Component<Prop, State> {
         type1: false,
         type2: true,
         type3: true,
-        type4: true
+        type4: true,
+        type5: true
       },
       values: {
         title: "",
@@ -156,6 +158,7 @@ class TopicForm extends React.Component<Prop, State> {
     this.englishRef = React.createRef();
     this.subjectsRef = React.createRef();
     this.technologiesRef = React.createRef();
+    this.projectRef = React.createRef();
 
     console.log(this.state.values);
   }
@@ -181,6 +184,7 @@ class TopicForm extends React.Component<Prop, State> {
     console.log("BSC tdk: ", this.bscTdkRef.current.checked);
     console.log("MSC szakdoga: ", this.mscThesisRef.current.checked);
     console.log("MSC tdk: ", this.mscTdkRef.current.checked);
+    console.log("Projekt: ", this.projectRef.current.checked);
     console.log("Magyar nyelvű:", this.hungarianRef.current.checked);
     console.log("Angol nyelvű: ", this.englishRef.current.checked);
     console.log("Tantárgyak: ", this.subjectsRef.current.selectedOptions);
@@ -199,6 +203,9 @@ class TopicForm extends React.Component<Prop, State> {
     }
     if (this.mscTdkRef.current.cheched) {
       types.push(TopicType.MScTDK);
+    }
+    if (this.projectRef.current.checked) {
+      types.push(TopicType.Project);
     }
 
     let languages: Language[] = [];
@@ -237,7 +244,6 @@ class TopicForm extends React.Component<Prop, State> {
         year: year,
         half: half
       },
-      status: TopicStatus.Announced,
       appliedStudentIds: [],
       language: languages
     };
@@ -378,12 +384,21 @@ class TopicForm extends React.Component<Prop, State> {
       }
     }));
   };
-  chanegType4 = () => {
+  changeType4 = () => {
     this.setState((state) => ({
       ...this.state,
       missingData: {
         ...state.missingData,
         type4: !state.missingData.type4
+      }
+    }));
+  };
+  changeType5 = () => {
+    this.setState((state) => ({
+      ...this.state,
+      missingData: {
+        ...state.missingData,
+        type5: !state.missingData.type5
       }
     }));
   };
@@ -452,7 +467,7 @@ class TopicForm extends React.Component<Prop, State> {
               />
               <div className="ms-Grid" dir="ltr">
                 <div className="ms-Grid-row">
-                  <div className="ms-Grid-col ms-sm6" style={{ paddingLeft: "0px" }}>
+                  <div className="ms-Grid-col ms-sm6">
                     <MaskedTextField
                       label="Tanév"
                       name="Tanév"
@@ -471,7 +486,7 @@ class TopicForm extends React.Component<Prop, State> {
                   </div>
                   <div className="ms-Grid-col ms-sm6" style={{ paddingTop: "10px" }}>
                     <Text style={{ fontWeight: 500, paddingTop: "60px", marginBottom: "0px" }}>
-                      Félév
+                      Félév <span style={{ color: "rgb(164, 38, 44)" }}> *</span>
                     </Text>
                     <ChoiceGroup
                       styles={horizontalChoiceGroupStyles}
@@ -486,8 +501,10 @@ class TopicForm extends React.Component<Prop, State> {
                 <br />
 
                 <div className="ms-Grid-row">
-                  <div className="ms-Grid-col ms-sm6" style={{ paddingLeft: "0px" }}>
-                    <Text style={{ fontWeight: 500 }}>Téma jellege</Text>
+                  <div className="ms-Grid-col ms-sm6">
+                    <Text style={{ fontWeight: 500 }}>
+                      Téma jellege <span style={{ color: "rgb(164, 38, 44)" }}> *</span>
+                    </Text>
                     <Stack tokens={stackTokens} id="chooseType" style={{ paddingLeft: "5px" }}>
                       <Checkbox
                         name="bsc_szakdoga"
@@ -516,17 +533,26 @@ class TopicForm extends React.Component<Prop, State> {
                         label="Msc TDK"
                         title="Msc TDK"
                         componentRef={this.mscTdkRef}
-                        onChange={this.chanegType4}
+                        onChange={this.changeType4}
+                      />
+                      <Checkbox
+                        name="project"
+                        label="Projekt"
+                        title="Projekt"
+                        componentRef={this.projectRef}
+                        onChange={this.changeType5}
                       />
                     </Stack>
                     {this.state.missingData.type1 &&
                     this.state.missingData.type2 &&
                     this.state.missingData.type3 &&
-                    this.state.missingData.type4 ? (
+                    this.state.missingData.type4 &&
+                    this.state.missingData.type5 ? (
                       <span
                         style={{
-                          fontSize: "13px",
-                          color: "#A72037",
+                          fontSize: "12px",
+                          fontWeight: 400,
+                          color: "rgb(164, 38, 44)",
                           marginTop: "7px",
                           display: "inline-block"
                         }}
@@ -538,8 +564,10 @@ class TopicForm extends React.Component<Prop, State> {
                     )}
                   </div>
                   <div className="ms-Grid-col ms-sm6">
-                    <Text style={{ fontWeight: 500 }}>Témaírás nyelve</Text>
-                    <Stack tokens={stackTokens} id="chooseLanguage">
+                    <Text style={{ fontWeight: 500 }}>
+                      Témaírás nyelve<span style={{ color: "rgb(164, 38, 44)" }}> *</span>
+                    </Text>
+                    <Stack tokens={stackTokens} id="chooseLanguage" style={{ paddingLeft: "5px" }}>
                       <Checkbox
                         name="english"
                         label="angol"
@@ -559,8 +587,9 @@ class TopicForm extends React.Component<Prop, State> {
                     {this.state.missingData.language1 && this.state.missingData.language2 ? (
                       <span
                         style={{
-                          fontSize: "13px",
-                          color: "#A72037",
+                          fontSize: "12px",
+                          fontWeight: 400,
+                          color: "#A4262C",
                           marginTop: "7px",
                           display: "inline-block"
                         }}
@@ -624,7 +653,8 @@ class TopicForm extends React.Component<Prop, State> {
                     (this.state.missingData.type1 &&
                       this.state.missingData.type2 &&
                       this.state.missingData.type3 &&
-                      this.state.missingData.type4)
+                      this.state.missingData.type4 &&
+                      this.state.missingData.type5)
                   }
                 ></ConfirmModify>
               ) : (
@@ -642,7 +672,8 @@ class TopicForm extends React.Component<Prop, State> {
                     (this.state.missingData.type1 &&
                       this.state.missingData.type2 &&
                       this.state.missingData.type3 &&
-                      this.state.missingData.type4)
+                      this.state.missingData.type4 &&
+                      this.state.missingData.type5)
                   }
                 />
               )}

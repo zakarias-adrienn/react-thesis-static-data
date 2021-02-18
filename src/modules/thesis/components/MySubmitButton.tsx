@@ -5,13 +5,14 @@ import { IIconProps } from "office-ui-fabric-react";
 export interface IButtonExampleProps {
   disabled?: boolean;
   checked?: boolean;
+  onClick: Function;
 }
 
 const stackTokens: IStackTokens = { childrenGap: 40 };
 
 const searchIcon: IIconProps = { iconName: "SearchBookmark" };
 
-const Button: React.FunctionComponent<IButtonExampleProps> = (props) => {
+const MySubmitButton: React.FunctionComponent<IButtonExampleProps> = (props) => {
   const { disabled, checked } = props;
 
   return (
@@ -19,7 +20,7 @@ const Button: React.FunctionComponent<IButtonExampleProps> = (props) => {
       <PrimaryButton
         iconProps={searchIcon}
         text="Keresés"
-        // onClick={_alertClicked}
+        onClick={() => props.onClick()}
         type="submit"
         allowDisabledFocus
         disabled={disabled}
@@ -29,8 +30,4 @@ const Button: React.FunctionComponent<IButtonExampleProps> = (props) => {
   );
 };
 
-function _alertClicked(): void {
-  alert("Clicked");
-}
-
-export default Button;
+export default MySubmitButton;

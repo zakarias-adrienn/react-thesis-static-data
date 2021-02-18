@@ -27,7 +27,12 @@ const comboBoxBasicOptions: IComboBoxOption[] = [
   { key: "Vadász Péter", text: "Vadász Péter" }
 ];
 
-const comboBoxMultiStyle = { maxWidth: 300, display: "block", marginTop: "10px" };
+const comboBoxMultiStyle = {
+  maxWidth: 300,
+  display: "block",
+  marginTop: "10px",
+  marginBottom: "10px"
+};
 
 interface TeacherProps {
   onChange?: any;
@@ -41,7 +46,7 @@ const SearchTeacher: React.FC<TeacherProps> = (props) => {
     <div>
       <ComboBox
         componentRef={comboBoxRef}
-        label="Tanár választása"
+        label="Témavezető tanár"
         allowFreeform
         autoComplete="on"
         options={comboBoxBasicOptions}

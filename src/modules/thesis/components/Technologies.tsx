@@ -24,7 +24,7 @@ const Technologies: React.FunctionComponent = () => {
     <Stack tokens={stackTokens}>
       <Dropdown
         placeholder="Válassz technológiákat..."
-        label="Válaszd ki a számodra megfelelő technológiákat!"
+        label="Témához kapcsolódó technológiák"
         multiSelect
         options={options}
         styles={dropdownStyles}

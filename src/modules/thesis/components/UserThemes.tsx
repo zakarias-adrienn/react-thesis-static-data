@@ -25,6 +25,7 @@ export interface IDetailsListBasicExampleItem {
   key: string;
   title: string;
   teacher: string;
+  semester: string;
   status: string;
   remove: JSX.Element;
 }
@@ -90,6 +91,7 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
       key: "Youniversity",
       title: "Youniversity",
       teacher: "Visnovitz Márton",
+      semester: "2020/21-ősz",
       status: "Elfogadva",
       remove: <ConfirmWithdraw myId="Youniversity" onWithdraw={this.onDelete}></ConfirmWithdraw>
     });
@@ -97,6 +99,7 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
       key: "TDK Dolgozat",
       title: "TDK Dolgozat",
       teacher: "Pusztai Kinga",
+      semester: "2020/21-tavasz",
       status: "Elutasítva",
       remove: <ConfirmWithdraw myId="TDK Dolgozat" onWithdraw={this.onDelete}></ConfirmWithdraw>
     });
@@ -114,20 +117,28 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
         key: "column2",
         name: "Témavezető",
         fieldName: "teacher",
-        minWidth: 100,
-        maxWidth: 200,
+        minWidth: 80,
+        maxWidth: 100,
         isResizable: true
       },
       {
         key: "column3",
-        name: "Státusz",
-        fieldName: "status",
-        minWidth: 100,
-        maxWidth: 200,
+        name: "Félév",
+        fieldName: "semester",
+        minWidth: 80,
+        maxWidth: 100,
         isResizable: true
       },
       {
         key: "column4",
+        name: "Státusz",
+        fieldName: "status",
+        minWidth: 80,
+        maxWidth: 100,
+        isResizable: true
+      },
+      {
+        key: "column5",
         name: "Visszavonás",
         fieldName: "remove",
         minWidth: 100,

@@ -12,6 +12,7 @@ import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { IconButton } from "@fluentui/react/lib/Button";
 import { MessageBar } from "office-ui-fabric-react";
+import { BrowserRouter, Link } from "react-router-dom";
 
 const exampleChildClass = mergeStyles({
   display: "block",
@@ -64,7 +65,9 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
       subjects: "Programozási nyelvek - Java",
       places: "Betelt",
       view: (
-        <IconButton iconProps={{ iconName: "RedEye" }} title="Megtekint" ariaLabel="Megtekint" />
+        <Link to={{ pathname: "/seeTopic/" + "1" }}>
+          <IconButton iconProps={{ iconName: "RedEye" }} title="Megtekint" ariaLabel="Megtekint" />
+        </Link>
       ),
       addFavourite: (
         <IconButton
@@ -81,10 +84,12 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
       semester: "2020/21-tavasz",
       language: "magyar",
       technologies: "React, Javascript",
-      subjects: "Webprogramozás, Kliensoldali webprogramozás",
+      subjects: "Webprogramozás, \nKliensoldali webprogramozás",
       places: 4,
       view: (
-        <IconButton iconProps={{ iconName: "RedEye" }} title="Megtekint" ariaLabel="Megtekint" />
+        <Link to={{ pathname: "/seeTopic/" + "2" }}>
+          <IconButton iconProps={{ iconName: "RedEye" }} title="Megtekint" ariaLabel="Megtekint" />
+        </Link>
       ),
       addFavourite: (
         <IconButton
@@ -141,7 +146,7 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
         name: "Tantárgyak",
         fieldName: "subjects",
         minWidth: 30,
-        maxWidth: 200,
+        maxWidth: 100,
         isResizable: true
       },
       {

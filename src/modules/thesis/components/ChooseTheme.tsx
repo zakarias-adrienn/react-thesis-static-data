@@ -9,8 +9,8 @@ const ChooseTheme: React.FunctionComponent = () => {
   // These checkboxes are uncontrolled because they don't set the `checked` prop.
   return (
     <div>
-      <p>Milyen témát keresel?</p>
-      <Stack tokens={stackTokens} id="chooseType">
+      <p style={{ fontWeight: 600 }}>Milyen típusú témát keresel?</p>
+      <Stack tokens={stackTokens} id="chooseType" style={{ marginBottom: "10px" }}>
         <Checkbox label="BSc Szakdolgozati" /*onChange={_onChange}*/ />
         <Checkbox label="BSc TDK" /*onChange={_onChange}*/ />
         <Checkbox label="MSc Szakdolgozati" />
@@ -20,9 +20,5 @@ const ChooseTheme: React.FunctionComponent = () => {
     </div>
   );
 };
-
-function _onChange(ev: React.FormEvent<HTMLElement>, isChecked: boolean) {
-  console.log(`The option has been changed to ${isChecked}.`);
-}
 
 export default ChooseTheme;

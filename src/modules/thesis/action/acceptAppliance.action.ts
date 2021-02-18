@@ -5,7 +5,7 @@ export type acceptApplianceAction = {
   type: "accept-appliance";
   payload: {
     studentId: string;
-    topicId: string;
+    applicationId: string;
     teacherId: string;
   };
   response: {
@@ -17,7 +17,7 @@ export const acceptApplianceActionSchema = {
   type: "accept-appliance",
   payload: {
     studentId: Joi.string().required(),
-    topicId: Joi.string().required(),
+    applicationId: Joi.string().required(),
     teacherId: Joi.string().required()
   },
   response: {

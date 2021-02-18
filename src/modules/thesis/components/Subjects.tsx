@@ -3,7 +3,7 @@ import { IStackTokens, Stack } from "office-ui-fabric-react/lib/Stack";
 import { Dropdown, IDropdownStyles, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 
 const dropdownStyles: Partial<IDropdownStyles> = {
-  dropdown: { width: 300 }
+  dropdown: { width: 300, marginBottom: "10px" }
 };
 
 let options: IDropdownOption[] = [
@@ -23,7 +23,7 @@ const Subjects: React.FunctionComponent = () => {
     <Stack tokens={stackTokens} id="subjects">
       <Dropdown
         placeholder="Válassz tantárgyakat..."
-        label="Válaszd ki a számodra megfelelő tantárgyakat!"
+        label="Témához kapcsolódó tantárgyak"
         multiSelect
         options={options}
         styles={dropdownStyles}

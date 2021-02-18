@@ -18,13 +18,6 @@ export enum TopicType {
   Project
 }
 
-export enum TopicStatus {
-  Accepted,
-  Denied,
-  Pending,
-  Announced
-}
-
 export enum Language {
   Hungarian,
   English
@@ -40,7 +33,6 @@ export type Topic = {
   connectedTechnologyIds: string[];
   numberOfPlaces: number;
   schoolSemester: SchoolSemester;
-  status: TopicStatus;
   appliedStudentIds: string[];
   language: Language[];
   denyReason?: string;
@@ -57,10 +49,6 @@ export const topicTypeSchema = Joi.array()
   .items(Joi.string().valid("bsc-thesis", "bsc-tdk", "msc-thesis", "msc-tdk", "project"))
   .required();
 
-export const topicStatusSchema = Joi.string()
-  .valid("accepted", "denied", "pending", "announced")
-  .required();
-
 export const languageSchema = Joi.array()
   .items(Joi.string().valid("english", "hungarian"))
   .required();
@@ -75,7 +63,6 @@ export const topicSchema = Joi.object({
   connectedTechnologyIds: Joi.array().items(Joi.string()),
   numberOfPlaces: Joi.number().min(1).required(),
   schoolSemester: schoolSemesterSchema,
-  status: topicStatusSchema, // a diák szempontjából kellenek állapotok
   appliedStudentIds: Joi.array().items(Joi.string()),
   language: languageSchema,
   denyReason: Joi.string()

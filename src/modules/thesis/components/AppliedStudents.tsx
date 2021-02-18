@@ -20,7 +20,7 @@ const exampleChildClass = mergeStyles({
   marginBottom: "10px"
 });
 
-const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "150px" } };
+const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "180px" } };
 
 // TYPES
 export interface IDetailsListBasicExampleItem {
@@ -81,7 +81,7 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
         key: "column1",
         name: "Cím",
         fieldName: "title",
-        minWidth: 100,
+        minWidth: 200,
         maxWidth: 200,
         isResizable: true
       },
@@ -89,8 +89,8 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
         key: "column2",
         name: "Hallgató",
         fieldName: "name",
-        minWidth: 50,
-        maxWidth: 100,
+        minWidth: 100,
+        maxWidth: 200,
         isResizable: true
       },
       {
@@ -190,42 +190,38 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
 
     return (
       <div className="ms-Grid" dir="ltr">
-        <div className="ms-Grid-row">
-          <div className="ms-Grid-col ms-sm6">
-            <h3>Függőben levő jelentkezések</h3>
-            <Fabric>
-              <TextField
-                className={exampleChildClass}
-                label="Cím szerinti szűrés:"
-                onChange={this._onFilter}
-                styles={textFieldStyles}
-              />
-              <DetailsList
-                items={items}
-                columns={this._columns}
-                setKey="none"
-                selectionMode={SelectionMode.none}
-                layoutMode={DetailsListLayoutMode.justified}
-              />
-              {!this.state.items.length && !this.state.isFilter && (
-                <Stack horizontalAlign="center">
-                  <Text>
-                    Jelenleg nincsen függőben levő jelentkezés egyetlen meghirdetett saját témára
-                    sem!
-                  </Text>
-                </Stack>
-              )}
-              {!this.state.items.length && this.state.isFilter && (
-                <Stack horizontalAlign="center">
-                  <Text>Nincs a keresésnek megfelelő jelentkezés!</Text>
-                </Stack>
-              )}
-            </Fabric>
-          </div>
-          <div className="ms-Grid-col ms-sm6">
-            <AcceptedStudents ref={(ele) => (this.acceptedStudents = ele)}></AcceptedStudents>
-          </div>
-        </div>
+        <h3>Függőben levő jelentkezések</h3>
+        <Fabric>
+          <TextField
+            className={exampleChildClass}
+            label="Cím szerinti szűrés:"
+            onChange={this._onFilter}
+            styles={textFieldStyles}
+          />
+          <DetailsList
+            items={items}
+            columns={this._columns}
+            setKey="none"
+            selectionMode={SelectionMode.none}
+            layoutMode={DetailsListLayoutMode.justified}
+          />
+          {!this.state.items.length && !this.state.isFilter && (
+            <Stack>
+              <Text>
+                Jelenleg nincsen függőben levő jelentkezés egyetlen meghirdetett saját témára sem!
+              </Text>
+            </Stack>
+          )}
+          {!this.state.items.length && this.state.isFilter && (
+            <Stack>
+              <Text>Nincs a keresésnek megfelelő jelentkezés!</Text>
+            </Stack>
+          )}
+        </Fabric>
+        <br />
+        <br />
+        <AcceptedStudents ref={(ele) => (this.acceptedStudents = ele)}></AcceptedStudents>
+        <br />
       </div>
     );
   }

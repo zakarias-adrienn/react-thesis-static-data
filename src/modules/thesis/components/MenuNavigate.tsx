@@ -3,7 +3,7 @@ import { Nav, INavLink, INavStyles, INavLinkGroup } from "office-ui-fabric-react
 
 const navStyles: Partial<INavStyles> = {
   root: {
-    width: 230,
+    width: 285,
     height: 250,
     boxSizing: "border-box",
     border: "1px solid #eee",
@@ -39,6 +39,11 @@ const navLinkGroups: INavLinkGroup[] = [
         url: "/addNewTechnology",
         key: "key5"
         //disabled: true
+      },
+      {
+        name: "Beérkezett jelentkezések kezelése",
+        url: "/appliedStudents",
+        key: "key6"
       }
     ]
   }

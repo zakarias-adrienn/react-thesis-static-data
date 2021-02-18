@@ -13,6 +13,7 @@ import { IconButton } from "@fluentui/react/lib/Button";
 import { BrowserRouter, Link } from "react-router-dom";
 import ConfirmDelete from "./ConfirmDelete";
 import { SelectionMode } from "@fluentui/react";
+import { MyTopicContext } from "../context/TopicContext";
 
 const exampleChildClass = mergeStyles({
   display: "block",
@@ -41,8 +42,12 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
 
-  constructor(props: {}) {
-    super(props);
+  static contextType = MyTopicContext;
+
+  constructor(props: {}, context: any) {
+    super(props, context);
+
+    console.log(this.context); // itt benne vannak a témák - de lehet hogy nem kell context csak sima getTopics hívás
 
     this.onDelete = this.onDelete.bind(this);
 
@@ -115,12 +120,10 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
       subjects: "Programozási nyelvek - Java",
       places: 2,
       view: (
-        <BrowserRouter>
-          {/* de a react futtatáskor nem kell ez ide, mert egy új routert használ nem az App.tsx belit */}
-          <Link to={{ pathname: "/editTopic/" + "1" }}>
-            <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
-          </Link>
-        </BrowserRouter>
+        <Link to={{ pathname: "/editTopic/" + "1" }}>
+          {/* browserrouter kell storybooknál köréje */}
+          <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
+        </Link>
       ),
       delete: (
         <ConfirmDelete
@@ -138,11 +141,9 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
       subjects: "Webprogramozás, Kliensoldali webprogramozás",
       places: 4,
       view: (
-        <BrowserRouter>
-          <Link to={{ pathname: "/editTopic/" + "2" }}>
-            <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
-          </Link>
-        </BrowserRouter>
+        <Link to={{ pathname: "/editTopic/" + "2" }}>
+          <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
+        </Link>
       ),
       delete: (
         <ConfirmDelete text="topic" which="Youniversity" onDelete={this.onDelete}></ConfirmDelete>
@@ -156,6 +157,7 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
   }
 
   public onDelete(id: string, toggleHideDialog: Function) {
+    // csak akkor ha nincsen rá jelentkezés!!! - régebbit törölhessen? a diáktól is eltűnik
     toggleHideDialog();
     this.setState({
       items: this.state.items.filter((item) => item.key !== id),

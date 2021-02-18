@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import Button from "./Button";
+import MySubmitButton from "./MySubmitButton";
 import Subjects from "./Subjects";
 import Technologies from "./Technologies";
 import ChooseTheme from "./ChooseTheme";
@@ -8,8 +8,9 @@ import SearchTeacher from "./SearchTeacher";
 import SearchByTitle from "./SearchByTitle";
 import ChooseLanguage from "./ChooseLanguage";
 import "office-ui-fabric-react/dist/css/fabric.css";
-import { Topic, TopicType, Semester, TopicStatus, Language } from "../model/topics.model";
+import { Topic, TopicType, Semester, Language } from "../model/topics.model";
 import { Link } from "office-ui-fabric-react";
+import SearchResult from "./SearchResult";
 
 const topics: Topic[] = [
   {
@@ -25,7 +26,6 @@ const topics: Topic[] = [
       year: 2020,
       half: Semester.Spring
     },
-    status: TopicStatus.Announced,
     appliedStudentIds: [],
     language: [Language.Hungarian]
   }
@@ -34,6 +34,7 @@ const topics: Topic[] = [
 type State = {
   selectedTeacher: { key: string; text: string };
   isFiltered: boolean;
+  isSearchClicked: boolean;
 };
 
 class SearchPage extends React.Component<{}, State> {
@@ -41,12 +42,14 @@ class SearchPage extends React.Component<{}, State> {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onClickSearch = this.onClickSearch.bind(this);
     this.state = {
       selectedTeacher: {
         key: "",
         text: ""
       },
-      isFiltered: false
+      isFiltered: false,
+      isSearchClicked: false
     };
   }
 
@@ -113,44 +116,56 @@ class SearchPage extends React.Component<{}, State> {
     }
   }
 
+  onClickSearch() {
+    this.setState({
+      ...this.state,
+      isSearchClicked: true
+    });
+  }
+
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
-        <div className="ms-Grid" dir="ltr">
-          <div className="ms-Grid-row">
-            <div className="ms-Grid-col ms-sm6">
-              <SearchByTitle></SearchByTitle>
-              {this.state.isFiltered && (
-                <>
-                  <ChooseTheme></ChooseTheme>
-                  <ChooseLanguage></ChooseLanguage>
-                </>
-              )}
+      <>
+        <form onSubmit={this.handleSubmit}>
+          <div className="ms-Grid" dir="ltr">
+            <div className="ms-Grid-row">
+              <div className="ms-Grid-col ms-sm6">
+                <SearchByTitle></SearchByTitle>
+                {this.state.isFiltered && (
+                  <>
+                    <ChooseTheme></ChooseTheme>
+                    <ChooseLanguage></ChooseLanguage>
+                  </>
+                )}
+              </div>
+              <div className="ms-Grid-col ms-sm6">
+                <Link
+                  onClick={() =>
+                    this.setState({
+                      ...this.state,
+                      isFiltered: !this.state.isFiltered
+                    })
+                  }
+                >
+                  Szűrők {!this.state.isFiltered ? <>megjelenítése</> : <>elrejtése</>}
+                </Link>
+                {this.state.isFiltered && (
+                  <>
+                    <SearchTeacher onChange={this.handleChange}></SearchTeacher>
+                    <Subjects></Subjects>
+                    <Technologies></Technologies>
+                  </>
+                )}
+              </div>
             </div>
-            <div className="ms-Grid-col ms-sm6">
-              <Link
-                onClick={() =>
-                  this.setState({
-                    ...this.state,
-                    isFiltered: !this.state.isFiltered
-                  })
-                }
-              >
-                Szűrők {!this.state.isFiltered ? <>megjelenítése</> : <>elrejtése</>}
-              </Link>
-              {this.state.isFiltered && (
-                <>
-                  <SearchTeacher onChange={this.handleChange}></SearchTeacher>
-                  <Subjects></Subjects>
-                  <Technologies></Technologies>
-                </>
-              )}
-            </div>
+            <br />
+            <MySubmitButton onClick={this.onClickSearch}></MySubmitButton>
           </div>
-          <br />
-          <Button></Button>
-        </div>
-      </form>
+        </form>
+        <br />
+        <br />
+        {this.state.isSearchClicked && <SearchResult></SearchResult>}
+      </>
     );
   }
 }

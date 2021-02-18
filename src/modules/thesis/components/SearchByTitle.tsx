@@ -7,7 +7,8 @@ const stackTokens: Partial<IStackTokens> = { childrenGap: 20 };
 const getStyles = () => {
   return {
     root: {
-      maxWidth: "300px"
+      maxWidth: "300px",
+      marginBottom: "10px"
     }
   };
 };
