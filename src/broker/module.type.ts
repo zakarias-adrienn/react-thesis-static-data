@@ -12,9 +12,16 @@ export type ModuleSetting = {
     hu: string;
   };
 };
+// TODO: egységesen kellene
+export type ModuleAction = {
+  type: string;
+  payload: Object;
+  response: Object;
+};
 
 export type Module = {
   root: ModuleRoot;
   model?: ModuleModel[];
   settings?: ModuleSetting[];
+  actions?: ModuleAction[];
 };

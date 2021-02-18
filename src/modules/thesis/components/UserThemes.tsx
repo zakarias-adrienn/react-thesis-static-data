@@ -71,6 +71,7 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
     }
   };
 
+  // valahogy adhatok paramétert hogy mit jelenítsen meg???
   onRenderPlainCard = (): JSX.Element => {
     return (
       <div className={classNames.plainCard}>
