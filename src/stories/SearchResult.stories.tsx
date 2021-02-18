@@ -1,11 +1,18 @@
 import React from "react";
 
 import SearchResult from "../modules/thesis/components/SearchResult";
+import { Link, MemoryRouter, Route, Router, Switch } from "react-router-dom";
 
-// This default export determines where your story goes in the story list
 export default {
   title: "SearchPage/SearchResultStory",
-  component: SearchResult
+  component: SearchResult,
+  decorators: [
+    (SearchResult: any) => (
+      <MemoryRouter>
+        <SearchResult />
+      </MemoryRouter>
+    )
+  ]
 };
 
 export const First = () => <SearchResult />;
