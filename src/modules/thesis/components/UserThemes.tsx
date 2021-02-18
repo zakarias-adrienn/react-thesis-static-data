@@ -12,7 +12,16 @@ import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import ConfirmWithdraw from "./ConfirmWithdraw";
-import { Stack } from "office-ui-fabric-react";
+import { Stack, DefaultButton } from "office-ui-fabric-react";
+import {
+  HoverCard,
+  IHoverCard,
+  IPlainCardProps,
+  HoverCardType
+} from "office-ui-fabric-react/lib/HoverCard";
+import { mergeStyleSets } from "office-ui-fabric-react/lib/Styling";
+import { IconButton } from "@fluentui/react/lib/Button";
+import { Icon } from "@fluentui/react";
 
 const exampleChildClass = mergeStyles({
   display: "block",
@@ -26,7 +35,7 @@ export interface IDetailsListBasicExampleItem {
   title: string;
   teacher: string;
   semester: string;
-  status: string;
+  status: string | JSX.Element;
   remove: JSX.Element;
 }
 
@@ -36,45 +45,48 @@ export interface IDetailsListBasicExampleState {
   isFilter: boolean;
 }
 
-// const KeyCellWithHoverCard: React.FunctionComponent<{ item: IExampleItem }> = ({ item }) => {
-//   const [contentRendered, { toggle: toggleContentRendered }] = useBoolean(false);
-//   const targetElementRef: React.RefObject<HTMLDivElement> = React.useRef<HTMLDivElement>(null);
-//   const expandingCardProps: IExpandingCardProps = useConst({
-//     onRenderCompactCard,
-//     onRenderExpandedCard,
-//     renderData: item,
-//     directionalHint: DirectionalHint.rightTopEdge,
-//     gapSpace: 16,
-//     calloutProps: {
-//       isBeakVisible: true
-//     }
-//   });
-//   React.useEffect(toggleContentRendered, [toggleContentRendered]);
-
-//   return (
-//     <div className={classNames.item}>
-//       <div ref={targetElementRef} data-is-focusable>
-//         {item.key}
-//         {contentRendered && (
-//           <HoverCard
-//             expandingCardProps={expandingCardProps}
-//             target={targetElementRef.current}
-//             cardDismissDelay={300}
-//             onCardVisible={log("onCardVisible")}
-//             onCardHide={log("onCardHide")}
-//             trapFocus
-//             openHotKey={KeyCodes.enter}
-//           />
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
+const classNames = mergeStyleSets({
+  plainCard: {
+    width: 200,
+    height: 100,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "10px"
+  },
+  target: {
+    display: "inline-block"
+  }
+});
 
 class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
   private _selection: Selection;
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
+  private hoverCard: any;
+
+  instantDismissCard = (): void => {
+    if (this.hoverCard.current) {
+      this.hoverCard.current.dismiss();
+    }
+  };
+
+  onRenderPlainCard = (): JSX.Element => {
+    return (
+      <div className={classNames.plainCard}>
+        Indoklás: <br></br>
+        Sajnos nincs időm a témavezetést bevállalni.
+      </div>
+    );
+  };
+
+  plainCardProps: IPlainCardProps = {
+    onRenderPlainCard: this.onRenderPlainCard
+  };
+
+  onCardHide = (): void => {
+    console.log("I am now hidden");
+  };
 
   constructor(props: {}) {
     super(props);
@@ -100,7 +112,20 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
       title: "TDK Dolgozat",
       teacher: "Pusztai Kinga",
       semester: "2020/21-tavasz",
-      status: "Elutasítva",
+      status: (
+        <HoverCard
+          cardDismissDelay={300}
+          type={HoverCardType.plain}
+          plainCardProps={this.plainCardProps}
+          componentRef={this.hoverCard}
+          onCardHide={this.onCardHide}
+        >
+          <>
+            Elutasítva
+            <Icon className={classNames.target} iconName="StatusCircleQuestionMark"></Icon>
+          </>
+        </HoverCard>
+      ),
       remove: <ConfirmWithdraw myId="TDK Dolgozat" onWithdraw={this.onDelete}></ConfirmWithdraw>
     });
 
@@ -163,17 +188,6 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
     });
     this._allItems = this._allItems.filter((item) => item.key !== id);
   }
-
-  // public renderRow(
-  //   item: IDetailsListBasicExampleItem,
-  //   index: number,
-  //   column: IColumn
-  // ): JSX.Element | React.ReactText {
-  //   if (column.key === "key") {
-  //     return <KeyCellWithHoverCard item={item} />;
-  //   }
-  //   return item;
-  // }
 
   public render(): JSX.Element {
     const { items, selectionDetails } = this.state;
