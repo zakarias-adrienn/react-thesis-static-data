@@ -7,7 +7,6 @@ import Header from "./modules/thesis/components/Header";
 import MenuNavigate from "./modules/thesis/components/MenuNavigate";
 import PublishedThesis from "./modules/thesis/components/PublishedThesis";
 import UserThemes from "./modules/thesis/components/UserThemes";
-import AddNewTechnology from "./modules/thesis/components/AddNewTechnology";
 import TopicForm from "./modules/thesis/components/TopicForm";
 import TechnologyTable from "./modules/thesis/components/TechnologyTable";
 import SeeTheme from "./modules/thesis/components/SeeTheme";
@@ -56,8 +55,6 @@ function App() {
                     <UserThemes />
                   </Route>
                   <Route path="/addNewTechnology">
-                    <AddNewTechnology />
-                    <h3>Adatbázisban levő technológiák</h3>
                     <TechnologyTable></TechnologyTable>
                   </Route>
                   <Route path="/editTopic/:id">

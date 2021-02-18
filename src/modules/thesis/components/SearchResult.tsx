@@ -33,7 +33,6 @@ export interface IDetailsListBasicExampleItem {
   subjects: string;
   places: number | string;
   view: JSX.Element;
-  addFavourite: JSX.Element;
 }
 
 export interface IDetailsListBasicExampleState {
@@ -68,13 +67,6 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
         <Link to={{ pathname: "/seeTopic/" + "1" }}>
           <IconButton iconProps={{ iconName: "RedEye" }} title="Megtekint" ariaLabel="Megtekint" />
         </Link>
-      ),
-      addFavourite: (
-        <IconButton
-          iconProps={{ iconName: "AddFavorite" }}
-          title="Kedvencekhez ad"
-          ariaLabel="Kedvencekhez ad"
-        ></IconButton>
       )
     });
     this._allItems.push({
@@ -90,13 +82,6 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
         <Link to={{ pathname: "/seeTopic/" + "2" }}>
           <IconButton iconProps={{ iconName: "RedEye" }} title="Megtekint" ariaLabel="Megtekint" />
         </Link>
-      ),
-      addFavourite: (
-        <IconButton
-          iconProps={{ iconName: "AddFavorite" }}
-          title="Kedvencekhez ad"
-          ariaLabel="Kedvencekhez ad"
-        ></IconButton>
       )
     });
 
@@ -161,14 +146,6 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
         key: "column8",
         name: "Megtekintés",
         fieldName: "view",
-        minWidth: 30,
-        maxWidth: 100,
-        isResizable: true
-      },
-      {
-        key: "column8",
-        name: "Mentés",
-        fieldName: "addFavourite",
         minWidth: 30,
         maxWidth: 100,
         isResizable: true

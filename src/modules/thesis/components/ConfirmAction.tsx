@@ -13,15 +13,20 @@ const dragOptions = {
   keepInBounds: true
 };
 //const screenReaderOnly = mergeStyles(hiddenContentStyle);
-const dialogContentProps = {
-  type: DialogType.normal,
-  title: "Új technológia hozzáadása",
-  closeButtonAriaLabel: "Close",
-  subText: "Biztosan hozzá akarja adni a választható technológiák listájához?"
+const dialogContentProps = (name: string) => {
+  return {
+    type: DialogType.normal,
+    title: "Új technológia hozzáadása",
+    closeButtonAriaLabel: "Close",
+    subText: `Biztosan hozzá akarja adni ${name}-t a választható technológiák listájához?`
+  };
 };
 
 interface ConfirmActionProps {
-  notEmpty?: boolean;
+  notEmpty: boolean;
+  onAddNew: Function;
+  name: string;
+  updateTextField: Function;
 }
 
 const ConfirmAction: React.FunctionComponent<ConfirmActionProps> = (props) => {
@@ -54,11 +59,14 @@ const ConfirmAction: React.FunctionComponent<ConfirmActionProps> = (props) => {
       <Dialog
         hidden={hideDialog}
         onDismiss={toggleHideDialog}
-        dialogContentProps={dialogContentProps}
+        dialogContentProps={dialogContentProps(props.name)}
         modalProps={modalProps}
       >
         <DialogFooter>
-          <PrimaryButton onClick={toggleHideDialog} text="Hozzzáadás" />
+          <PrimaryButton
+            onClick={() => props.onAddNew(props.name, toggleHideDialog, props.updateTextField)}
+            text="Hozzzáadás"
+          />
           <DefaultButton onClick={toggleHideDialog} text="Mégse" />
         </DialogFooter>
       </Dialog>

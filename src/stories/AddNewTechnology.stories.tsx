@@ -7,4 +7,4 @@ export default {
   component: AddNewTechnology
 };
 
-export const First = () => <AddNewTechnology />;
+export const First = () => <AddNewTechnology name="" onAddNew={() => console.log("Hozzáadás")} />;

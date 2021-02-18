@@ -8,4 +8,11 @@ export default {
   component: ConfirmAction
 };
 
-export const First = () => <ConfirmAction />;
+export const First = () => (
+  <ConfirmAction
+    name="valami"
+    notEmpty={true}
+    onAddNew={() => console.log("hozzáadás")}
+    updateTextField={() => console.log("kiüresítve")}
+  />
+);

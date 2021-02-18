@@ -14,6 +14,7 @@ import { Text } from "office-ui-fabric-react/lib/Text";
 import { Stack } from "office-ui-fabric-react";
 import ConfirmDelete from "./ConfirmDelete";
 import DialogToEditTechnology from "./DialogToEditTechnology";
+import AddNewTechnology from "./AddNewTechnology";
 
 const exampleChildClass = mergeStyles({
   display: "block",
@@ -76,6 +77,7 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
 
     this.onChangeName = this.onChangeName.bind(this);
     this.onDelete = this.onDelete.bind(this);
+    this.addNewTechnology = this.addNewTechnology.bind(this);
 
     // Populate with items for demos.
     this._allItems = [];
@@ -153,44 +155,71 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
     this._allItems = this._allItems.filter((item) => item.key !== id);
   }
 
+  public addNewTechnology(name: string, toogleHideDialog: Function, updateTextField: Function) {
+    toogleHideDialog();
+    updateTextField();
+    let newItem: IDetailsListBasicExampleItem = {
+      key: name,
+      name: name,
+      edit: (
+        <DialogToEditTechnology
+          name={name}
+          myId={name}
+          onSave={this.onChangeName}
+        ></DialogToEditTechnology>
+      ),
+      delete: (
+        <ConfirmDelete text="technology" onDelete={this.onDelete} which={name}></ConfirmDelete>
+      )
+    };
+    this.setState({
+      ...this.state,
+      items: [...this.state.items, newItem]
+    });
+  }
+
   public render(): JSX.Element {
     const { items, selectionDetails } = this.state;
 
     return (
-      <Fabric>
-        <div className={exampleChildClass}>{selectionDetails}</div>
-        <Announced message={selectionDetails} />
-        <TextField
-          className={exampleChildClass}
-          label="Cím szerinti szűrés:"
-          onChange={this._onFilter}
-          styles={textFieldStyles}
-        />
-        <MarqueeSelection selection={this._selection}>
-          <DetailsList
-            items={items}
-            columns={this._columns}
-            setKey="set"
-            layoutMode={DetailsListLayoutMode.justified}
-            selection={this._selection}
-            selectionPreservedOnEmptyClick={true}
-            ariaLabelForSelectionColumn="Toggle selection"
-            ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-            checkButtonAriaLabel="Row checkbox"
-            // onItemInvoked={this._onItemInvoked}
+      <>
+        <AddNewTechnology onAddNew={this.addNewTechnology} name="" />
+        <h3>Adatbázisban levő technológiák</h3>
+        <Fabric>
+          <div className={exampleChildClass}>{selectionDetails}</div>
+          <Announced message={selectionDetails} />
+          <TextField
+            className={exampleChildClass}
+            label="Cím szerinti szűrés:"
+            onChange={this._onFilter}
+            styles={textFieldStyles}
           />
-          {!this.state.items.length && !this.state.isFilter && (
-            <Stack style={{ marginLeft: "30px" }}>
-              <Text>Nincsenek még technológiák felvéve!</Text>
-            </Stack>
-          )}
-          {!this.state.items.length && this.state.isFilter && (
-            <Stack style={{ marginLeft: "30px" }}>
-              <Text>Nincsen a keresésnek megfelelő eredmény!</Text>
-            </Stack>
-          )}
-        </MarqueeSelection>
-      </Fabric>
+          <MarqueeSelection selection={this._selection}>
+            <DetailsList
+              items={items}
+              columns={this._columns}
+              setKey="set"
+              layoutMode={DetailsListLayoutMode.justified}
+              selection={this._selection}
+              selectionPreservedOnEmptyClick={true}
+              ariaLabelForSelectionColumn="Toggle selection"
+              ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+              checkButtonAriaLabel="Row checkbox"
+              // onItemInvoked={this._onItemInvoked}
+            />
+            {!this.state.items.length && !this.state.isFilter && (
+              <Stack style={{ marginLeft: "30px" }}>
+                <Text>Nincsenek még technológiák felvéve!</Text>
+              </Stack>
+            )}
+            {!this.state.items.length && this.state.isFilter && (
+              <Stack style={{ marginLeft: "30px" }}>
+                <Text>Nincsen a keresésnek megfelelő eredmény!</Text>
+              </Stack>
+            )}
+          </MarqueeSelection>
+        </Fabric>
+      </>
     );
   }
 

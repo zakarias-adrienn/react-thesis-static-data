@@ -639,7 +639,7 @@ class TopicForm extends React.Component<Prop, State> {
                 label="Technológiák"
                 multiSelect
                 options={options2}
-                //styles={dropdownStyles
+                style={{ marginBottom: "10px" }}
                 componentRef={this.technologiesRef}
               />
               {this.props.values ? (

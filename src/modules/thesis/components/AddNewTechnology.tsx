@@ -13,8 +13,14 @@ const columnProps: Partial<IStackProps> = {
   styles: { root: { width: 1000, alignItems: "center" as "center" } }
 };
 
-const AddNewTechnology: React.FunctionComponent = () => {
+interface AddProps {
+  onAddNew: Function;
+  name: string;
+}
+
+const AddNewTechnology: React.FunctionComponent<AddProps> = (props) => {
   let [empty, setEmpty] = React.useState(true);
+  const [name, setName] = React.useState(props.name);
 
   const getErrorMessage = (value: string): string => {
     if (value.length >= 1) {
@@ -26,6 +32,17 @@ const AddNewTechnology: React.FunctionComponent = () => {
     }
   };
 
+  function handleChange(e: any) {
+    console.log(e.target);
+    let element: React.ChangeEvent<HTMLInputElement> = e;
+    console.log(element.target.value);
+    setName(element.target.value);
+  }
+
+  function updateState() {
+    setName("");
+  }
+
   return (
     <div>
       <Stack horizontal tokens={stackTokens} styles={stackStyles}>
@@ -35,8 +52,15 @@ const AddNewTechnology: React.FunctionComponent = () => {
             required
             onGetErrorMessage={getErrorMessage}
             validateOnLoad={false}
+            value={name}
+            onChange={handleChange}
           />
-          <ConfirmAction notEmpty={empty}></ConfirmAction>
+          <ConfirmAction
+            notEmpty={empty}
+            onAddNew={props.onAddNew}
+            name={name}
+            updateTextField={updateState}
+          ></ConfirmAction>
         </Stack>
       </Stack>
     </div>
