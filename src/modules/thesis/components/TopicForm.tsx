@@ -98,7 +98,7 @@ class TopicForm extends React.Component<Prop, State> {
   private plusOneYear: string;
   private projectRef: any;
 
-  // nem működik megfelelően
+  // nem működik megfelelően - valahogy így kell majd elkérnem s akkor az adatbázisból elkérni a megfelelő id-jú témát
   // componentDidMount() {
   //   const id = (this.props.match.params as any).id;
   //   console.log(id);

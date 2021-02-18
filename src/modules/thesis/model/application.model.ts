@@ -11,6 +11,7 @@ export type Application = {
   studentId: string;
   topicId: string;
   status: ApplicationStatus;
+  denyReason?: string;
 };
 
 export const applicationStatusSchema = Joi.string()
@@ -21,5 +22,6 @@ export const applicationSchema = Joi.object({
   id: Joi.string().required(),
   studentId: Joi.string().required(),
   topicId: Joi.string().required(),
-  status: applicationStatusSchema
+  status: applicationStatusSchema,
+  denyReason: Joi.string()
 });

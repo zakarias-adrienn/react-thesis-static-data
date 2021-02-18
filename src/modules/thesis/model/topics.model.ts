@@ -35,7 +35,6 @@ export type Topic = {
   schoolSemester: SchoolSemester;
   appliedStudentIds: string[];
   language: Language[];
-  denyReason?: string;
 };
 
 // JOI-s sémák
