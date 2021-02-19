@@ -11,6 +11,7 @@ import "office-ui-fabric-react/dist/css/fabric.css";
 import { Topic, TopicType, Semester, Language } from "../model/topics.model";
 import { Link } from "office-ui-fabric-react";
 import SearchResult from "./SearchResult";
+import MySpinner from "./MySpinner";
 
 const topics: Topic[] = [
   {
@@ -34,7 +35,8 @@ const topics: Topic[] = [
 type State = {
   selectedTeacher: { key: string; text: string };
   isFiltered: boolean;
-  isSearchClicked: boolean;
+  isSearchResult: boolean;
+  isSearchProgress: boolean;
 };
 
 class SearchPage extends React.Component<{}, State> {
@@ -49,7 +51,8 @@ class SearchPage extends React.Component<{}, State> {
         text: ""
       },
       isFiltered: false,
-      isSearchClicked: false
+      isSearchResult: false,
+      isSearchProgress: false
     };
   }
 
@@ -117,10 +120,26 @@ class SearchPage extends React.Component<{}, State> {
   }
 
   onClickSearch() {
-    this.setState({
-      ...this.state,
-      isSearchClicked: true
-    });
+    // TODO: lehetne loading?
+    if (this.state.isSearchResult) {
+      this.setState({
+        ...this.state,
+        isSearchProgress: true,
+        isSearchResult: false
+      });
+    } else {
+      this.setState({
+        ...this.state,
+        isSearchProgress: true
+      });
+    }
+    setTimeout(() => {
+      this.setState({
+        ...this.state,
+        isSearchResult: true,
+        isSearchProgress: false
+      });
+    }, 2000);
   }
 
   render() {
@@ -164,7 +183,8 @@ class SearchPage extends React.Component<{}, State> {
         </form>
         <br />
         <br />
-        {this.state.isSearchClicked && <SearchResult></SearchResult>}
+        {this.state.isSearchProgress && <MySpinner label="Folyamatban a keresés..."></MySpinner>}
+        {this.state.isSearchResult && <SearchResult></SearchResult>}
       </>
     );
   }

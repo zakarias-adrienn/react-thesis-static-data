@@ -1,27 +1,16 @@
 import * as React from "react";
-import { Announced } from "office-ui-fabric-react/lib/Announced";
-import { TextField, ITextFieldStyles } from "office-ui-fabric-react/lib/TextField";
+import { ITextFieldStyles } from "office-ui-fabric-react/lib/TextField";
 import {
   DetailsList,
   DetailsListLayoutMode,
-  Selection,
   IColumn
 } from "office-ui-fabric-react/lib/DetailsList";
-import { MarqueeSelection } from "office-ui-fabric-react/lib/MarqueeSelection";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { IconButton } from "@fluentui/react/lib/Button";
 import { MessageBar } from "office-ui-fabric-react";
 import { BrowserRouter, Link } from "react-router-dom";
-
-const exampleChildClass = mergeStyles({
-  display: "block",
-  marginBottom: "10px"
-});
-
-const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "300px" } };
-
-// tanár is tudjon menteni? nem kellene
+import { SelectionMode } from "@fluentui/react";
 
 export interface IDetailsListBasicExampleItem {
   key: string;
@@ -37,20 +26,14 @@ export interface IDetailsListBasicExampleItem {
 
 export interface IDetailsListBasicExampleState {
   items: IDetailsListBasicExampleItem[];
-  selectionDetails: string;
 }
 
 class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
-  private _selection: Selection;
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
 
   constructor(props: {}) {
     super(props);
-
-    this._selection = new Selection({
-      onSelectionChanged: () => this.setState({ selectionDetails: this._getSelectionDetails() })
-    });
 
     // Populate with items for demos.
     this._allItems = [];
@@ -153,73 +136,26 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
     ];
 
     this.state = {
-      items: this._allItems,
-      selectionDetails: this._getSelectionDetails()
+      items: this._allItems
     };
   }
 
   public render(): JSX.Element {
-    const { items, selectionDetails } = this.state;
+    const { items } = this.state;
 
     return (
       <Fabric>
-        <div className={exampleChildClass}>{selectionDetails}</div>
-        <Announced message={selectionDetails} />
-        <TextField
-          className={exampleChildClass}
-          label="Cím szerinti szűrés:"
-          onChange={this._onFilter}
-          styles={textFieldStyles}
-        />
         <MessageBar>Jelentkezni a téma részleteinek megtekintése során lehet.</MessageBar>
-        <MarqueeSelection selection={this._selection}>
-          <DetailsList
-            items={items}
-            columns={this._columns}
-            setKey="set"
-            layoutMode={DetailsListLayoutMode.justified}
-            selection={this._selection}
-            selectionPreservedOnEmptyClick={true}
-            ariaLabelForSelectionColumn="Toggle selection"
-            ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-            checkButtonAriaLabel="Row checkbox"
-            onItemInvoked={this._onItemInvoked}
-          />
-        </MarqueeSelection>
+        <DetailsList
+          items={items}
+          columns={this._columns}
+          layoutMode={DetailsListLayoutMode.justified}
+          setKey="none"
+          selectionMode={SelectionMode.none}
+        />
       </Fabric>
     );
   }
-
-  private _getSelectionDetails(): string {
-    const selectionCount = this._selection.getSelectedCount();
-
-    switch (selectionCount) {
-      case 0:
-        return "Nincs kiválasztva elem";
-      case 1:
-        return (
-          "1 kiválasztott elem: " +
-          (this._selection.getSelection()[0] as IDetailsListBasicExampleItem).title
-        );
-      default:
-        return `${selectionCount} darab elem kiválasztva`;
-    }
-  }
-
-  private _onFilter = (
-    ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-    text: string | undefined
-  ): void => {
-    this.setState({
-      items: text
-        ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text?.toLowerCase()) > -1)
-        : this._allItems
-    });
-  };
-
-  private _onItemInvoked = (item: IDetailsListBasicExampleItem): void => {
-    alert(`Kattintottak: ${item.title}`);
-  };
 }
 
 export default SearchResult;
