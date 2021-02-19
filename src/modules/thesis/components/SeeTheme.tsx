@@ -38,7 +38,7 @@ const rightStyle = {
   borderRadius: "5px",
   borderWidth: "2px",
   borderColor: "rgb(0, 120, 215)",
-  width: "60%"
+  width: "70%"
 };
 
 const SeeTheme: React.FunctionComponent = () => {
@@ -56,6 +56,13 @@ const SeeTheme: React.FunctionComponent = () => {
   return (
     <div>
       <div className="ms-Grid" dir="ltr">
+        <div className="ms-Grid-row" style={{ paddingBottom: "20px", paddingTop: "20px" }}>
+          <div className="ms-Grid-col ms-sm2"></div>
+          <div className="ms-Grid-col ms-sm10">
+            <b style={{ fontSize: "150%" }}>Téma részleteinek megtekintése</b>
+          </div>
+        </div>
+
         <div className="ms-Grid-row" style={{ paddingBottom: "20px" }}>
           <div className="ms-Grid-col ms-sm2">
             <b>Cím:</b>
@@ -127,7 +134,7 @@ const SeeTheme: React.FunctionComponent = () => {
         {/* ha diák a bejelentkezett felhasználó és nem teltek be a helyek erre a témára */}
         <div className="ms-Grid-row" style={{ paddingBottom: "20px" }}>
           <div className="ms-Grid-col ms-sm2"></div>
-          <div className="ms-Grid-col ms-sm10" style={{ width: "60%", padding: "0px" }}>
+          <div className="ms-Grid-col ms-sm10" style={{ width: "70%", padding: "0px" }}>
             <PrimaryButton
               text="Jelentkezés"
               allowDisabledFocus
