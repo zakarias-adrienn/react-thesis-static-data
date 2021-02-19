@@ -8,7 +8,7 @@ export type addNewTechnologyAction = {
     name: string;
   };
   response: {
-    technologyCreated: Technology;
+    technologyCreated: Technology; // lehet hogy kellene success? ha már van ilyen nevű technológia? vagy akkor üres obj?
   };
 };
 

@@ -19,12 +19,13 @@ const Header: React.FunctionComponent = () => {
           height: "80px",
           backgroundColor: "#0078D7",
           color: "white",
-          fontSize: "30px",
+          fontSize: "180%",
           marginTop: "0px"
         }}
       >
         Szakdolgozat és TDK témakereső modul
       </h2>
+      {/* TODO: react-responsive for mobile header? */}
     </>
   );
 };

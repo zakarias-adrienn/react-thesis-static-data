@@ -17,13 +17,11 @@ const screenReaderOnly = mergeStyles(hiddenContentStyle);
 
 interface ConfirmDeleteProps {
   text: string;
-  technologies?: any[];
   which?: string;
   onDelete: Function;
 }
 
 const ConfirmAction: React.FunctionComponent<ConfirmDeleteProps> = (props) => {
-  console.log(props.technologies);
   console.log(props.which);
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
   const [isDraggable, { toggle: toggleIsDraggable }] = useBoolean(false);

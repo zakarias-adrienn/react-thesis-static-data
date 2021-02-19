@@ -172,6 +172,7 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
         <ConfirmDelete text="technology" onDelete={this.onDelete} which={name}></ConfirmDelete>
       )
     };
+    // adatbázishívás -> ha nem sikerül mert már van ilyen nevű, akkor hibaüzenet!!
     this.setState({
       ...this.state,
       items: [...this.state.items, newItem]

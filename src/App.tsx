@@ -28,10 +28,10 @@ function App() {
           <Header></Header>
           <div className="ms-Grid" dir="ltr">
             <div className="ms-Grid-row">
-              <div className="ms-Grid-col ms-sm3">
+              <div className="ms-Grid-col ms-sm12 ms-smPull ms-md12 ms-lg12 ms-xl3">
                 <MenuNavigate></MenuNavigate>
               </div>
-              <div className="ms-Grid-col ms-sm9">
+              <div className="ms-Grid-col ms-sm12 ms-smPull ms-md12 ms-lg12 ms-xl9">
                 <Switch>
                   <Route exact path="/">
                     <p style={{ fontSize: "18px" }}>

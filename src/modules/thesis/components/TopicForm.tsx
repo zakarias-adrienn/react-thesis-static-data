@@ -7,14 +7,21 @@ import { PrimaryButton, IIconProps } from "office-ui-fabric-react";
 import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import { Language, Semester, TopicType } from "../model/topics.model";
-import ConfirmModify from "./ConfirmModify";
+import { Redirect } from "react-router";
 
 const stackTokens = { childrenGap: 5 };
-const stackStyles: Partial<IStackStyles> = { root: { width: 650 } };
+const stackStyles: Partial<IStackStyles> = { root: { width: "100%" } };
+const stackStyles2: Partial<IStackStyles> = {
+  root: { width: "70%", margin: "auto" }
+};
 const horizontalChoiceGroupStyles = {
   flexContainer: { display: "flex", flexDirection: "row" },
   marginTop: "0px",
   paddingTop: "0px"
+};
+const columnProps: Partial<IStackProps> = {
+  // tokens: { childrenGap: 5 },
+  styles: { root: { width: "100%" } }
 };
 
 let options: IDropdownOption[] = [
@@ -43,11 +50,6 @@ const semesters: IChoiceGroupOption[] = [
   { key: "spring", text: "Tavasz", styles: { root: { marginTop: "0px" } } }
 ];
 
-const columnProps: Partial<IStackProps> = {
-  tokens: { childrenGap: 5 },
-  styles: { root: { width: 800, alignItems: "center" as "center" } }
-};
-
 type MissingData = {
   title: boolean;
   description: boolean;
@@ -65,6 +67,7 @@ type MissingData = {
 type State = {
   missingData: MissingData;
   values: Values;
+  redirectAfterSave: boolean;
 };
 
 type Prop = {
@@ -84,6 +87,7 @@ type Values = {
 };
 
 const publishIcon: IIconProps = { iconName: "PublishContent" };
+const saveIcon: IIconProps = { iconName: "Save" };
 
 class TopicForm extends React.Component<Prop, State> {
   private choiceGroupRef: any;
@@ -126,7 +130,8 @@ class TopicForm extends React.Component<Prop, State> {
         description: "",
         numOfPlaces: 0,
         startYear: 0
-      }
+      },
+      redirectAfterSave: false
     };
     // ha valamelyik nincs megadva akkor egyiket sem állítja be,
     // de jobb lenne ha mindet kötelező lenne megadni
@@ -216,7 +221,7 @@ class TopicForm extends React.Component<Prop, State> {
       languages.push(Language.English);
     }
 
-    let semester = fields["Félév"];
+    let semester = fields["Tanév"];
     let year = parseInt(semester.substring(0, 4));
     let half =
       this.choiceGroupRef.current.checkedOption.key === "autumn"
@@ -248,6 +253,12 @@ class TopicForm extends React.Component<Prop, State> {
       language: languages
     };
     console.log(newTopic);
+
+    //visszairányítás a publishedthesis-ekhez
+    this.setState({
+      ...this.state,
+      redirectAfterSave: true
+    });
   }
 
   getErrorMessage = (value: string): string => {
@@ -423,9 +434,15 @@ class TopicForm extends React.Component<Prop, State> {
   };
 
   render() {
+    let redirectToPublishedThesis: boolean = this.state.redirectAfterSave;
+
+    if (redirectToPublishedThesis) {
+      return <Redirect to="/publishedThesis" />;
+    }
+
     return (
-      <div>
-        <Stack {...columnProps}>
+      <div style={{ width: "100%" }}>
+        <Stack styles={stackStyles2}>
           <h2>Téma {this.props.values ? <>módosítása</> : <>kiírása</>}</h2>
           <form onSubmit={this.handleSubmit}>
             <Stack tokens={stackTokens} styles={stackStyles}>
@@ -643,7 +660,10 @@ class TopicForm extends React.Component<Prop, State> {
                 componentRef={this.technologiesRef}
               />
               {this.props.values ? (
-                <ConfirmModify
+                <PrimaryButton
+                  text="Mentés"
+                  type="submit"
+                  iconProps={saveIcon}
                   disabled={
                     this.state.missingData.title ||
                     this.state.missingData.description ||
@@ -656,7 +676,7 @@ class TopicForm extends React.Component<Prop, State> {
                       this.state.missingData.type4 &&
                       this.state.missingData.type5)
                   }
-                ></ConfirmModify>
+                ></PrimaryButton>
               ) : (
                 <PrimaryButton
                   text="Meghirdetés"

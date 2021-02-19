@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Nav, INavLink, INavStyles, INavLinkGroup } from "office-ui-fabric-react/lib/Nav";
+import { useLocation } from "react-router-dom";
 
 const navStyles: Partial<INavStyles> = {
   root: {
@@ -49,20 +50,30 @@ const navLinkGroups: INavLinkGroup[] = [
 ];
 
 const MenuNavigate: React.FunctionComponent = () => {
+  const location = useLocation();
+  console.log(location.pathname);
+
+  const getSelectedKey = (): string => {
+    if (location.pathname === "/addNewTechnology") {
+      return "key5";
+    } else if (location.pathname === "/myTopics") {
+      return "key4";
+    } else if (location.pathname === "/searchPage") {
+      return "key3";
+    } else if (location.pathname === "/appliedStudents") {
+      return "key6";
+    } else if (location.pathname === "/publishedThesis") {
+      return "key2";
+    } else if (location.pathname === "/createThesis") {
+      return "key1";
+    } else {
+      return "";
+    }
+  };
+
   return (
-    <Nav
-      onLinkClick={_onLinkClick}
-      ariaLabel="Nav basic example"
-      styles={navStyles}
-      groups={navLinkGroups}
-    />
+    <Nav ariaLabel="Nav" styles={navStyles} groups={navLinkGroups} selectedKey={getSelectedKey()} />
   );
 };
-
-function _onLinkClick(ev?: React.MouseEvent<HTMLElement>, item?: INavLink) {
-  if (item && item.name === "News") {
-    alert("News link clicked");
-  }
-}
 
 export default MenuNavigate;

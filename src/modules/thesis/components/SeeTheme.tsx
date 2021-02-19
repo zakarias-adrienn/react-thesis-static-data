@@ -4,6 +4,7 @@ import { IDropdownStyles, IDropdownOption } from "office-ui-fabric-react/lib/Dro
 import { PrimaryButton } from "office-ui-fabric-react";
 import { IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
 import { BrowserRouter, Link } from "react-router-dom";
+import { Redirect } from "react-router";
 
 let options: IDropdownOption[] = [
   { key: "Webprogramozás", text: "Webprogramozás" },
@@ -41,6 +42,17 @@ const rightStyle = {
 };
 
 const SeeTheme: React.FunctionComponent = () => {
+  const [applied, setApplied] = React.useState(false);
+
+  const handleApplication = () => {
+    // adatbázis hívás - applyToTopic
+    setApplied(true);
+  };
+
+  if (applied) {
+    return <Redirect to="/myTopics" />;
+  }
+
   return (
     <div>
       <div className="ms-Grid" dir="ltr">
@@ -121,6 +133,7 @@ const SeeTheme: React.FunctionComponent = () => {
               allowDisabledFocus
               style={{ width: "30%" }}
               disabled={false} /* numofPlaces==0 */
+              onClick={handleApplication}
             />
             <Link to="/searchPage">
               <PrimaryButton
