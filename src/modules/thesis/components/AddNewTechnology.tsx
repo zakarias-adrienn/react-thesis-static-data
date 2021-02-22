@@ -24,12 +24,12 @@ const AddNewTechnology: React.FunctionComponent<AddProps> = (props) => {
   const [reset, setReset] = React.useState(false);
 
   const getErrorMessage = (value: string): string => {
-    if (reset === true || value.length >= 1) {
+    if (reset === true || value.trim().length >= 1) {
       setEmpty(false);
       return "";
     } else {
       setEmpty(true);
-      return `Név megadása kötelező!`;
+      return `Név megadása kötelező! Nem lehet üres!`;
     }
   };
 

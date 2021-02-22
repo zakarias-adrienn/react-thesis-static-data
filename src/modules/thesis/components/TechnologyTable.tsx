@@ -1,13 +1,10 @@
 import * as React from "react";
-import { Announced } from "office-ui-fabric-react/lib/Announced";
 import { TextField, ITextFieldStyles } from "office-ui-fabric-react/lib/TextField";
 import {
   DetailsList,
   DetailsListLayoutMode,
-  Selection,
   IColumn
 } from "office-ui-fabric-react/lib/DetailsList";
-import { MarqueeSelection } from "office-ui-fabric-react/lib/MarqueeSelection";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { Text } from "office-ui-fabric-react/lib/Text";
@@ -15,6 +12,7 @@ import { Stack } from "office-ui-fabric-react";
 import ConfirmDelete from "./ConfirmDelete";
 import DialogToEditTechnology from "./DialogToEditTechnology";
 import AddNewTechnology from "./AddNewTechnology";
+import { SelectionMode } from "@fluentui/react";
 
 const exampleChildClass = mergeStyles({
   display: "block",
@@ -32,21 +30,38 @@ export interface IDetailsListBasicExampleItem {
 
 export interface IDetailsListBasicExampleState {
   items: IDetailsListBasicExampleItem[];
-  selectionDetails: string;
   isFilter: boolean;
 }
 
 class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState> {
-  private _selection: Selection;
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
 
+  componentDidMount() {
+    // async - await adatbhívás -> eredménye technologies[] -> id, name
+    /*
+
+    _allItems = technologies.map(item => {
+        key: item.name,
+        name: item.name,
+        edit: (
+          <DialogToEditTechnology
+            name=item.name
+            myId=item.id
+            onSave={this.onChangeName}
+          ></DialogToEditTechnology>
+        ),
+        delete: (
+          <ConfirmDelete text="technology" onDelete={this.onDelete} which={item.name}></ConfirmDelete>
+        )
+      });
+
+      console.log(_allItems);
+    */
+  }
+
   constructor(props: {}) {
     super(props);
-
-    this._selection = new Selection({
-      onSelectionChanged: () => this.setState({ selectionDetails: this._getSelectionDetails() })
-    });
 
     this._columns = [
       {
@@ -128,7 +143,6 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
 
     this.state = {
       items: this._allItems,
-      selectionDetails: this._getSelectionDetails(),
       isFilter: false
     };
   }
@@ -140,7 +154,6 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
     toggleHideDialog();
     this.setState({
       items: this.state.items.map((item) => (item.key === id ? { ...item, name } : item)),
-      selectionDetails: this._getSelectionDetails(),
       isFilter: this.state.isFilter
     });
   }
@@ -149,7 +162,6 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
     toggleHideDialog();
     this.setState({
       items: this.state.items.filter((item) => item.key !== id),
-      selectionDetails: this._getSelectionDetails(),
       isFilter: this.state.isFilter
     });
     this._allItems = this._allItems.filter((item) => item.key !== id);
@@ -180,64 +192,44 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
   }
 
   public render(): JSX.Element {
-    const { items, selectionDetails } = this.state;
+    const { items } = this.state;
 
     return (
       <>
         <AddNewTechnology onAddNew={this.addNewTechnology} name="" />
         <h3>Adatbázisban levő technológiák</h3>
         <Fabric>
-          <div className={exampleChildClass}>{selectionDetails}</div>
-          <Announced message={selectionDetails} />
           <TextField
             className={exampleChildClass}
             label="Cím szerinti szűrés:"
             onChange={this._onFilter}
             styles={textFieldStyles}
           />
-          <MarqueeSelection selection={this._selection}>
-            <DetailsList
-              items={items}
-              columns={this._columns}
-              setKey="set"
-              layoutMode={DetailsListLayoutMode.justified}
-              selection={this._selection}
-              selectionPreservedOnEmptyClick={true}
-              ariaLabelForSelectionColumn="Toggle selection"
-              ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-              checkButtonAriaLabel="Row checkbox"
-              // onItemInvoked={this._onItemInvoked}
-            />
-            {!this.state.items.length && !this.state.isFilter && (
-              <Stack style={{ marginLeft: "30px" }}>
-                <Text>Nincsenek még technológiák felvéve!</Text>
-              </Stack>
-            )}
-            {!this.state.items.length && this.state.isFilter && (
-              <Stack style={{ marginLeft: "30px" }}>
-                <Text>Nincsen a keresésnek megfelelő eredmény!</Text>
-              </Stack>
-            )}
-          </MarqueeSelection>
+          <DetailsList
+            items={items}
+            columns={this._columns}
+            setKey="none"
+            selectionMode={SelectionMode.none}
+            layoutMode={DetailsListLayoutMode.justified}
+            selectionPreservedOnEmptyClick={true}
+            ariaLabelForSelectionColumn="Toggle selection"
+            ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+            checkButtonAriaLabel="Row checkbox"
+            // onItemInvoked={this._onItemInvoked}
+          />
+          {!this.state.items.length && !this.state.isFilter && (
+            <Stack style={{ marginLeft: "30px" }}>
+              <Text>Nincsenek még technológiák felvéve!</Text>
+            </Stack>
+          )}
+          {!this.state.items.length && this.state.isFilter && (
+            <Stack style={{ marginLeft: "30px" }}>
+              <Text>Nincsen a keresésnek megfelelő eredmény!</Text>
+            </Stack>
+          )}
         </Fabric>
       </>
     );
-  }
-
-  private _getSelectionDetails(): string {
-    const selectionCount = this._selection.getSelectedCount();
-
-    switch (selectionCount) {
-      case 0:
-        return "";
-      case 1:
-        return (
-          "1 kiválasztott elem: " +
-          (this._selection.getSelection()[0] as IDetailsListBasicExampleItem).name
-        );
-      default:
-        return `${selectionCount} darab elem kiválasztva`;
-    }
   }
 
   private _onFilter = (
@@ -251,10 +243,6 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
       isFilter: text ? true : false
     });
   };
-
-  // private _onItemInvoked = (item: IDetailsListBasicExampleItem): void => {
-  //   alert(`Kattintottak: ${item.name}`);
-  // };
 }
 
 export default TechnologyTable;

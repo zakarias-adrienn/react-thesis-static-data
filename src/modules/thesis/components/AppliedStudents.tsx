@@ -27,6 +27,7 @@ export interface IDetailsListBasicExampleItem {
   key: string;
   title: string;
   name: string;
+  semester: string;
   accept: JSX.Element;
   deny: JSX.Element;
 }
@@ -54,6 +55,7 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
       key: "Garbage Collector működése Javában",
       title: "Garbage Collector működése Javában",
       name: "Zakariás Adrienn",
+      semester: "2020-21-ősz",
       accept: (
         <DefaultButton
           text="Elfogad"
@@ -72,6 +74,7 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
       key: "Youniversity",
       title: "Youniversity",
       name: "Zöld Elek",
+      semester: "2020-21-ősz",
       accept: <DefaultButton text="Elfogad" onClick={() => this.handleAccept("Youniversity")} />,
       deny: <ConfirmDeny name="Zöld Elek" myId="Youniversity" onDeny={this.onDeny}></ConfirmDeny>
     });
@@ -95,6 +98,14 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
       },
       {
         key: "column3",
+        name: "Félév",
+        fieldName: "semester",
+        minWidth: 50,
+        maxWidth: 100,
+        isResizable: true
+      },
+      {
+        key: "column4",
         name: "Elfogadás",
         fieldName: "accept",
         minWidth: 50,
@@ -102,7 +113,7 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
         isResizable: true
       },
       {
-        key: "column4",
+        key: "column5",
         name: "Elutasítás",
         fieldName: "deny",
         minWidth: 50,

@@ -56,8 +56,8 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
         key: "column1",
         name: "Cím",
         fieldName: "title",
-        minWidth: 20,
-        maxWidth: 100,
+        minWidth: 100,
+        maxWidth: 200,
         isResizable: true
       },
       {

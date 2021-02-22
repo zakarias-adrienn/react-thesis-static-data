@@ -262,7 +262,7 @@ class TopicForm extends React.Component<Prop, State> {
   }
 
   getErrorMessage = (value: string): string => {
-    if (value.length >= 1) {
+    if (value.trim().length >= 1) {
       this.setState((state) => ({
         ...this.state,
         missingData: {
@@ -285,7 +285,7 @@ class TopicForm extends React.Component<Prop, State> {
   };
 
   getErrorDescription = (value: string): string => {
-    if (value.length >= 1) {
+    if (value.trim().length >= 1) {
       this.setState((state) => ({
         ...this.state,
         missingData: {
@@ -312,6 +312,10 @@ class TopicForm extends React.Component<Prop, State> {
     let first = parseInt(value.substring(2, 4));
     let second = parseInt(value.substring(5, 7));
     const regex = new RegExp("[0-9][0-9][0-9][0-9]/[0-9][0-9]");
+    let currentYear = new Date().getFullYear();
+    console.log(currentYear);
+    let enteredValue = parseInt(value.substring(0, 4));
+    console.log(enteredValue);
     if (!regex.test(value)) {
       this.setState((state) => ({
         ...this.state,
@@ -321,7 +325,8 @@ class TopicForm extends React.Component<Prop, State> {
         }
       }));
       return "Tanév formátuma nem helyes szintaktikailag! Példa helyes formátumra: 2020/21";
-    } else if (second !== first + 1) {
+    }
+    if (second !== first + 1) {
       this.setState((state) => ({
         ...this.state,
         missingData: {
@@ -331,17 +336,26 @@ class TopicForm extends React.Component<Prop, State> {
       }));
       console.log(this.state);
       return "Tanév formátuma nem helyes szemantikailag! Példa helyes formátumra: 2020/21";
-    } else {
+    }
+    this.setState((state) => ({
+      ...this.state,
+      missingData: {
+        ...state.missingData,
+        semester: false
+      }
+    }));
+    if (enteredValue < currentYear) {
       this.setState((state) => ({
         ...this.state,
         missingData: {
           ...state.missingData,
-          semester: false
+          semester: true
         }
       }));
-      console.log(this.state);
-      return "";
+      return "Tanév értéke nem lehet kisebb mint a jelenlegi év.";
     }
+    console.log(this.state);
+    return "";
   };
 
   getErrorNumPlaces = (value: string): string => {
