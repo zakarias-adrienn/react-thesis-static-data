@@ -18,7 +18,7 @@ const dialogContentProps = (name: string) => {
     type: DialogType.normal,
     title: "Új technológia hozzáadása",
     closeButtonAriaLabel: "Close",
-    subText: `Biztosan hozzá akarja adni ${name}-t a választható technológiák listájához?`
+    subText: `Biztosan hozzá akarja adni "${name}" nevű technológiát a választható technológiák listájához?`
   };
 };
 

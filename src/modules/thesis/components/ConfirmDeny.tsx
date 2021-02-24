@@ -19,7 +19,7 @@ const dialogContentProps = (name: string) => {
     type: DialogType.normal,
     title: "Jelentkezés elutasítása",
     closeButtonAriaLabel: "Close",
-    subText: `Biztosan elutasítja ${name} jelentkezését?`
+    subText: `Biztosan elutasítja "${name}" jelentkezését?`
   };
 };
 

@@ -14,16 +14,19 @@ const dragOptions = {
   keepInBounds: true
 };
 const screenReaderOnly = mergeStyles(hiddenContentStyle);
-const dialogContentProps = {
-  type: DialogType.normal,
-  title: "Jelentkezés visszavonása",
-  closeButtonAriaLabel: "Close",
-  subText: "Biztosan vissza akarja vonni a témára való jelentkezést?"
+const dialogContentProps = (name: string) => {
+  return {
+    type: DialogType.normal,
+    title: "Jelentkezés visszavonása",
+    closeButtonAriaLabel: "Close",
+    subText: `Biztosan vissza akarod vonni a "${name}" nevű témára való jelentkezést?`
+  };
 };
 
 interface ConfirmWithdrawProps {
   myId: string;
   onWithdraw: Function;
+  name: string;
 }
 
 const ConfirmWithdraw: React.FunctionComponent<ConfirmWithdrawProps> = (props) => {
@@ -55,7 +58,7 @@ const ConfirmWithdraw: React.FunctionComponent<ConfirmWithdrawProps> = (props) =
       <Dialog
         hidden={hideDialog}
         onDismiss={toggleHideDialog}
-        dialogContentProps={dialogContentProps}
+        dialogContentProps={dialogContentProps(props.name)}
         modalProps={modalProps}
       >
         <DialogFooter>

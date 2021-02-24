@@ -16,8 +16,9 @@ const dragOptions = {
 const screenReaderOnly = mergeStyles(hiddenContentStyle);
 
 interface ConfirmDeleteProps {
-  text: string;
-  which?: string;
+  type: string;
+  which: string; //id
+  name: string;
   onDelete: Function;
 }
 
@@ -30,12 +31,12 @@ const ConfirmAction: React.FunctionComponent<ConfirmDeleteProps> = (props) => {
   const dialogContentProps = {
     type: DialogType.normal,
     title:
-      props.text === "technology" ? "Meglevő technológia törlése" : "Meghirdetett téma törlése",
+      props.type === "technology" ? "Meglevő technológia törlése" : "Meghirdetett téma törlése",
     closeButtonAriaLabel: "Close",
     subText:
-      props.text === "technology"
-        ? "Biztosan törölni szeretné a technológiát?"
-        : "Biztosan törölni szeretné a témát?"
+      props.type === "technology"
+        ? `Biztosan törölni szeretné a "${props.name}" nevű technológiát?`
+        : `Biztosan törölni szeretné a "${props.name}" nevű témát?`
   };
 
   const modalProps = React.useMemo(

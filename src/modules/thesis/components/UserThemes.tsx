@@ -91,7 +91,13 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
       teacher: "Visnovitz Márton",
       semester: "2020/21-ősz",
       status: "Elfogadva",
-      remove: <ConfirmWithdraw myId="Youniversity" onWithdraw={this.onDelete}></ConfirmWithdraw>
+      remove: (
+        <ConfirmWithdraw
+          myId="Youniversity"
+          onWithdraw={this.onDelete}
+          name="Youniversity"
+        ></ConfirmWithdraw>
+      )
     });
     this._allItems.push({
       key: "TDK Dolgozat",
@@ -112,7 +118,13 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
           </>
         </HoverCard>
       ),
-      remove: <ConfirmWithdraw myId="TDK Dolgozat" onWithdraw={this.onDelete}></ConfirmWithdraw>
+      remove: (
+        <ConfirmWithdraw
+          myId="TDK Dolgozat"
+          onWithdraw={this.onDelete}
+          name="TDK Dolgozat"
+        ></ConfirmWithdraw>
+      )
     });
 
     this._columns = [
@@ -219,5 +231,3 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
 }
 
 export default UserThemes;
-
-// TODO: ha elutasítva, hogy jelenjen meg az indoklás?

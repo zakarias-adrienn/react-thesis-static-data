@@ -63,7 +63,12 @@ const onRenderCell = (item: MyListItem | undefined, index: number | undefined): 
         {index !== undefined ? index + 1 : undefined} &nbsp;{" "}
         {item !== undefined ? item.name : undefined}
         <div className={styles.right}>
-          <ConfirmDelete text="technology" onDelete={onDelete}></ConfirmDelete>
+          <ConfirmDelete
+            type="technology"
+            onDelete={onDelete}
+            which="id"
+            name="name"
+          ></ConfirmDelete>
         </div>
       </div>
     </div>

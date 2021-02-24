@@ -127,8 +127,9 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
       ),
       delete: (
         <ConfirmDelete
-          text="topic"
+          type="topic"
           which="Garbage Collector működése Javában"
+          name="Garbage Collector működése Javában"
           onDelete={this.onDelete}
         ></ConfirmDelete>
       )
@@ -146,7 +147,12 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
         </Link>
       ),
       delete: (
-        <ConfirmDelete text="topic" which="Youniversity" onDelete={this.onDelete}></ConfirmDelete>
+        <ConfirmDelete
+          type="topic"
+          which="Youniversity"
+          name="Youniversity"
+          onDelete={this.onDelete}
+        ></ConfirmDelete>
       )
     });
 

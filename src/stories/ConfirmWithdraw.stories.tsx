@@ -12,4 +12,4 @@ const onWithDraw = () => {
   console.log("Visszavonás");
 };
 
-export const First = () => <ConfirmWithdraw myId={"valami"} onWithdraw={onWithDraw} />;
+export const First = () => <ConfirmWithdraw myId={"valami"} onWithdraw={onWithDraw} name="name" />;

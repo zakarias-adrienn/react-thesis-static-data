@@ -108,7 +108,12 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
           ></DialogToEditTechnology>
         ),
         delete: (
-          <ConfirmDelete text="technology" onDelete={this.onDelete} which={"JAVA"}></ConfirmDelete>
+          <ConfirmDelete
+            type="technology"
+            onDelete={this.onDelete}
+            which="JAVA"
+            name="JAVA"
+          ></ConfirmDelete>
         )
       },
       {
@@ -122,7 +127,12 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
           ></DialogToEditTechnology>
         ),
         delete: (
-          <ConfirmDelete text="technology" onDelete={this.onDelete} which={"C++"}></ConfirmDelete>
+          <ConfirmDelete
+            type="technology"
+            onDelete={this.onDelete}
+            which="C++"
+            name="C++"
+          ></ConfirmDelete>
         )
       },
       {
@@ -136,7 +146,12 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
           ></DialogToEditTechnology>
         ),
         delete: (
-          <ConfirmDelete text="technology" onDelete={this.onDelete} which={"HTML5"}></ConfirmDelete>
+          <ConfirmDelete
+            type="technology"
+            onDelete={this.onDelete}
+            which="HTML5"
+            name="HTML5"
+          ></ConfirmDelete>
         )
       }
     );
@@ -181,7 +196,12 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
         ></DialogToEditTechnology>
       ),
       delete: (
-        <ConfirmDelete text="technology" onDelete={this.onDelete} which={name}></ConfirmDelete>
+        <ConfirmDelete
+          type="technology"
+          onDelete={this.onDelete}
+          which={name}
+          name={name}
+        ></ConfirmDelete>
       )
     };
     // adatbázishívás -> ha nem sikerül mert már van ilyen nevű, akkor hibaüzenet!!
