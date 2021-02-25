@@ -17,18 +17,35 @@ const dialogContentProps = {
 interface DialogProps {
   name: string;
   onSave?: any;
-  myId?: string;
+  myId: string;
 }
 
 const DialogToEditTechnology: React.FunctionComponent<DialogProps> = (props) => {
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
   const [name, setName] = React.useState(props.name);
+  const [disabled, setDisabled] = React.useState(false);
+
+  // technologies-t le kell kérni - legalábbis az összes névre szükség van
 
   function handleChange(e: any) {
     console.log(e.target);
     let element: React.ChangeEvent<HTMLInputElement> = e;
     console.log(element.target.value);
     setName(element.target.value);
+  }
+
+  function getErrorMessage(value: string): string {
+    let technologyNames: string[] = [];
+    // TODO: ha myId-val megegyező nevűre írja át, az működhessen!!!
+    if (value.trim().length >= 1 && !technologyNames.includes(value.trim().toLowerCase())) {
+      setDisabled(false);
+      return "";
+    } else {
+      setDisabled(true);
+      return technologyNames.includes(value.trim().toLowerCase())
+        ? `Ilyen nevű technológia már szerepel az adatbázisban!`
+        : `Név megadása kötelező!`;
+    }
   }
 
   return (
@@ -46,12 +63,18 @@ const DialogToEditTechnology: React.FunctionComponent<DialogProps> = (props) => 
         modalProps={modelProps}
       >
         {/* formba kellene tenni valahogy? */}
-        <TextField label="Név" value={name} onChange={handleChange} />
+        <TextField
+          label="Név"
+          value={name}
+          onChange={handleChange}
+          required
+          onGetErrorMessage={getErrorMessage}
+        />
         <DialogFooter>
           <PrimaryButton
             onClick={(e) => props.onSave(name, props.myId, toggleHideDialog)}
             text="Mentés"
-            disabled={name === ""}
+            disabled={disabled}
           />
           <DefaultButton onClick={toggleHideDialog} text="Mégse" />
         </DialogFooter>

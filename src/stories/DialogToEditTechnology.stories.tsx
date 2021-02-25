@@ -8,4 +8,4 @@ export default {
   component: DialogToEditTechnology
 };
 
-export const First = () => <DialogToEditTechnology name="VALAMI" />;
+export const First = () => <DialogToEditTechnology name="VALAMI" myId="valami" />;
