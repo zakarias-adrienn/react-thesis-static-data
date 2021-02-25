@@ -32,13 +32,30 @@ const semesters: IChoiceGroupOption[] = [
   { key: "spring", text: "Tavasz" }
 ];
 
+const colors = ["#b7472a", "#31752f", "#742774", "#3955a3", "#a4373a", "#077568", "#2b579a"];
+
+function getRandomColor() {
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
+const myLiStyle: React.CSSProperties = {
+  padding: "3px",
+  width: "20%",
+  borderRadius: "25px",
+  display: "inline-block",
+  textAlign: "center",
+  marginLeft: "5px",
+  color: "white"
+};
+
 const rightStyle = {
+  backgroundColor: "rgb(237, 235, 233)",
   padding: "8px",
-  border: "solid",
-  borderRadius: "5px",
-  borderWidth: "2px",
-  borderColor: "rgb(0, 120, 215)",
-  width: "70%"
+  // border: "solid",
+  // borderRadius: "5px",
+  // borderWidth: "2px",
+  // borderColor: "rgb(0, 120, 215)",
+  width: "60%"
 };
 
 type Prop = {
@@ -121,9 +138,16 @@ const SeeTheme: React.FunctionComponent<Prop> = (props) => {
             <b>Kapcsolódó technológiák:</b>
           </div>
           <div className="ms-Grid-col ms-sm10" style={rightStyle}>
-            <ul style={{ paddingLeft: "13px", marginTop: "0px" }}>
-              <li>React</li>
-              <li>Typescript</li>
+            <ul
+              style={{
+                paddingLeft: "0px",
+                marginTop: "0px",
+                listStyleType: "none",
+                marginBottom: "0px"
+              }}
+            >
+              <li style={{ ...myLiStyle, backgroundColor: getRandomColor() }}>React</li>
+              <li style={{ ...myLiStyle, backgroundColor: getRandomColor() }}>Typescript</li>
             </ul>
           </div>
         </div>
@@ -132,16 +156,23 @@ const SeeTheme: React.FunctionComponent<Prop> = (props) => {
             <b>Kapcsolódó tantárgyak:</b>
           </div>
           <div className="ms-Grid-col ms-sm10" style={rightStyle}>
-            <ul style={{ paddingLeft: "13px", marginTop: "0px" }}>
-              <li>Webprogramozás</li>
-              <li>Számításelmélet</li>
+            <ul
+              style={{
+                paddingLeft: "0px",
+                marginTop: "0px",
+                listStyleType: "none",
+                marginBottom: "0px"
+              }}
+            >
+              <li style={{ ...myLiStyle, backgroundColor: getRandomColor() }}>Webprogramozás</li>
+              <li style={{ ...myLiStyle, backgroundColor: getRandomColor() }}>Számításelmélet</li>
             </ul>
           </div>
         </div>
         {/* ha diák a bejelentkezett felhasználó és nem teltek be a helyek erre a témára */}
         <div className="ms-Grid-row" style={{ paddingBottom: "20px" }}>
           <div className="ms-Grid-col ms-sm2"></div>
-          <div className="ms-Grid-col ms-sm10" style={{ width: "70%", padding: "0px" }}>
+          <div className="ms-Grid-col ms-sm10" style={{ width: "60%", padding: "0px" }}>
             <PrimaryButton
               text="Jelentkezés"
               allowDisabledFocus

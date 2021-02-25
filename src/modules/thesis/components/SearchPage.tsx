@@ -12,6 +12,21 @@ import { Topic, TopicType, Semester, Language } from "../model/topics.model";
 import { Link } from "office-ui-fabric-react";
 import SearchResult from "./SearchResult";
 import MySpinner from "./MySpinner";
+import { MaskedTextField } from "office-ui-fabric-react/lib/TextField";
+import { Text } from "office-ui-fabric-react/lib/Text";
+import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
+import { MessageBar, MessageBarType } from "office-ui-fabric-react";
+
+const horizontalChoiceGroupStyles = {
+  flexContainer: { display: "flex", flexDirection: "row" },
+  marginTop: "0px",
+  paddingTop: "0px"
+};
+
+const semesters: IChoiceGroupOption[] = [
+  { key: "autumn", text: "Ősz", styles: { root: { marginRight: "10px", marginTop: "0px" } } },
+  { key: "spring", text: "Tavasz", styles: { root: { marginTop: "0px" } } }
+];
 
 const topics: Topic[] = [
   {
@@ -38,15 +53,22 @@ type State = {
   isSearchResult: boolean;
   isSearchProgress: boolean;
   hideHeaderSearch: boolean;
+  isGoodDate: boolean;
 };
 
 class SearchPage extends React.Component<{}, State> {
+  private choiceGroupRef: any;
+
   constructor(props: any) {
     super(props);
+
+    this.choiceGroupRef = React.createRef();
+
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onClickSearch = this.onClickSearch.bind(this);
     this.toogleHide = this.toogleHide.bind(this);
+    this.getErrorSemester = this.getErrorSemester.bind(this);
 
     this.state = {
       selectedTeacher: {
@@ -56,7 +78,8 @@ class SearchPage extends React.Component<{}, State> {
       isFiltered: false,
       isSearchResult: false,
       isSearchProgress: false,
-      hideHeaderSearch: false
+      hideHeaderSearch: false,
+      isGoodDate: true
     };
   }
 
@@ -75,6 +98,15 @@ class SearchPage extends React.Component<{}, State> {
     event.preventDefault();
     console.log(event.target);
     let element = event.target as HTMLInputElement;
+
+    // félévet is bele kell építeni
+    console.log(element.querySelector("#maskedField"));
+    let years = (element.querySelector("#maskedField") as HTMLInputElement)?.value;
+    console.log(years);
+
+    // tavasz vagy ősz
+    console.log("Tavasz vagy ősz:", this.choiceGroupRef.current?.checkedOption);
+
     console.log(element.querySelector("#chooseType"));
     let checkBoxDiv = element.querySelector("#chooseType");
     console.log(checkBoxDiv?.querySelectorAll('input[type="checkbox"]'));
@@ -123,6 +155,45 @@ class SearchPage extends React.Component<{}, State> {
     }
   }
 
+  getErrorSemester = (value: string): string => {
+    let first = parseInt(value.substring(2, 4));
+    let second = parseInt(value.substring(5, 7));
+    const regex = new RegExp("[0-9][0-9][0-9][0-9]/[0-9][0-9]");
+    let currentYear = new Date().getFullYear();
+    console.log(currentYear);
+    let enteredValueString = value.substring(0, 2) + value.substring(5, 7);
+    console.log(enteredValueString);
+    let enteredValue = parseInt(enteredValueString);
+    if (!regex.test(value)) {
+      this.setState((state) => ({
+        ...this.state,
+        isGoodDate: false
+      }));
+      return "Tanév formátuma nem helyes szintaktikailag! Példa helyes formátumra: 2020/21";
+    }
+    if (second !== first + 1) {
+      this.setState((state) => ({
+        ...this.state,
+        isGoodDate: false
+      }));
+      console.log(this.state);
+      return "Tanév formátuma nem helyes szemantikailag! Példa helyes formátumra: 2020/21";
+    }
+    // régebbit is megtekinthet ugye?? - mondjuk nem jelentkezhet? akkor csak aktív témákra jelentkezhet? aktív mező kellene? ki dönti el hogy aktív-e?
+    // if (enteredValue < currentYear) {
+    //   this.setState((state) => ({
+    //     ...this.state,
+    //     isGoodDate: false
+    //   }));
+    //   return "Tanév értéke nem lehet kisebb mint a jelenlegi tanév.";
+    // }
+    this.setState((state) => ({
+      ...this.state,
+      isGoodDate: true
+    }));
+    return "";
+  };
+
   onClickSearch() {
     // TODO: lehetne loading?
     if (this.state.isSearchResult) {
@@ -163,6 +234,7 @@ class SearchPage extends React.Component<{}, State> {
                 <div className="ms-Grid-row">
                   <div className="ms-Grid-col ms-sm6">
                     <SearchByTitle></SearchByTitle>
+                    <br />
                     {this.state.isFiltered && (
                       <>
                         <ChooseTheme></ChooseTheme>
@@ -183,6 +255,47 @@ class SearchPage extends React.Component<{}, State> {
                     </Link>
                     {this.state.isFiltered && (
                       <>
+                        <div className="ms-Grid" dir="ltr">
+                          <div className="ms-Grid-row" style={{ marginBottom: "10px" }}>
+                            <div className="ms-Grid-col ms-sm3">
+                              <MaskedTextField
+                                label="Tanév"
+                                name="Tanév"
+                                mask="2099/99"
+                                id="maskedField"
+                                onGetErrorMessage={this.getErrorSemester}
+                                validateOnLoad={false}
+                              />
+                            </div>
+                            <div className="ms-Grid-col ms-sm9" style={{ paddingTop: "10px" }}>
+                              <Text
+                                style={{ fontWeight: 500, paddingTop: "60px", marginBottom: "0px" }}
+                              >
+                                Félév
+                              </Text>
+                              <ChoiceGroup
+                                styles={horizontalChoiceGroupStyles}
+                                name="autumnorspring"
+                                defaultSelectedKey="autumn"
+                                options={semesters}
+                                required={true}
+                                componentRef={this.choiceGroupRef}
+                              />
+                            </div>
+                          </div>
+                          <div className="ms-Grid-row" style={{ width: "83%" }}>
+                            <MessageBar
+                              messageBarType={MessageBarType.warning}
+                              isMultiline={false}
+                              dismissButtonAriaLabel="Close"
+                            >
+                              Megadás hiányában az aktuális félévben meghirdetett témák jelenítődnek
+                              meg.
+                            </MessageBar>
+                            {/* Akkor is ha simán keresés? Ha nincs aktuális félévben téma?
+                              Honnan jön az aktuális félév? */}
+                          </div>
+                        </div>
                         <SearchTeacher onChange={this.handleChange}></SearchTeacher>
                         <Subjects></Subjects>
                         <Technologies></Technologies>
@@ -191,7 +304,10 @@ class SearchPage extends React.Component<{}, State> {
                   </div>
                 </div>
                 <br />
-                <MySubmitButton onClick={this.onClickSearch}></MySubmitButton>
+                <MySubmitButton
+                  onClick={this.onClickSearch}
+                  disabled={!this.state.isGoodDate}
+                ></MySubmitButton>
               </div>
             </form>
             <br />

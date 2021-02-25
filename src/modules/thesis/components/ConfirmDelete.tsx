@@ -35,7 +35,7 @@ const ConfirmAction: React.FunctionComponent<ConfirmDeleteProps> = (props) => {
     closeButtonAriaLabel: "Close",
     subText:
       props.type === "technology"
-        ? `Biztosan törölni szeretné a "${props.name}" nevű technológiát?`
+        ? `Biztosan törölni szeretné a "${props.name}" nevű technológiát? Amennyiben vannak már hozzákapcsolt témák, akkor megszűnik a kapcsolatuk.`
         : `Biztosan törölni szeretné a "${props.name}" nevű témát?`
   };
 

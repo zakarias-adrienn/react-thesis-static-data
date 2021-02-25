@@ -337,13 +337,6 @@ class TopicForm extends React.Component<Prop, State> {
       console.log(this.state);
       return "Tanév formátuma nem helyes szemantikailag! Példa helyes formátumra: 2020/21";
     }
-    this.setState((state) => ({
-      ...this.state,
-      missingData: {
-        ...state.missingData,
-        semester: false
-      }
-    }));
     if (enteredValue < currentYear) {
       this.setState((state) => ({
         ...this.state,
@@ -352,8 +345,15 @@ class TopicForm extends React.Component<Prop, State> {
           semester: true
         }
       }));
-      return "Tanév értéke nem lehet kisebb mint a jelenlegi év.";
+      return "Tanév értéke nem lehet kisebb mint a jelenlegi tanév.";
     }
+    this.setState((state) => ({
+      ...this.state,
+      missingData: {
+        ...state.missingData,
+        semester: false
+      }
+    }));
     console.log(this.state);
     return "";
   };
