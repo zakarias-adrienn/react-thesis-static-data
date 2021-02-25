@@ -50,6 +50,15 @@ const semesters: IChoiceGroupOption[] = [
   { key: "spring", text: "Tavasz", styles: { root: { marginTop: "0px" } } }
 ];
 
+const mainSemesters: IChoiceGroupOption[] = [
+  {
+    key: "every",
+    text: "Tetszőleges félév",
+    styles: { root: { marginRight: "10px", marginTop: "0px" } }
+  },
+  { key: "given", text: "Adott félév", styles: { root: { marginTop: "0px" } } }
+];
+
 type MissingData = {
   title: boolean;
   description: boolean;
@@ -62,6 +71,8 @@ type MissingData = {
   type3: boolean;
   type4: boolean;
   type5: boolean;
+  every_semester: boolean;
+  given_semester: boolean;
 };
 
 type State = {
@@ -123,7 +134,9 @@ class TopicForm extends React.Component<Prop, State> {
         type2: true,
         type3: true,
         type4: true,
-        type5: true
+        type5: true,
+        every_semester: true,
+        given_semester: false
       },
       values: {
         title: "",
@@ -144,8 +157,9 @@ class TopicForm extends React.Component<Prop, State> {
           ...this.state.missingData,
           title: false,
           description: false,
-          places: false,
-          semester: false
+          places: false
+          //semester: false
+          //betöltéskor be kell állítani valamelyik semester értéket! - vagy csak every_semester vagy given_semester + semester
         },
         values: this.props?.values
       };
@@ -446,6 +460,18 @@ class TopicForm extends React.Component<Prop, State> {
       }
     }));
   };
+  changeSemester = () => {
+    this.setState((state) => ({
+      ...this.state,
+      missingData: {
+        ...state.missingData,
+        semester: true,
+        every_semester: !state.missingData.every_semester,
+        given_semester: !state.missingData.given_semester
+      }
+    }));
+  };
+  // TODO: ezeket nem kellene bindolni this-hez?
 
   render() {
     let redirectToPublishedThesis: boolean = this.state.redirectAfterSave;
@@ -496,47 +522,71 @@ class TopicForm extends React.Component<Prop, State> {
                   }));
                 }}
               />
+
+              {/* félév refaktor */}
+              <Text style={{ fontWeight: 500, marginTop: "10px" }}>
+                Téma érvényességi ideje <span style={{ color: "rgb(164, 38, 44)" }}> *</span>
+              </Text>
+              <Stack style={{ marginBottom: "10px", marginTop: "5px" }}>
+                <ChoiceGroup
+                  styles={horizontalChoiceGroupStyles}
+                  name="everyorgiven"
+                  defaultSelectedKey="given"
+                  options={mainSemesters}
+                  required={true}
+                  onChange={this.changeSemester}
+                  // componentRef={this.choiceGroupRef}
+                />
+              </Stack>
               <div className="ms-Grid" dir="ltr">
-                <div className="ms-Grid-row">
-                  <div className="ms-Grid-col ms-sm6">
-                    <MaskedTextField
-                      label="Tanév"
-                      name="Tanév"
-                      mask="2099/99"
-                      required
-                      onGetErrorMessage={this.getErrorSemester}
-                      validateOnLoad={false}
-                      value={
-                        this.state.values.startYear === 0
-                          ? ""
-                          : this.state.values.startYear.toString().substring(2) +
-                            "/" +
-                            this.plusOneYear
-                      }
-                    />
-                  </div>
-                  <div className="ms-Grid-col ms-sm6" style={{ paddingTop: "10px" }}>
-                    <Text style={{ fontWeight: 500, paddingTop: "60px", marginBottom: "0px" }}>
-                      Félév <span style={{ color: "rgb(164, 38, 44)" }}> *</span>
-                    </Text>
-                    <ChoiceGroup
-                      styles={horizontalChoiceGroupStyles}
-                      name="autumnorspring"
-                      defaultSelectedKey="autumn"
-                      options={semesters}
-                      required={true}
-                      componentRef={this.choiceGroupRef}
-                    />
-                  </div>
-                </div>
-                <br />
+                {!this.state.missingData.given_semester && (
+                  <>
+                    <div className="ms-Grid-row">
+                      <div className="ms-Grid-col ms-sm6">
+                        <MaskedTextField
+                          label="Tanév"
+                          name="Tanév"
+                          mask="2099/99"
+                          required
+                          onGetErrorMessage={this.getErrorSemester}
+                          validateOnLoad={false}
+                          value={
+                            this.state.values.startYear === 0
+                              ? ""
+                              : this.state.values.startYear.toString().substring(2) +
+                                "/" +
+                                this.plusOneYear
+                          }
+                        />
+                      </div>
+                      <div className="ms-Grid-col ms-sm6" style={{ paddingTop: "10px" }}>
+                        <Text style={{ fontWeight: 500, paddingTop: "60px", marginBottom: "0px" }}>
+                          Félév <span style={{ color: "rgb(164, 38, 44)" }}> *</span>
+                        </Text>
+                        <ChoiceGroup
+                          styles={horizontalChoiceGroupStyles}
+                          name="autumnorspring"
+                          defaultSelectedKey="autumn"
+                          options={semesters}
+                          required={true}
+                          componentRef={this.choiceGroupRef}
+                        />
+                      </div>
+                    </div>
+                    <br />
+                  </>
+                )}
 
                 <div className="ms-Grid-row">
                   <div className="ms-Grid-col ms-sm6">
                     <Text style={{ fontWeight: 500 }}>
                       Téma jellege <span style={{ color: "rgb(164, 38, 44)" }}> *</span>
                     </Text>
-                    <Stack tokens={stackTokens} id="chooseType" style={{ paddingLeft: "5px" }}>
+                    <Stack
+                      tokens={stackTokens}
+                      id="chooseType"
+                      style={{ paddingLeft: "5px", marginTop: "5px" }}
+                    >
                       <Checkbox
                         name="bsc_szakdoga"
                         label="Bsc szakdolgozati"
@@ -598,7 +648,11 @@ class TopicForm extends React.Component<Prop, State> {
                     <Text style={{ fontWeight: 500 }}>
                       Témaírás nyelve<span style={{ color: "rgb(164, 38, 44)" }}> *</span>
                     </Text>
-                    <Stack tokens={stackTokens} id="chooseLanguage" style={{ paddingLeft: "5px" }}>
+                    <Stack
+                      tokens={stackTokens}
+                      id="chooseLanguage"
+                      style={{ paddingLeft: "5px", marginTop: "5px" }}
+                    >
                       <Checkbox
                         name="english"
                         label="angol"
@@ -681,7 +735,7 @@ class TopicForm extends React.Component<Prop, State> {
                   disabled={
                     this.state.missingData.title ||
                     this.state.missingData.description ||
-                    this.state.missingData.semester ||
+                    // this.state.missingData.semester ||
                     this.state.missingData.places ||
                     (this.state.missingData.language1 && this.state.missingData.language2) ||
                     (this.state.missingData.type1 &&
@@ -700,7 +754,7 @@ class TopicForm extends React.Component<Prop, State> {
                   disabled={
                     this.state.missingData.title ||
                     this.state.missingData.description ||
-                    this.state.missingData.semester ||
+                    (this.state.missingData.every_semester && this.state.missingData.semester) ||
                     this.state.missingData.places ||
                     (this.state.missingData.language1 && this.state.missingData.language2) ||
                     (this.state.missingData.type1 &&

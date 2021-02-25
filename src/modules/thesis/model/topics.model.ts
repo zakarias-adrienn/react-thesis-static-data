@@ -32,7 +32,7 @@ export type Topic = {
   connectedSubjectIds: string[];
   connectedTechnologyIds: string[];
   numberOfPlaces: number;
-  schoolSemester: SchoolSemester;
+  schoolSemester: SchoolSemester | undefined; // ha tetszőleges?
   appliedStudentIds: string[];
   language: Language[];
 };

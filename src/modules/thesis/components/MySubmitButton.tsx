@@ -18,6 +18,7 @@ const MySubmitButton: React.FunctionComponent<IButtonExampleProps> = (props) => 
   return (
     <Stack horizontal tokens={stackTokens}>
       <PrimaryButton
+        style={{ marginTop: "10px" }}
         iconProps={searchIcon}
         text="Keresés"
         onClick={() => props.onClick()}

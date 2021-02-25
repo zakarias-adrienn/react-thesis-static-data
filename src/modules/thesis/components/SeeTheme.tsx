@@ -32,7 +32,26 @@ const semesters: IChoiceGroupOption[] = [
   { key: "spring", text: "Tavasz" }
 ];
 
-const colors = ["#b7472a", "#31752f", "#742774", "#3955a3", "#a4373a", "#077568", "#2b579a"];
+const colors = [
+  "#FFB900",
+  "#E74856",
+  "#0078D7",
+  "#767676",
+  "#FF8C00",
+  "#E81123",
+  "#0063B1",
+  "#2D7D9A",
+  "F7630C",
+  "#EA005E",
+  "#8E8CD8",
+  "#00B7C3",
+  "#038387",
+  "#00B294",
+  "#018574",
+  "#EF6950",
+  "#BF0077",
+  "#744DA9"
+];
 
 function getRandomColor() {
   return colors[Math.floor(Math.random() * colors.length)];

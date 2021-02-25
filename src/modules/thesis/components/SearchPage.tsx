@@ -16,6 +16,7 @@ import { MaskedTextField } from "office-ui-fabric-react/lib/TextField";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
 import { MessageBar, MessageBarType } from "office-ui-fabric-react";
+import { Stack, IStackProps, IStackStyles } from "office-ui-fabric-react/lib/Stack";
 
 const horizontalChoiceGroupStyles = {
   flexContainer: { display: "flex", flexDirection: "row" },
@@ -26,6 +27,15 @@ const horizontalChoiceGroupStyles = {
 const semesters: IChoiceGroupOption[] = [
   { key: "autumn", text: "Ősz", styles: { root: { marginRight: "10px", marginTop: "0px" } } },
   { key: "spring", text: "Tavasz", styles: { root: { marginTop: "0px" } } }
+];
+
+const mainSemesters: IChoiceGroupOption[] = [
+  {
+    key: "every",
+    text: "Tetszőleges félév",
+    styles: { root: { marginRight: "10px", marginTop: "0px" } }
+  },
+  { key: "given", text: "Adott félév", styles: { root: { marginTop: "0px" } } }
 ];
 
 const topics: Topic[] = [
@@ -54,6 +64,7 @@ type State = {
   isSearchProgress: boolean;
   hideHeaderSearch: boolean;
   isGoodDate: boolean;
+  isGivenSemester: boolean;
 };
 
 class SearchPage extends React.Component<{}, State> {
@@ -69,6 +80,7 @@ class SearchPage extends React.Component<{}, State> {
     this.onClickSearch = this.onClickSearch.bind(this);
     this.toogleHide = this.toogleHide.bind(this);
     this.getErrorSemester = this.getErrorSemester.bind(this);
+    this.changeSemester = this.changeSemester.bind(this);
 
     this.state = {
       selectedTeacher: {
@@ -79,7 +91,8 @@ class SearchPage extends React.Component<{}, State> {
       isSearchResult: false,
       isSearchProgress: false,
       hideHeaderSearch: false,
-      isGoodDate: true
+      isGoodDate: true,
+      isGivenSemester: true
     };
   }
 
@@ -224,6 +237,13 @@ class SearchPage extends React.Component<{}, State> {
     });
   }
 
+  changeSemester() {
+    this.setState({
+      ...this.state,
+      isGivenSemester: !this.state.isGivenSemester
+    });
+  }
+
   render() {
     return (
       <>
@@ -239,11 +259,13 @@ class SearchPage extends React.Component<{}, State> {
                       <>
                         <ChooseTheme></ChooseTheme>
                         <ChooseLanguage></ChooseLanguage>
+                        <SearchTeacher onChange={this.handleChange}></SearchTeacher>
                       </>
                     )}
                   </div>
                   <div className="ms-Grid-col ms-sm6">
                     <Link
+                      style={{ marginBottom: "40px" }}
                       onClick={() =>
                         this.setState({
                           ...this.state,
@@ -257,53 +279,77 @@ class SearchPage extends React.Component<{}, State> {
                       <>
                         <div className="ms-Grid" dir="ltr">
                           <div className="ms-Grid-row" style={{ marginBottom: "10px" }}>
-                            <div className="ms-Grid-col ms-sm3">
-                              <MaskedTextField
-                                label="Tanév"
-                                name="Tanév"
-                                mask="2099/99"
-                                id="maskedField"
-                                onGetErrorMessage={this.getErrorSemester}
-                                validateOnLoad={false}
-                              />
-                            </div>
-                            <div className="ms-Grid-col ms-sm9" style={{ paddingTop: "10px" }}>
-                              <Text
-                                style={{ fontWeight: 500, paddingTop: "60px", marginBottom: "0px" }}
-                              >
-                                Félév
+                            <div className="ms-Grid-col ms-sm12">
+                              <Text style={{ fontWeight: 500, marginTop: "10px" }}>
+                                Téma érvényességi ideje
                               </Text>
-                              <ChoiceGroup
-                                styles={horizontalChoiceGroupStyles}
-                                name="autumnorspring"
-                                defaultSelectedKey="autumn"
-                                options={semesters}
-                                required={true}
-                                componentRef={this.choiceGroupRef}
-                              />
+                              <Stack style={{ marginBottom: "10px", marginTop: "5px" }}>
+                                <ChoiceGroup
+                                  styles={horizontalChoiceGroupStyles}
+                                  name="everyorgiven"
+                                  defaultSelectedKey="given"
+                                  options={mainSemesters}
+                                  required={true}
+                                  onChange={this.changeSemester}
+                                  // componentRef={this.choiceGroupRef}
+                                />
+                              </Stack>
                             </div>
                           </div>
-                          <div className="ms-Grid-row" style={{ width: "83%" }}>
+                          {this.state.isGivenSemester && (
+                            <div className="ms-Grid-row" style={{ marginBottom: "10px" }}>
+                              <div className="ms-Grid-col ms-sm3">
+                                <MaskedTextField
+                                  label="Tanév"
+                                  name="Tanév"
+                                  mask="2099/99"
+                                  id="maskedField"
+                                  onGetErrorMessage={this.getErrorSemester}
+                                  validateOnLoad={false}
+                                />
+                              </div>
+                              <div className="ms-Grid-col ms-sm9" style={{ paddingTop: "10px" }}>
+                                <Text
+                                  style={{
+                                    fontWeight: 500,
+                                    paddingTop: "60px",
+                                    marginBottom: "0px"
+                                  }}
+                                >
+                                  Félév
+                                </Text>
+                                <ChoiceGroup
+                                  styles={horizontalChoiceGroupStyles}
+                                  name="autumnorspring"
+                                  defaultSelectedKey="autumn"
+                                  options={semesters}
+                                  required={true}
+                                  componentRef={this.choiceGroupRef}
+                                />
+                              </div>
+                            </div>
+                          )}
+                          <div className="ms-Grid-row" style={{ width: "95%" }}>
                             <MessageBar
                               messageBarType={MessageBarType.warning}
                               isMultiline={false}
                               dismissButtonAriaLabel="Close"
                             >
-                              Megadás hiányában az aktuális félévben meghirdetett témák jelenítődnek
-                              meg.
+                              Kitöltés nélkül az aktuális félévre szóló és a tetszőleges időtartamú
+                              témák jelenítődnek meg.
                             </MessageBar>
                             {/* Akkor is ha simán keresés? Ha nincs aktuális félévben téma?
                               Honnan jön az aktuális félév? */}
                           </div>
                         </div>
-                        <SearchTeacher onChange={this.handleChange}></SearchTeacher>
+                        <br />
                         <Subjects></Subjects>
                         <Technologies></Technologies>
                       </>
                     )}
+                    <br />
                   </div>
                 </div>
-                <br />
                 <MySubmitButton
                   onClick={this.onClickSearch}
                   disabled={!this.state.isGoodDate}
