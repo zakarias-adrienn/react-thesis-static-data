@@ -308,14 +308,14 @@ class TopicForm extends React.Component<Prop, State> {
   };
 
   getErrorSemester = (value: string): string => {
-    console.log(value);
     let first = parseInt(value.substring(2, 4));
     let second = parseInt(value.substring(5, 7));
     const regex = new RegExp("[0-9][0-9][0-9][0-9]/[0-9][0-9]");
     let currentYear = new Date().getFullYear();
     console.log(currentYear);
-    let enteredValue = parseInt(value.substring(0, 4));
-    console.log(enteredValue);
+    let enteredValueString = value.substring(0, 2) + value.substring(5, 7);
+    console.log(enteredValueString);
+    let enteredValue = parseInt(enteredValueString);
     if (!regex.test(value)) {
       this.setState((state) => ({
         ...this.state,

@@ -41,8 +41,15 @@ const rightStyle = {
   width: "70%"
 };
 
-const SeeTheme: React.FunctionComponent = () => {
+type Prop = {
+  onBack: Function;
+  id: string;
+};
+
+const SeeTheme: React.FunctionComponent<Prop> = (props) => {
   const [applied, setApplied] = React.useState(false);
+
+  // useState - getTopicById - props.id
 
   const handleApplication = () => {
     // adatbázis hívás - applyToTopic
@@ -142,12 +149,13 @@ const SeeTheme: React.FunctionComponent = () => {
               disabled={false} /* numofPlaces==0 */
               onClick={handleApplication}
             />
-            <Link to="/searchPage">
-              <PrimaryButton
-                style={{ float: "right" }}
-                text="Vissza a böngészéshez"
-              ></PrimaryButton>
-            </Link>
+            {/* <Link to="/searchPage"> */}
+            <PrimaryButton
+              style={{ float: "right" }}
+              text="Vissza a böngészéshez"
+              onClick={() => props.onBack()}
+            ></PrimaryButton>
+            {/* </Link> */}
           </div>
         </div>
       </div>

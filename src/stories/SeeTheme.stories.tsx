@@ -16,4 +16,4 @@ export default {
   ]
 };
 
-export const First = () => <SeeTheme />;
+export const First = () => <SeeTheme id="valami" onBack={() => console.log("vissza")} />;

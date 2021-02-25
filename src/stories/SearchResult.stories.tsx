@@ -15,4 +15,6 @@ export default {
   ]
 };
 
-export const First = () => <SearchResult />;
+export const First = () => (
+  <SearchResult hideHeaderSearch={() => console.log("eltűnik a keresési lehetőség")} />
+);

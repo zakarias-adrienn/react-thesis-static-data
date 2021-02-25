@@ -16,6 +16,7 @@ const columnProps: Partial<IStackProps> = {
 interface AddProps {
   onAddNew: Function;
   name: string;
+  technologies: any;
 }
 
 const AddNewTechnology: React.FunctionComponent<AddProps> = (props) => {
@@ -23,13 +24,21 @@ const AddNewTechnology: React.FunctionComponent<AddProps> = (props) => {
   const [name, setName] = React.useState(props.name);
   const [reset, setReset] = React.useState(false);
 
+  // technológiákat megkaphatja propként vagy useState-adatbázisból
+
   const getErrorMessage = (value: string): string => {
-    if (reset === true || value.trim().length >= 1) {
+    let technologyNames = props.technologies.map((item: any) => item.name.toLowerCase());
+    if (
+      (reset === true || value.trim().length >= 1) &&
+      !technologyNames.includes(value.trim().toLowerCase())
+    ) {
       setEmpty(false);
       return "";
     } else {
       setEmpty(true);
-      return `Név megadása kötelező! Nem lehet üres!`;
+      return value.trim().length >= 1 && technologyNames.includes(value.trim().toLowerCase())
+        ? `Ilyen nevű technológia már szerepel az adatbázisban!`
+        : `Név megadása kötelező! Nem lehet üres!`;
     }
   };
 
@@ -61,7 +70,7 @@ const AddNewTechnology: React.FunctionComponent<AddProps> = (props) => {
             />
           </form>
           <ConfirmAction
-            notEmpty={empty}
+            notEmpty={empty || reset}
             onAddNew={props.onAddNew}
             name={name}
             updateTextField={updateState}

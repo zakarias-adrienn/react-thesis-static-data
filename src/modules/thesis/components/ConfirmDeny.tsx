@@ -48,7 +48,7 @@ const ConfirmDeny: React.FunctionComponent<ConfirmDenyProps> = (props) => {
 
   return (
     <>
-      <PrimaryButton text="Elutasít" onClick={toggleHideDialog} />
+      <DefaultButton text="Elutasít" onClick={toggleHideDialog} />
 
       <Dialog
         hidden={hideDialog}

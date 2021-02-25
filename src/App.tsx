@@ -60,9 +60,9 @@ function App() {
                   <Route path="/editTopic/:id">
                     <TopicForm values={fakeTopic} />
                   </Route>
-                  <Route path="/seeTopic/:id">
+                  {/* <Route path="/seeTopic/:id">
                     <SeeTheme></SeeTheme>
-                  </Route>
+                  </Route> */}
                   <Route path="/appliedStudents">
                     <AppliedStudents></AppliedStudents>
                   </Route>

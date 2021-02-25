@@ -1,5 +1,4 @@
 import * as React from "react";
-import { ITextFieldStyles } from "office-ui-fabric-react/lib/TextField";
 import {
   DetailsList,
   DetailsListLayoutMode,
@@ -11,6 +10,7 @@ import { IconButton } from "@fluentui/react/lib/Button";
 import { MessageBar } from "office-ui-fabric-react";
 import { BrowserRouter, Link } from "react-router-dom";
 import { SelectionMode } from "@fluentui/react";
+import SeeTheme from "./SeeTheme";
 
 export interface IDetailsListBasicExampleItem {
   key: string;
@@ -26,14 +26,23 @@ export interface IDetailsListBasicExampleItem {
 
 export interface IDetailsListBasicExampleState {
   items: IDetailsListBasicExampleItem[];
+  seeTheme: boolean;
+  seeTopicId: string;
 }
 
-class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
+type Prop = {
+  hideHeaderSearch: Function;
+};
+
+class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> {
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
 
-  constructor(props: {}) {
+  constructor(props: Prop) {
     super(props);
+
+    this.setSeeTheme = this.setSeeTheme.bind(this);
+    this.onBackToSearch = this.onBackToSearch.bind(this);
 
     // Populate with items for demos.
     this._allItems = [];
@@ -47,9 +56,13 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
       subjects: "Programozási nyelvek - Java",
       places: "Betelt",
       view: (
-        <Link to={{ pathname: "/seeTopic/" + "1" }}>
-          <IconButton iconProps={{ iconName: "RedEye" }} title="Megtekint" ariaLabel="Megtekint" />
-        </Link>
+        // így nem veszik el a keresés eredménye, de a keresés felül ott lesz
+        <IconButton
+          iconProps={{ iconName: "RedEye" }}
+          title="Megtekint"
+          ariaLabel="Megtekint"
+          onClick={() => this.setSeeTheme("Garbage Collector műküdése Javában")}
+        />
       )
     });
     this._allItems.push({
@@ -62,6 +75,7 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
       subjects: "Webprogramozás, \nKliensoldali webprogramozás",
       places: 4,
       view: (
+        // lehet így linkkel lekérni, de visszakor elveszik a keresés eredménye
         <Link to={{ pathname: "/seeTopic/" + "2" }}>
           <IconButton iconProps={{ iconName: "RedEye" }} title="Megtekint" ariaLabel="Megtekint" />
         </Link>
@@ -136,8 +150,28 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
     ];
 
     this.state = {
-      items: this._allItems
+      items: this._allItems,
+      seeTheme: false,
+      seeTopicId: ""
     };
+  }
+
+  private setSeeTheme(id: string) {
+    this.props.hideHeaderSearch();
+    this.setState({
+      ...this.state,
+      seeTheme: true,
+      seeTopicId: id
+    });
+  }
+
+  private onBackToSearch() {
+    this.props.hideHeaderSearch();
+    this.setState({
+      ...this.state,
+      seeTheme: false,
+      seeTopicId: ""
+    });
   }
 
   public render(): JSX.Element {
@@ -145,14 +179,20 @@ class SearchResult extends React.Component<{}, IDetailsListBasicExampleState> {
 
     return (
       <Fabric>
-        <MessageBar>Jelentkezni a téma részleteinek megtekintése során lehet.</MessageBar>
-        <DetailsList
-          items={items}
-          columns={this._columns}
-          layoutMode={DetailsListLayoutMode.justified}
-          setKey="none"
-          selectionMode={SelectionMode.none}
-        />
+        {!this.state.seeTheme ? (
+          <>
+            <MessageBar>Jelentkezni a téma részleteinek megtekintése során lehet.</MessageBar>
+            <DetailsList
+              items={items}
+              columns={this._columns}
+              layoutMode={DetailsListLayoutMode.justified}
+              setKey="none"
+              selectionMode={SelectionMode.none}
+            />
+          </>
+        ) : (
+          <SeeTheme onBack={this.onBackToSearch} id={this.state.seeTopicId}></SeeTheme>
+        )}
       </Fabric>
     );
   }

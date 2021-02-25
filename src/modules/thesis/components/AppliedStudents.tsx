@@ -9,7 +9,7 @@ import {
 } from "office-ui-fabric-react/lib/DetailsList";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
-import { DefaultButton, Stack } from "office-ui-fabric-react";
+import { DefaultButton, PrimaryButton, Stack } from "office-ui-fabric-react";
 import AcceptedStudents from "./AcceptedStudents";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import ConfirmDeny from "./ConfirmDeny";
@@ -57,7 +57,7 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
       name: "Zakariás Adrienn",
       semester: "2020-21-ősz",
       accept: (
-        <DefaultButton
+        <PrimaryButton
           text="Elfogad"
           onClick={() => this.handleAccept("Garbage Collector működése Javában")}
         />
@@ -75,7 +75,7 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
       title: "Youniversity",
       name: "Zöld Elek",
       semester: "2020-21-ősz",
-      accept: <DefaultButton text="Elfogad" onClick={() => this.handleAccept("Youniversity")} />,
+      accept: <PrimaryButton text="Elfogad" onClick={() => this.handleAccept("Youniversity")} />,
       deny: <ConfirmDeny name="Zöld Elek" myId="Youniversity" onDeny={this.onDeny}></ConfirmDeny>
     });
 

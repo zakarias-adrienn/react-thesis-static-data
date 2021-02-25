@@ -37,6 +37,7 @@ type State = {
   isFiltered: boolean;
   isSearchResult: boolean;
   isSearchProgress: boolean;
+  hideHeaderSearch: boolean;
 };
 
 class SearchPage extends React.Component<{}, State> {
@@ -45,6 +46,8 @@ class SearchPage extends React.Component<{}, State> {
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onClickSearch = this.onClickSearch.bind(this);
+    this.toogleHide = this.toogleHide.bind(this);
+
     this.state = {
       selectedTeacher: {
         key: "",
@@ -52,7 +55,8 @@ class SearchPage extends React.Component<{}, State> {
       },
       isFiltered: false,
       isSearchResult: false,
-      isSearchProgress: false
+      isSearchProgress: false,
+      hideHeaderSearch: false
     };
   }
 
@@ -142,49 +146,62 @@ class SearchPage extends React.Component<{}, State> {
     }, 2000);
   }
 
+  private toogleHide() {
+    this.setState({
+      ...this.state,
+      hideHeaderSearch: !this.state.hideHeaderSearch
+    });
+  }
+
   render() {
     return (
       <>
-        <form onSubmit={this.handleSubmit}>
-          <div className="ms-Grid" dir="ltr">
-            <div className="ms-Grid-row">
-              <div className="ms-Grid-col ms-sm6">
-                <SearchByTitle></SearchByTitle>
-                {this.state.isFiltered && (
-                  <>
-                    <ChooseTheme></ChooseTheme>
-                    <ChooseLanguage></ChooseLanguage>
-                  </>
-                )}
+        {!this.state.hideHeaderSearch && (
+          <>
+            <form onSubmit={this.handleSubmit}>
+              <div className="ms-Grid" dir="ltr">
+                <div className="ms-Grid-row">
+                  <div className="ms-Grid-col ms-sm6">
+                    <SearchByTitle></SearchByTitle>
+                    {this.state.isFiltered && (
+                      <>
+                        <ChooseTheme></ChooseTheme>
+                        <ChooseLanguage></ChooseLanguage>
+                      </>
+                    )}
+                  </div>
+                  <div className="ms-Grid-col ms-sm6">
+                    <Link
+                      onClick={() =>
+                        this.setState({
+                          ...this.state,
+                          isFiltered: !this.state.isFiltered
+                        })
+                      }
+                    >
+                      Szűrők {!this.state.isFiltered ? <>megjelenítése</> : <>elrejtése</>}
+                    </Link>
+                    {this.state.isFiltered && (
+                      <>
+                        <SearchTeacher onChange={this.handleChange}></SearchTeacher>
+                        <Subjects></Subjects>
+                        <Technologies></Technologies>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <br />
+                <MySubmitButton onClick={this.onClickSearch}></MySubmitButton>
               </div>
-              <div className="ms-Grid-col ms-sm6">
-                <Link
-                  onClick={() =>
-                    this.setState({
-                      ...this.state,
-                      isFiltered: !this.state.isFiltered
-                    })
-                  }
-                >
-                  Szűrők {!this.state.isFiltered ? <>megjelenítése</> : <>elrejtése</>}
-                </Link>
-                {this.state.isFiltered && (
-                  <>
-                    <SearchTeacher onChange={this.handleChange}></SearchTeacher>
-                    <Subjects></Subjects>
-                    <Technologies></Technologies>
-                  </>
-                )}
-              </div>
-            </div>
+            </form>
             <br />
-            <MySubmitButton onClick={this.onClickSearch}></MySubmitButton>
-          </div>
-        </form>
-        <br />
-        <br />
+            <br />
+          </>
+        )}
         {this.state.isSearchProgress && <MySpinner label="Folyamatban a keresés..."></MySpinner>}
-        {this.state.isSearchResult && <SearchResult></SearchResult>}
+        {this.state.isSearchResult && (
+          <SearchResult hideHeaderSearch={this.toogleHide}></SearchResult>
+        )}
       </>
     );
   }

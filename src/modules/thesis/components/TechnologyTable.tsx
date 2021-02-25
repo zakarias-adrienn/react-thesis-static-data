@@ -216,7 +216,11 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
 
     return (
       <>
-        <AddNewTechnology onAddNew={this.addNewTechnology} name="" />
+        <AddNewTechnology
+          onAddNew={this.addNewTechnology}
+          technologies={this.state.items}
+          name=""
+        />
         <h3>Adatbázisban levő technológiák</h3>
         <Fabric>
           <TextField
