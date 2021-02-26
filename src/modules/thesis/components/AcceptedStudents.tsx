@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Announced } from "office-ui-fabric-react/lib/Announced";
 import { TextField, ITextFieldStyles } from "office-ui-fabric-react/lib/TextField";
 import {
   DetailsList,
@@ -8,9 +7,10 @@ import {
   IColumn
 } from "office-ui-fabric-react/lib/DetailsList";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
-import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import { Stack } from "office-ui-fabric-react";
+import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
+import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
 
 // STYLES
 
@@ -89,6 +89,19 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
   }
 
   // FUNCTIONS
+  onRenderDetailsHeader(props: any, defaultRender: any) {
+    if (!props) {
+      return null;
+    }
+    return (
+      <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced>
+        {defaultRender!({
+          ...props
+        })}
+      </Sticky>
+    );
+  }
+
   public updateState(key: string, title: string, name: string) {
     let acceptedItem: IDetailsListBasicExampleItem = {
       key: key,
@@ -147,26 +160,32 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
               styles={textFieldStyles}
             />
           </div>
-          <DetailsList
-            items={items}
-            columns={this._columns}
-            setKey="none"
-            selectionMode={SelectionMode.none}
-            layoutMode={DetailsListLayoutMode.justified}
-            selectionPreservedOnEmptyClick={true}
-          />
-          {!this.state.items.length && !this.state.isFilter && (
-            <Stack horizontalAlign="center">
-              <Text>
-                Jelenleg nincsen függőben levő jelentkezés egyetlen meghirdetett saját témára sem!
-              </Text>
-            </Stack>
-          )}
-          {!this.state.items.length && this.state.isFilter && (
-            <Stack>
-              <Text>Nincs a keresésnek megfelelő jelentkezés!</Text>
-            </Stack>
-          )}
+          <div style={{ height: "200px", position: "relative" }}>
+            <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+              <DetailsList
+                items={items}
+                columns={this._columns}
+                setKey="none"
+                selectionMode={SelectionMode.none}
+                layoutMode={DetailsListLayoutMode.justified}
+                selectionPreservedOnEmptyClick={true}
+                onRenderDetailsHeader={this.onRenderDetailsHeader}
+              />
+              {!this.state.items.length && !this.state.isFilter && (
+                <Stack horizontalAlign="center">
+                  <Text>
+                    Jelenleg nincsen függőben levő jelentkezés egyetlen meghirdetett saját témára
+                    sem!
+                  </Text>
+                </Stack>
+              )}
+              {!this.state.items.length && this.state.isFilter && (
+                <Stack>
+                  <Text>Nincs a keresésnek megfelelő jelentkezés!</Text>
+                </Stack>
+              )}
+            </ScrollablePane>
+          </div>
         </Fabric>
       </>
     );

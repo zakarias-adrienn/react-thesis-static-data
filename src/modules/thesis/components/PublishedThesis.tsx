@@ -14,6 +14,8 @@ import { BrowserRouter, Link } from "react-router-dom";
 import ConfirmDelete from "./ConfirmDelete";
 import { SelectionMode } from "@fluentui/react";
 import { MyTopicContext } from "../context/TopicContext";
+import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
+import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
 
 const exampleChildClass = mergeStyles({
   display: "block",
@@ -162,6 +164,19 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
     };
   }
 
+  onRenderDetailsHeader(props: any, defaultRender: any) {
+    if (!props) {
+      return null;
+    }
+    return (
+      <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced>
+        {defaultRender!({
+          ...props
+        })}
+      </Sticky>
+    );
+  }
+
   public onDelete(id: string, toggleHideDialog: Function) {
     // csak akkor ha nincsen rá jelentkezés!!! - régebbit törölhessen? a diáktól is eltűnik
     toggleHideDialog();
@@ -183,23 +198,28 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
           onChange={this._onFilter}
           styles={textFieldStyles}
         />
-        <DetailsList
-          items={items}
-          columns={this._columns}
-          layoutMode={DetailsListLayoutMode.justified}
-          setKey="none"
-          selectionMode={SelectionMode.none}
-        />
-        {!this.state.items.length && !this.state.isFilter && (
-          <Stack horizontalAlign="center">
-            <Text>Nincsenek még meghirdetett témák!</Text>
-          </Stack>
-        )}
-        {!this.state.items.length && this.state.isFilter && (
-          <Stack horizontalAlign="center">
-            <Text>Nincs a keresésnek megfelelő téma!</Text>
-          </Stack>
-        )}
+        <div style={{ height: "200px", position: "relative" }}>
+          <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+            <DetailsList
+              items={items}
+              columns={this._columns}
+              layoutMode={DetailsListLayoutMode.justified}
+              setKey="none"
+              selectionMode={SelectionMode.none}
+              onRenderDetailsHeader={this.onRenderDetailsHeader}
+            />
+            {!this.state.items.length && !this.state.isFilter && (
+              <Stack horizontalAlign="center">
+                <Text>Nincsenek még meghirdetett témák!</Text>
+              </Stack>
+            )}
+            {!this.state.items.length && this.state.isFilter && (
+              <Stack horizontalAlign="center">
+                <Text>Nincs a keresésnek megfelelő téma!</Text>
+              </Stack>
+            )}
+          </ScrollablePane>
+        </div>
       </Fabric>
     );
   }

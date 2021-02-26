@@ -6,7 +6,6 @@ import {
   DetailsListLayoutMode,
   IColumn
 } from "office-ui-fabric-react/lib/DetailsList";
-import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import { Stack } from "office-ui-fabric-react";
@@ -14,20 +13,14 @@ import ConfirmDelete from "./ConfirmDelete";
 import DialogToEditTechnology from "./DialogToEditTechnology";
 import AddNewTechnology from "./AddNewTechnology";
 import { SelectionMode } from "@fluentui/react";
-import {
-  ScrollablePane,
-  ScrollbarVisibility,
-  IScrollablePaneStyles
-} from "office-ui-fabric-react/lib/ScrollablePane";
+import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
 import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
-import { mergeStyleSets, getTheme } from "office-ui-fabric-react/lib/Styling";
 
 const exampleChildClass = mergeStyles({
   display: "block",
   marginBottom: "10px"
 });
 
-const theme = getTheme();
 const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "200px" } };
 
 export interface IDetailsListBasicExampleItem {
@@ -313,47 +306,43 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
     const { items } = this.state;
 
     return (
-      <div style={{ height: "300px", position: "relative" }}>
-        <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} />
-        <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced>
-          <AddNewTechnology
-            onAddNew={this.addNewTechnology}
-            technologies={this.state.items}
-            name=""
-          />
-          <h3>Adatbázisban levő technológiák</h3>
-        </Sticky>
-        <>
-          <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced>
-            <TextField
-              className={exampleChildClass}
-              label="Cím szerinti szűrés:"
-              onChange={this._onFilter}
-              styles={textFieldStyles}
+      <>
+        <AddNewTechnology
+          onAddNew={this.addNewTechnology}
+          technologies={this.state.items}
+          name=""
+        />
+        <h3>Adatbázisban levő technológiák</h3>
+        <TextField
+          className={exampleChildClass}
+          label="Cím szerinti szűrés:"
+          onChange={this._onFilter}
+          styles={textFieldStyles}
+        />
+        <div style={{ height: "350px", position: "relative" }}>
+          <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+            <DetailsList
+              items={items}
+              columns={this._columns}
+              setKey="set"
+              selectionMode={SelectionMode.none}
+              layoutMode={DetailsListLayoutMode.justified}
+              constrainMode={ConstrainMode.unconstrained}
+              onRenderDetailsHeader={this.onRenderDetailsHeader}
             />
-          </Sticky>
-          <DetailsList
-            items={items}
-            columns={this._columns}
-            setKey="set"
-            selectionMode={SelectionMode.none}
-            layoutMode={DetailsListLayoutMode.justified}
-            constrainMode={ConstrainMode.unconstrained}
-            onRenderDetailsHeader={this.onRenderDetailsHeader}
-          />
-          {!this.state.items.length && !this.state.isFilter && (
-            <Stack style={{ marginLeft: "30px" }}>
-              <Text>Nincsenek még technológiák felvéve!</Text>
-            </Stack>
-          )}
-          {!this.state.items.length && this.state.isFilter && (
-            <Stack style={{ marginLeft: "30px" }}>
-              <Text>Nincsen a keresésnek megfelelő eredmény!</Text>
-            </Stack>
-          )}
-        </>
-        <ScrollablePane />
-      </div>
+            {!this.state.items.length && !this.state.isFilter && (
+              <Stack style={{ marginLeft: "30px" }}>
+                <Text>Nincsenek még technológiák felvéve!</Text>
+              </Stack>
+            )}
+            {!this.state.items.length && this.state.isFilter && (
+              <Stack style={{ marginLeft: "30px" }}>
+                <Text>Nincsen a keresésnek megfelelő eredmény!</Text>
+              </Stack>
+            )}
+          </ScrollablePane>
+        </div>
+      </>
     );
   }
 

@@ -5,12 +5,13 @@ import {
   IColumn
 } from "office-ui-fabric-react/lib/DetailsList";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
-import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { IconButton } from "@fluentui/react/lib/Button";
 import { MessageBar } from "office-ui-fabric-react";
 import { BrowserRouter, Link } from "react-router-dom";
 import { SelectionMode } from "@fluentui/react";
 import SeeTheme from "./SeeTheme";
+import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
+import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
 
 export interface IDetailsListBasicExampleItem {
   key: string;
@@ -156,6 +157,19 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
     };
   }
 
+  onRenderDetailsHeader(props: any, defaultRender: any) {
+    if (!props) {
+      return null;
+    }
+    return (
+      <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced>
+        {defaultRender!({
+          ...props
+        })}
+      </Sticky>
+    );
+  }
+
   private setSeeTheme(id: string) {
     this.props.hideHeaderSearch();
     this.setState({
@@ -182,13 +196,18 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
         {!this.state.seeTheme ? (
           <>
             <MessageBar>Jelentkezni a téma részleteinek megtekintése során lehet.</MessageBar>
-            <DetailsList
-              items={items}
-              columns={this._columns}
-              layoutMode={DetailsListLayoutMode.justified}
-              setKey="none"
-              selectionMode={SelectionMode.none}
-            />
+            <div style={{ height: "500px", position: "relative" }}>
+              <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+                <DetailsList
+                  items={items}
+                  columns={this._columns}
+                  layoutMode={DetailsListLayoutMode.justified}
+                  setKey="none"
+                  selectionMode={SelectionMode.none}
+                  onRenderDetailsHeader={this.onRenderDetailsHeader}
+                />
+              </ScrollablePane>
+            </div>
           </>
         ) : (
           <SeeTheme onBack={this.onBackToSearch} id={this.state.seeTopicId}></SeeTheme>

@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Announced } from "office-ui-fabric-react/lib/Announced";
 import { TextField, ITextFieldStyles } from "office-ui-fabric-react/lib/TextField";
 import {
   DetailsList,
@@ -9,10 +8,12 @@ import {
 } from "office-ui-fabric-react/lib/DetailsList";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
-import { DefaultButton, PrimaryButton, Stack } from "office-ui-fabric-react";
+import { PrimaryButton, Stack } from "office-ui-fabric-react";
 import AcceptedStudents from "./AcceptedStudents";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import ConfirmDeny from "./ConfirmDeny";
+import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
+import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
 
 // STYLES
 const exampleChildClass = mergeStyles({
@@ -130,6 +131,19 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
 
   // FUNCTIONS
 
+  onRenderDetailsHeader(props: any, defaultRender: any) {
+    if (!props) {
+      return null;
+    }
+    return (
+      <Sticky stickyPosition={StickyPositionType.Header} isScrollSynced>
+        {defaultRender!({
+          ...props
+        })}
+      </Sticky>
+    );
+  }
+
   onDeny(myId: string, toggleHideDialog: any) {
     toggleHideDialog();
     this.setState({
@@ -161,41 +175,6 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
     });
   };
 
-  // KÖZÉPRE TEVÉS
-  // private renderDetailsHeader(detailsHeaderProps: IDetailsHeaderProps) {
-  //   return (
-  //     <DetailsHeader
-  //       {...detailsHeaderProps}
-  //       onRenderColumnHeaderTooltip={this.renderCustomHeaderTooltip}
-  //     />
-  //   );
-  // }
-
-  // private renderRow: IDetailsListProps["onRenderRow"] = (props) => {
-  //   const customStyles: Partial<IDetailsRowStyles> = {};
-  //   if (props) {
-  //     customStyles.root = { textAlign: "center" };
-
-  //     return <DetailsRow {...props} styles={customStyles} />;
-  //   }
-  //   return null;
-  // };
-
-  // // így tudom stylingolni a headereket
-  // private renderCustomHeaderTooltip(tooltipHostProps: ITooltipHostProps) {
-  //   return (
-  //     <span
-  //       style={{
-  //         display: "flex",
-  //         justifyContent: "center",
-  //         fontSize: "12px"
-  //       }}
-  //     >
-  //       {tooltipHostProps.children}
-  //     </span>
-  //   );
-  // }
-
   public render(): JSX.Element {
     const { items } = this.state;
 
@@ -209,25 +188,31 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
             onChange={this._onFilter}
             styles={textFieldStyles}
           />
-          <DetailsList
-            items={items}
-            columns={this._columns}
-            setKey="none"
-            selectionMode={SelectionMode.none}
-            layoutMode={DetailsListLayoutMode.justified}
-          />
-          {!this.state.items.length && !this.state.isFilter && (
-            <Stack>
-              <Text>
-                Jelenleg nincsen függőben levő jelentkezés egyetlen meghirdetett saját témára sem!
-              </Text>
-            </Stack>
-          )}
-          {!this.state.items.length && this.state.isFilter && (
-            <Stack>
-              <Text>Nincs a keresésnek megfelelő jelentkezés!</Text>
-            </Stack>
-          )}
+          <div style={{ height: "200px", position: "relative" }}>
+            <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+              <DetailsList
+                items={items}
+                columns={this._columns}
+                setKey="none"
+                selectionMode={SelectionMode.none}
+                layoutMode={DetailsListLayoutMode.justified}
+                onRenderDetailsHeader={this.onRenderDetailsHeader}
+              />
+              {!this.state.items.length && !this.state.isFilter && (
+                <Stack>
+                  <Text>
+                    Jelenleg nincsen függőben levő jelentkezés egyetlen meghirdetett saját témára
+                    sem!
+                  </Text>
+                </Stack>
+              )}
+              {!this.state.items.length && this.state.isFilter && (
+                <Stack>
+                  <Text>Nincs a keresésnek megfelelő jelentkezés!</Text>
+                </Stack>
+              )}
+            </ScrollablePane>
+          </div>
         </Fabric>
         <br />
         <br />
