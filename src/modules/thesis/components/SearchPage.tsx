@@ -297,52 +297,55 @@ class SearchPage extends React.Component<{}, State> {
                             </div>
                           </div>
                           {this.state.isGivenSemester && (
-                            <div className="ms-Grid-row" style={{ marginBottom: "10px" }}>
-                              <div className="ms-Grid-col ms-sm3">
-                                <MaskedTextField
-                                  label="Tanév"
-                                  name="Tanév"
-                                  mask="2099/99"
-                                  id="maskedField"
-                                  onGetErrorMessage={this.getErrorSemester}
-                                  validateOnLoad={false}
-                                />
+                            <>
+                              <div className="ms-Grid-row" style={{ marginBottom: "10px" }}>
+                                <div className="ms-Grid-col ms-sm3">
+                                  <MaskedTextField
+                                    label="Tanév"
+                                    name="Tanév"
+                                    mask="2099/99"
+                                    id="maskedField"
+                                    onGetErrorMessage={this.getErrorSemester}
+                                    validateOnLoad={false}
+                                  />
+                                </div>
+                                <div className="ms-Grid-col ms-sm9" style={{ paddingTop: "10px" }}>
+                                  <Text
+                                    style={{
+                                      fontWeight: 500,
+                                      paddingTop: "60px",
+                                      marginBottom: "0px"
+                                    }}
+                                  >
+                                    Félév
+                                  </Text>
+                                  <ChoiceGroup
+                                    styles={horizontalChoiceGroupStyles}
+                                    name="autumnorspring"
+                                    defaultSelectedKey="autumn"
+                                    options={semesters}
+                                    required={true}
+                                    componentRef={this.choiceGroupRef}
+                                  />
+                                </div>
                               </div>
-                              <div className="ms-Grid-col ms-sm9" style={{ paddingTop: "10px" }}>
-                                <Text
-                                  style={{
-                                    fontWeight: 500,
-                                    paddingTop: "60px",
-                                    marginBottom: "0px"
-                                  }}
+                              <div className="ms-Grid-row" style={{ width: "95%" }}>
+                                <MessageBar
+                                  messageBarType={MessageBarType.warning}
+                                  isMultiline={false}
+                                  dismissButtonAriaLabel="Close"
                                 >
-                                  Félév
-                                </Text>
-                                <ChoiceGroup
-                                  styles={horizontalChoiceGroupStyles}
-                                  name="autumnorspring"
-                                  defaultSelectedKey="autumn"
-                                  options={semesters}
-                                  required={true}
-                                  componentRef={this.choiceGroupRef}
-                                />
+                                  Kitöltés nélkül az aktuális félévre szóló és a tetszőleges
+                                  időtartamú témák jelenítődnek meg.
+                                </MessageBar>
+                                {/* Akkor is ha simán keresés? Ha nincs aktuális félévben téma?
+                              Honnan jön az aktuális félév? aktuális dátumból */}
                               </div>
-                            </div>
+                              <br />
+                            </>
                           )}
-                          <div className="ms-Grid-row" style={{ width: "95%" }}>
-                            <MessageBar
-                              messageBarType={MessageBarType.warning}
-                              isMultiline={false}
-                              dismissButtonAriaLabel="Close"
-                            >
-                              Kitöltés nélkül az aktuális félévre szóló és a tetszőleges időtartamú
-                              témák jelenítődnek meg.
-                            </MessageBar>
-                            {/* Akkor is ha simán keresés? Ha nincs aktuális félévben téma?
-                              Honnan jön az aktuális félév? */}
-                          </div>
                         </div>
-                        <br />
+
                         <Subjects></Subjects>
                         <Technologies></Technologies>
                       </>

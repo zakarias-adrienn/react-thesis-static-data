@@ -17,8 +17,8 @@ function App() {
   let fakeTopic = {
     title: "FAKE-valami",
     description: "FAKE-hali",
-    numOfPlaces: 3,
-    startYear: 2020
+    numOfPlaces: 3
+    // startYear: 2020 - ehelyett más valami lesz
   };
 
   return (
@@ -58,7 +58,7 @@ function App() {
                     <TechnologyTable></TechnologyTable>
                   </Route>
                   <Route path="/editTopic/:id">
-                    <TopicForm values={fakeTopic} />
+                    <TopicForm />
                   </Route>
                   {/* <Route path="/seeTopic/:id">
                     <SeeTheme></SeeTheme>

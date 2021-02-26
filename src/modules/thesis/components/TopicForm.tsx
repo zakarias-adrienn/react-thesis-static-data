@@ -8,6 +8,8 @@ import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/Choi
 import { Text } from "office-ui-fabric-react/lib/Text";
 import { Language, Semester, TopicType } from "../model/topics.model";
 import { Redirect } from "react-router";
+import { RouteComponentProps } from "react-router";
+import { withRouter } from "react-router-dom";
 
 const stackTokens = { childrenGap: 5 };
 const stackStyles: Partial<IStackStyles> = { root: { width: "100%" } };
@@ -77,30 +79,19 @@ type MissingData = {
 
 type State = {
   missingData: MissingData;
-  values: Values;
   redirectAfterSave: boolean;
-};
-
-type Prop = {
-  values?: Values;
-};
-
-type Values = {
-  title: string;
-  description: string;
-  numOfPlaces: number;
-  startYear: number;
-  // TODO: félév hónapja
-  // TODO: tantárgyak
-  // TODO: technológiák
-  // TODO: téma jellege
-  // TODO: témaírás nyelve
+  id: string;
 };
 
 const publishIcon: IIconProps = { iconName: "PublishContent" };
 const saveIcon: IIconProps = { iconName: "Save" };
 
-class TopicForm extends React.Component<Prop, State> {
+interface IMyProps {}
+interface IReactRouterParams {
+  id?: string;
+}
+
+class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRouterParams>, State> {
   private choiceGroupRef: any;
   private bscThesisRef: any;
   private bscTdkRef: any;
@@ -110,15 +101,20 @@ class TopicForm extends React.Component<Prop, State> {
   private englishRef: any;
   private subjectsRef: any;
   private technologiesRef: any;
-  private plusOneYear: string;
   private projectRef: any;
 
   // nem működik megfelelően - valahogy így kell majd elkérnem s akkor az adatbázisból elkérni a megfelelő id-jú témát
-  // componentDidMount() {
-  //   const id = (this.props.match.params as any).id;
-  //   console.log(id);
-  //   // ha ez nem undefined, akkor id alapján le tudnám kérni a témát nem kellene paraméterben megadni
-  // }
+  componentDidMount() {
+    if (this.props.match.params.id) {
+      console.log("van id");
+      this.setState({
+        ...this.state,
+        id: this.props.match.params.id
+      });
+    } else {
+      console.log("nincs id");
+    }
+  }
 
   constructor(props: any) {
     super(props);
@@ -138,34 +134,9 @@ class TopicForm extends React.Component<Prop, State> {
         every_semester: true,
         given_semester: false
       },
-      values: {
-        title: "",
-        description: "",
-        numOfPlaces: 0,
-        startYear: 0
-      },
-      redirectAfterSave: false
+      redirectAfterSave: false,
+      id: ""
     };
-    // ha valamelyik nincs megadva akkor egyiket sem állítja be,
-    // de jobb lenne ha mindet kötelező lenne megadni
-    // olyan kellene hogy vagy megadok propot vagy nem
-    if (this.props.values) {
-      console.log("itt");
-      this.state = {
-        ...this.state,
-        missingData: {
-          ...this.state.missingData,
-          title: false,
-          description: false,
-          places: false
-          //semester: false
-          //betöltéskor be kell állítani valamelyik semester értéket! - vagy csak every_semester vagy given_semester + semester
-        },
-        values: this.props?.values
-      };
-    }
-    this.plusOneYear = (this.state.values.startYear + 1).toString().substring(2);
-    console.log(this.plusOneYear);
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.choiceGroupRef = React.createRef();
@@ -178,8 +149,6 @@ class TopicForm extends React.Component<Prop, State> {
     this.subjectsRef = React.createRef();
     this.technologiesRef = React.createRef();
     this.projectRef = React.createRef();
-
-    console.log(this.state.values);
   }
 
   handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -483,7 +452,7 @@ class TopicForm extends React.Component<Prop, State> {
     return (
       <div style={{ width: "100%" }}>
         <Stack styles={stackStyles2}>
-          <h2>Téma {this.props.values ? <>módosítása</> : <>kiírása</>}</h2>
+          <h2>Téma {this.state.id ? <>módosítása</> : <>kiírása</>}</h2>
           <form onSubmit={this.handleSubmit}>
             <Stack tokens={stackTokens} styles={stackStyles}>
               <TextField
@@ -492,20 +461,20 @@ class TopicForm extends React.Component<Prop, State> {
                 required
                 onGetErrorMessage={this.getErrorMessage}
                 validateOnLoad={false}
-                value={this.state.values.title}
-                onChange={(e) => {
-                  this.setState((state) => ({
-                    ...state,
-                    values: {
-                      ...state.values,
-                      title: (e.target as HTMLInputElement).value
-                    }
-                  }));
-                }}
+                // value={this.state.values.title}
+                // onChange={(e) => {
+                //   this.setState((state) => ({
+                //     ...state,
+                //     values: {
+                //       ...state.values,
+                //       title: (e.target as HTMLInputElement).value
+                //     }
+                //   }));
+                // }}
               />
               <TextField
                 label="Leírás"
-                value={this.state.values.description}
+                //value={this.state.values.description}
                 name="Leírás"
                 multiline
                 rows={3}
@@ -516,7 +485,7 @@ class TopicForm extends React.Component<Prop, State> {
                   this.setState((state) => ({
                     ...state,
                     values: {
-                      ...state.values,
+                      //...state.values,
                       description: (e.target as HTMLInputElement).value
                     }
                   }));
@@ -550,13 +519,6 @@ class TopicForm extends React.Component<Prop, State> {
                           required
                           onGetErrorMessage={this.getErrorSemester}
                           validateOnLoad={false}
-                          value={
-                            this.state.values.startYear === 0
-                              ? ""
-                              : this.state.values.startYear.toString().substring(2) +
-                                "/" +
-                                this.plusOneYear
-                          }
                         />
                       </div>
                       <div className="ms-Grid-col ms-sm6" style={{ paddingTop: "10px" }}>
@@ -695,16 +657,16 @@ class TopicForm extends React.Component<Prop, State> {
                 name="numberofplaces"
                 onGetErrorMessage={this.getErrorNumPlaces}
                 validateOnLoad={false}
-                value={
-                  this.state.values.numOfPlaces === 0
-                    ? ""
-                    : this.state.values.numOfPlaces.toString()
-                }
+                // value={
+                //   this.state.values.numOfPlaces === 0
+                //     ? ""
+                //     : this.state.values.numOfPlaces.toString()
+                // }
                 onChange={(e) => {
                   this.setState((state) => ({
                     ...state,
                     values: {
-                      ...state.values,
+                      //...state.values,
                       numOfPlaces: parseInt((e.target as HTMLInputElement).value)
                     }
                   }));
@@ -727,7 +689,7 @@ class TopicForm extends React.Component<Prop, State> {
                 style={{ marginBottom: "10px" }}
                 componentRef={this.technologiesRef}
               />
-              {this.props.values ? (
+              {this.state.id ? (
                 <PrimaryButton
                   text="Mentés"
                   type="submit"
@@ -775,4 +737,4 @@ class TopicForm extends React.Component<Prop, State> {
   }
 }
 
-export default TopicForm;
+export default withRouter(TopicForm);
