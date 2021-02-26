@@ -2,6 +2,7 @@ import * as React from "react";
 import { TextField, ITextFieldStyles } from "office-ui-fabric-react/lib/TextField";
 import {
   DetailsList,
+  ConstrainMode,
   DetailsListLayoutMode,
   IColumn
 } from "office-ui-fabric-react/lib/DetailsList";
@@ -13,12 +14,20 @@ import ConfirmDelete from "./ConfirmDelete";
 import DialogToEditTechnology from "./DialogToEditTechnology";
 import AddNewTechnology from "./AddNewTechnology";
 import { SelectionMode } from "@fluentui/react";
+import {
+  ScrollablePane,
+  ScrollbarVisibility,
+  IScrollablePaneStyles
+} from "office-ui-fabric-react/lib/ScrollablePane";
+import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
+import { mergeStyleSets, getTheme } from "office-ui-fabric-react/lib/Styling";
 
 const exampleChildClass = mergeStyles({
   display: "block",
   marginBottom: "10px"
 });
 
+const theme = getTheme();
 const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "200px" } };
 
 export interface IDetailsListBasicExampleItem {
@@ -141,7 +150,7 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
         edit: (
           <DialogToEditTechnology
             name="HTML5"
-            myId="JAVA"
+            myId="HTML5"
             onSave={this.onChangeName}
           ></DialogToEditTechnology>
         ),
@@ -151,6 +160,82 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
             onDelete={this.onDelete}
             which="HTML5"
             name="HTML5"
+          ></ConfirmDelete>
+        )
+      },
+      {
+        key: "CSS3",
+        name: "CSS3",
+        edit: (
+          <DialogToEditTechnology
+            name="CSS3"
+            myId="CSS3"
+            onSave={this.onChangeName}
+          ></DialogToEditTechnology>
+        ),
+        delete: (
+          <ConfirmDelete
+            type="technology"
+            onDelete={this.onDelete}
+            which="CSS3"
+            name="CSS3"
+          ></ConfirmDelete>
+        )
+      },
+      {
+        key: "Mesterséges intelligencia",
+        name: "Mesterséges intelligencia",
+        edit: (
+          <DialogToEditTechnology
+            name="Mesterséges intelligencia"
+            myId="Mesterséges intelligencia"
+            onSave={this.onChangeName}
+          ></DialogToEditTechnology>
+        ),
+        delete: (
+          <ConfirmDelete
+            type="technology"
+            onDelete={this.onDelete}
+            which="Mesterséges intelligencia"
+            name="Mesterséges intelligencia"
+          ></ConfirmDelete>
+        )
+      },
+      {
+        key: "Python",
+        name: "Python",
+        edit: (
+          <DialogToEditTechnology
+            name="Python"
+            myId="Python"
+            onSave={this.onChangeName}
+          ></DialogToEditTechnology>
+        ),
+        delete: (
+          <ConfirmDelete
+            type="technology"
+            onDelete={this.onDelete}
+            which="Python"
+            name="Python"
+          ></ConfirmDelete>
+        )
+      },
+      {
+        key: "C",
+        name: "C",
+        edit: (
+          <DialogToEditTechnology
+            name="C"
+            myId="C"
+            onSave={this.onChangeName}
+          ></DialogToEditTechnology>
+        ),
+        delete: (
+          <ConfirmDelete
+            type="technology"
+            onDelete={this.onDelete}
+            which="C"
+            name="C"
           ></ConfirmDelete>
         )
       }
@@ -229,18 +314,18 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
             onChange={this._onFilter}
             styles={textFieldStyles}
           />
-          <DetailsList
-            items={items}
-            columns={this._columns}
-            setKey="none"
-            selectionMode={SelectionMode.none}
-            layoutMode={DetailsListLayoutMode.justified}
-            selectionPreservedOnEmptyClick={true}
-            ariaLabelForSelectionColumn="Toggle selection"
-            ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-            checkButtonAriaLabel="Row checkbox"
-            // onItemInvoked={this._onItemInvoked}
-          />
+          <div>
+            <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto} />
+            <DetailsList
+              items={items}
+              columns={this._columns}
+              setKey="none"
+              selectionMode={SelectionMode.none}
+              layoutMode={DetailsListLayoutMode.justified}
+              constrainMode={ConstrainMode.unconstrained}
+            />
+            <ScrollablePane />
+          </div>
           {!this.state.items.length && !this.state.isFilter && (
             <Stack style={{ marginLeft: "30px" }}>
               <Text>Nincsenek még technológiák felvéve!</Text>
