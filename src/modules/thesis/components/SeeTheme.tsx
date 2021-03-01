@@ -1,9 +1,7 @@
 import * as React from "react";
-import { Stack, IStackProps, IStackStyles } from "office-ui-fabric-react/lib/Stack";
 import { IDropdownStyles, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 import { PrimaryButton } from "office-ui-fabric-react";
 import { IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
-import { BrowserRouter, Link } from "react-router-dom";
 import { Redirect } from "react-router";
 
 let options: IDropdownOption[] = [
@@ -41,7 +39,7 @@ const colors = [
   "#E81123",
   "#0063B1",
   "#2D7D9A",
-  "F7630C",
+  "#F7630C",
   "#EA005E",
   "#8E8CD8",
   "#00B7C3",
@@ -50,7 +48,11 @@ const colors = [
   "#018574",
   "#EF6950",
   "#BF0077",
-  "#744DA9"
+  "#744DA9",
+  "#567C73",
+  "#647C64",
+  "#4C4A48",
+  "#0063B1"
 ];
 
 function getRandomColor() {
@@ -166,6 +168,7 @@ const SeeTheme: React.FunctionComponent<Prop> = (props) => {
               }}
             >
               <li style={{ ...myLiStyle, backgroundColor: getRandomColor() }}>React</li>
+              {/* speckó szélesség kellene mindenik li badgenék? */}
               <li style={{ ...myLiStyle, backgroundColor: getRandomColor() }}>Typescript</li>
             </ul>
           </div>
