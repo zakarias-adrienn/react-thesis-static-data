@@ -3,6 +3,7 @@ import { SearchData, searchDataSchema } from "../model/searchdata.model";
 
 const Joi = require("joi");
 
+// inkább kliens oldalon oldom meg a keresést, úgyhogy ez nem fog kelleni
 export type searchTopicAction = {
   type: "search-topic";
   payload: {

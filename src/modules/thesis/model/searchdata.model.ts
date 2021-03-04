@@ -2,6 +2,7 @@ import { TopicType, Language, languageSchema, topicTypeSchema } from "../model/t
 
 const Joi = require("joi");
 
+// de a keresést is végül kliens oldalon oldom meg - nem kell a szerver hozzá!
 /**
  * @author Zakariás Adrienn <zakarias.adrienn@yahoo.com>
  */

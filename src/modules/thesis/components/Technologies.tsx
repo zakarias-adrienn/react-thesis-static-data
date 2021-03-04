@@ -19,7 +19,24 @@ options = options.sort((a, b) => (a.key > b.key ? 1 : -1));
 
 const stackTokens: IStackTokens = { childrenGap: 20 };
 
-const Technologies: React.FunctionComponent = () => {
+type Prop = {
+  technologies: string[];
+  onChange: Function;
+};
+
+const Technologies: React.FunctionComponent<Prop> = (props) => {
+  const [selectedKeys, setSelectedKeys] = React.useState<string[]>(props.technologies);
+
+  const onChange = (ev: React.FormEvent<HTMLDivElement>, option: IDropdownOption | undefined) => {
+    if (selectedKeys.includes(option?.key.toString() || "")) {
+      let keys = selectedKeys.filter((key) => key != option?.key.toString() || "");
+      setSelectedKeys(keys);
+    } else {
+      setSelectedKeys([...selectedKeys, option?.key.toString() || ""]);
+    }
+    props.onChange(option?.key.toString() || "");
+  };
+
   return (
     <Stack tokens={stackTokens}>
       <Dropdown
@@ -28,6 +45,8 @@ const Technologies: React.FunctionComponent = () => {
         multiSelect
         options={options}
         styles={dropdownStyles}
+        selectedKeys={selectedKeys}
+        onChange={onChange}
       />
     </Stack>
   );

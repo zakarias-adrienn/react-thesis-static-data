@@ -3,7 +3,8 @@ import { TextField, ITextFieldStyles } from "office-ui-fabric-react/lib/TextFiel
 import {
   DetailsList,
   DetailsListLayoutMode,
-  IColumn
+  IColumn,
+  Selection
 } from "office-ui-fabric-react/lib/DetailsList";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
@@ -15,6 +16,8 @@ import ConfirmDelete from "./ConfirmDelete";
 import { SelectionMode } from "@fluentui/react";
 import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
 import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
+import { PrimaryButton } from "office-ui-fabric-react";
+import ConfirmDeleteAll from "./ConfirmDeleteAll";
 
 const exampleChildClass = mergeStyles({
   display: "block",
@@ -37,16 +40,25 @@ export interface IDetailsListBasicExampleItem {
 export interface IDetailsListBasicExampleState {
   items: IDetailsListBasicExampleItem[];
   isFilter: boolean;
+  selectionDetails: string;
 }
 
-class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState> {
+class ExpiredThesis extends React.Component<{}, IDetailsListBasicExampleState> {
+  private _selection: Selection;
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
 
-  constructor(props: any) {
+  constructor(props: {}) {
     super(props);
 
+    this._selection = new Selection({
+      onSelectionChanged: () =>
+        this.setState({ ...this.state, selectionDetails: this._getSelectionDetails() })
+    });
+
     this.onDelete = this.onDelete.bind(this);
+    this.getDeleteIds = this.getDeleteIds.bind(this);
+    this.onDeleteAll = this.onDeleteAll.bind(this);
 
     this._columns = [
       {
@@ -155,7 +167,8 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
 
     this.state = {
       items: this._allItems,
-      isFilter: false
+      isFilter: false,
+      selectionDetails: this._getSelectionDetails()
     };
   }
 
@@ -172,40 +185,80 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
     );
   }
 
+  getDeleteIds(): string[] {
+    console.log(this._selection.getSelectedIndices()); //ebből megkapom az indexeket a táblázatbeli helyüket, az alapján majd a key-t s tudom törölni
+    let tableIndexes = this._selection.getSelectedIndices();
+    let ids: string[] = [];
+    for (let e in tableIndexes) {
+      ids.push(this.state.items[e].key);
+    }
+    return ids;
+  }
+
+  public onDeleteAll(toggleHideDialog: Function) {
+    // akkor is törölheti ha van rá jelentkezés?
+    // adatbből is törölni kell!
+    toggleHideDialog();
+    this.setState({
+      ...this.state,
+      items: this.state.items.filter((item) => !this.getDeleteIds().includes(item.key))
+    });
+    this._allItems = this._allItems.filter((item) => !this.getDeleteIds().includes(item.key));
+  }
+
   public onDelete(id: string, toggleHideDialog: Function) {
-    // csak akkor ha nincsen rá jelentkezés!!! - régebbit törölhessen? a diáktól is eltűnik
+    // csak akkor ha nincsen rá jelentkezés?
+    // adatbből is törölni kell!
     toggleHideDialog();
     this.setState({
       items: this.state.items.filter((item) => item.key !== id),
-      isFilter: this.state.isFilter
+      isFilter: this.state.isFilter,
+      selectionDetails: this.state.selectionDetails
     });
     this._allItems = this._allItems.filter((item) => item.key !== id);
   }
 
   public render(): JSX.Element {
-    const { items } = this.state;
+    const { items, selectionDetails } = this.state;
 
     return (
       <Fabric>
-        <TextField
-          className={exampleChildClass}
-          label="Cím szerinti szűrés:"
-          onChange={this._onFilter}
-          styles={textFieldStyles}
-        />
+        <div className="ms-Grid" dir="ltr">
+          <div className="ms-Grid-row">
+            <div className="ms-Grid-col ms-sm9">
+              <TextField
+                className={exampleChildClass}
+                label="Cím szerinti szűrés:"
+                onChange={this._onFilter}
+                styles={textFieldStyles}
+              />
+            </div>
+            <div className="ms-Grid-col ms-sm3">
+              {/* onClick={this.onDeleteSelection} */}
+              <ConfirmDeleteAll
+                count={this._selection.getSelectedCount()}
+                onDelete={this.onDeleteAll}
+              />
+            </div>
+          </div>
+        </div>
         <div style={{ height: "200px", position: "relative" }}>
           <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
             <DetailsList
               items={items}
               columns={this._columns}
               layoutMode={DetailsListLayoutMode.justified}
-              setKey="none"
-              selectionMode={SelectionMode.none}
+              setKey="set"
               onRenderDetailsHeader={this.onRenderDetailsHeader}
+              selection={this._selection}
+              selectionPreservedOnEmptyClick={true}
+              ariaLabelForSelectionColumn="Toggle selection"
+              ariaLabelForSelectAllCheckbox="Toggle selection for all items"
+              checkButtonAriaLabel="Row checkbox"
             />
             {!this.state.items.length && !this.state.isFilter && (
               <Stack horizontalAlign="center">
-                <Text>Nincsenek még meghirdetett témák!</Text>
+                <Text>Nincsenek lejárt témák!</Text>
               </Stack>
             )}
             {!this.state.items.length && this.state.isFilter && (
@@ -224,12 +277,24 @@ class PublishedThesis extends React.Component<{}, IDetailsListBasicExampleState>
     text: string | undefined
   ): void => {
     this.setState({
+      ...this.state,
       items: text
         ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text.toLowerCase()) > -1)
         : this._allItems,
       isFilter: text ? true : false
     });
   };
+
+  private _getSelectionDetails(): string {
+    const selectionCount = this._selection.getSelectedCount();
+
+    switch (selectionCount) {
+      case 0:
+        return "";
+      default:
+        return `${selectionCount} elem kiválasztva`;
+    }
+  }
 }
 
-export default PublishedThesis;
+export default ExpiredThesis;

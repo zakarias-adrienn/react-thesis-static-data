@@ -233,6 +233,7 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
         )
       }
     );
+    this._allItems = this._allItems.sort((a, b) => (a.name > b.name ? 1 : -1));
 
     this.state = {
       items: this._allItems,

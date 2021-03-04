@@ -3,13 +3,14 @@ import { TextField, MaskedTextField } from "office-ui-fabric-react/lib/TextField
 import { Stack, IStackProps, IStackStyles } from "office-ui-fabric-react/lib/Stack";
 import { Checkbox } from "office-ui-fabric-react/lib/Checkbox";
 import { Dropdown, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
-import { PrimaryButton, IIconProps } from "office-ui-fabric-react";
+import { PrimaryButton, IIconProps, DefaultButton } from "office-ui-fabric-react";
 import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import { Language, Semester, TopicType } from "../model/topics.model";
 import { Redirect } from "react-router";
 import { RouteComponentProps } from "react-router";
 import { withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const stackTokens = { childrenGap: 5 };
 const stackStyles: Partial<IStackStyles> = { root: { width: "100%" } };
@@ -92,7 +93,7 @@ interface IReactRouterParams {
 }
 
 class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRouterParams>, State> {
-  private choiceGroupRef: any;
+  private autumnOrSpringSemester: any;
   private bscThesisRef: any;
   private bscTdkRef: any;
   private mscThesisRef: any;
@@ -102,6 +103,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
   private subjectsRef: any;
   private technologiesRef: any;
   private projectRef: any;
+  private everyOrGivenRef: any;
 
   // nem működik megfelelően - valahogy így kell majd elkérnem s akkor az adatbázisból elkérni a megfelelő id-jú témát
   componentDidMount() {
@@ -139,7 +141,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.choiceGroupRef = React.createRef();
+    this.autumnOrSpringSemester = React.createRef();
     this.bscThesisRef = React.createRef();
     this.bscTdkRef = React.createRef();
     this.mscThesisRef = React.createRef();
@@ -149,6 +151,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
     this.subjectsRef = React.createRef();
     this.technologiesRef = React.createRef();
     this.projectRef = React.createRef();
+    this.everyOrGivenRef = React.createRef();
   }
 
   handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -167,7 +170,6 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
         {}
       );
     console.log(fields);
-    console.log(this.choiceGroupRef.current.checkedOption);
     console.log("BSC szakdoga: ", this.bscThesisRef.current.checked);
     console.log("BSC tdk: ", this.bscTdkRef.current.checked);
     console.log("MSC szakdoga: ", this.mscThesisRef.current.checked);
@@ -204,12 +206,19 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
       languages.push(Language.English);
     }
 
-    let semester = fields["Tanév"];
-    let year = parseInt(semester.substring(0, 4));
-    let half =
-      this.choiceGroupRef.current.checkedOption.key === "autumn"
-        ? Semester.Autumn
-        : Semester.Spring;
+    let year, half;
+    if (fields["Tanév"]) {
+      // ez ha a fields[Tanév] létezik
+      let semester = fields["Tanév"];
+      year = parseInt(semester.substring(0, 4));
+      half =
+        this.autumnOrSpringSemester.current.checkedOption.key === "autumn"
+          ? Semester.Autumn
+          : Semester.Spring;
+    } else {
+      year = undefined;
+      half = undefined;
+    }
 
     let subjectIds: string[] = this.subjectsRef.current.selectedOptions.map(
       (subject: any) => subject.key
@@ -228,10 +237,12 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
       connectedSubjectIds: subjectIds,
       connectedTechnologyIds: technologyIds,
       numberOfPlaces: parseInt(fields["numberofplaces"]),
-      schoolSemester: {
-        year: year,
-        half: half
-      },
+      schoolSemester: year
+        ? {
+            year: year,
+            half: half
+          }
+        : null, // tetszőleges félév
       appliedStudentIds: [],
       language: languages
     };
@@ -504,7 +515,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                   options={mainSemesters}
                   required={true}
                   onChange={this.changeSemester}
-                  // componentRef={this.choiceGroupRef}
+                  componentRef={this.everyOrGivenRef}
                 />
               </Stack>
               <div className="ms-Grid" dir="ltr">
@@ -531,7 +542,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                           defaultSelectedKey="autumn"
                           options={semesters}
                           required={true}
-                          componentRef={this.choiceGroupRef}
+                          componentRef={this.autumnOrSpringSemester}
                         />
                       </div>
                     </div>
@@ -690,23 +701,36 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                 componentRef={this.technologiesRef}
               />
               {this.state.id ? (
-                <PrimaryButton
-                  text="Mentés"
-                  type="submit"
-                  iconProps={saveIcon}
-                  disabled={
-                    this.state.missingData.title ||
-                    this.state.missingData.description ||
-                    // this.state.missingData.semester ||
-                    this.state.missingData.places ||
-                    (this.state.missingData.language1 && this.state.missingData.language2) ||
-                    (this.state.missingData.type1 &&
-                      this.state.missingData.type2 &&
-                      this.state.missingData.type3 &&
-                      this.state.missingData.type4 &&
-                      this.state.missingData.type5)
-                  }
-                ></PrimaryButton>
+                <div className="ms-Grid-row">
+                  <div className="ms-Grid-col ms-sm6">
+                    <PrimaryButton
+                      text="Mentés"
+                      type="submit"
+                      iconProps={saveIcon}
+                      disabled={
+                        this.state.missingData.title ||
+                        this.state.missingData.description ||
+                        // this.state.missingData.semester ||
+                        this.state.missingData.places ||
+                        (this.state.missingData.language1 && this.state.missingData.language2) ||
+                        (this.state.missingData.type1 &&
+                          this.state.missingData.type2 &&
+                          this.state.missingData.type3 &&
+                          this.state.missingData.type4 &&
+                          this.state.missingData.type5)
+                      }
+                      style={{ position: "relative", left: "50%" }}
+                    ></PrimaryButton>
+                  </div>
+                  <div className="ms-Grid-col ms-sm6">
+                    <Link to="/publishedThesis">
+                      <DefaultButton
+                        text="Mégse"
+                        style={{ position: "relative", left: "20%" }}
+                      ></DefaultButton>
+                    </Link>
+                  </div>
+                </div>
               ) : (
                 <PrimaryButton
                   text="Meghirdetés"

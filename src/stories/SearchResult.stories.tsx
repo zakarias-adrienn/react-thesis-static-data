@@ -16,5 +16,8 @@ export default {
 };
 
 export const First = () => (
-  <SearchResult hideHeaderSearch={() => console.log("eltűnik a keresési lehetőség")} />
+  <SearchResult
+    topicsToShow={[]}
+    hideHeaderSearch={() => console.log("eltűnik a keresési lehetőség")}
+  />
 );

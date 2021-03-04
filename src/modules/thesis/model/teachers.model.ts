@@ -1,5 +1,3 @@
-// hogy tanár alapján tudjon keresni kell tanár séma is?
-
 const Joi = require("joi");
 
 export type Department = {

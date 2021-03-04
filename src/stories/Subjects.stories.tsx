@@ -8,4 +8,4 @@ export default {
   component: Subjects
 };
 
-export const First = () => <Subjects />;
+export const First = () => <Subjects subjects={[]} onChange={() => console.log("változik")} />;

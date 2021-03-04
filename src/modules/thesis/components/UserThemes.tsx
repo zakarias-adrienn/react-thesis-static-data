@@ -21,7 +21,7 @@ const exampleChildClass = mergeStyles({
   marginBottom: "10px"
 });
 
-const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "300px" } };
+const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "180px" } };
 
 export interface IDetailsListBasicExampleItem {
   key: string;
@@ -90,7 +90,20 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
       title: "Youniversity",
       teacher: "Visnovitz Márton",
       semester: "2020/21-ősz",
-      status: "Elfogadva",
+      status: (
+        <HoverCard
+          cardDismissDelay={300}
+          type={HoverCardType.plain}
+          plainCardProps={{ onRenderPlainCard: () => this.onRenderPlainCard("") }} //itt kell megadnom az indoklást
+          componentRef={this.hoverCard}
+          onCardHide={this.onCardHide}
+        >
+          <>
+            Elfogadva
+            <Icon className={classNames.target} iconName="StatusCircleQuestionMark"></Icon>
+          </>
+        </HoverCard>
+      ),
       remove: (
         <ConfirmWithdraw
           myId="Youniversity"
@@ -204,12 +217,12 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
           selectionMode={SelectionMode.none}
         />
         {!this.state.items.length && !this.state.isFilter && (
-          <Stack horizontalAlign="center">
+          <Stack>
             <Text>Nem történt még egy témára sem jelentkezés!</Text>
           </Stack>
         )}
         {!this.state.items.length && this.state.isFilter && (
-          <Stack horizontalAlign="center">
+          <Stack>
             <Text>Nincs a keresésnek megfelelő jelentkezés!</Text>
           </Stack>
         )}

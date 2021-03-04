@@ -8,4 +8,13 @@ export default {
   component: ChooseTheme
 };
 
-export const First = () => <ChooseTheme />;
+let checks = {
+  BScThesis: true,
+  BScTDK: false,
+  MScThesis: false,
+  MScTDK: false,
+  Projekt: false
+};
+export const First = () => (
+  <ChooseTheme checked={checks} onChange={() => console.log("változtat")} />
+);

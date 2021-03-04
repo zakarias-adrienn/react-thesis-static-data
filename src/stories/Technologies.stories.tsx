@@ -8,4 +8,6 @@ export default {
   component: Technologies
 };
 
-export const First = () => <Technologies />;
+export const First = () => (
+  <Technologies technologies={[]} onChange={() => console.log("változik")} />
+);

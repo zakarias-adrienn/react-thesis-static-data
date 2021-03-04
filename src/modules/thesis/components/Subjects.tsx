@@ -18,15 +18,34 @@ options = options.sort((a, b) => (a.key > b.key ? 1 : -1));
 
 const stackTokens: IStackTokens = { childrenGap: 20 };
 
-const Subjects: React.FunctionComponent = () => {
+type Prop = {
+  subjects: string[];
+  onChange: Function;
+};
+
+const Subjects: React.FunctionComponent<Prop> = (props) => {
+  const [selectedKeys, setSelectedKeys] = React.useState<string[]>(props.subjects);
+
+  const onChange = (ev: React.FormEvent<HTMLDivElement>, option: IDropdownOption | undefined) => {
+    if (selectedKeys.includes(option?.key.toString() || "")) {
+      let keys = selectedKeys.filter((key) => key != option?.key.toString() || "");
+      setSelectedKeys(keys);
+    } else {
+      setSelectedKeys([...selectedKeys, option?.key.toString() || ""]);
+    }
+    props.onChange(option?.key.toString() || "");
+  };
+
   return (
-    <Stack tokens={stackTokens} id="subjects">
+    <Stack tokens={stackTokens}>
       <Dropdown
         placeholder="Válassz tantárgyakat..."
         label="Témához kapcsolódó tantárgyak"
         multiSelect
         options={options}
         styles={dropdownStyles}
+        selectedKeys={selectedKeys}
+        onChange={onChange}
       />
     </Stack>
   );

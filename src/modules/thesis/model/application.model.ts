@@ -12,6 +12,7 @@ export type Application = {
   topicId: string;
   status: ApplicationStatus;
   denyReason?: string;
+  acceptReason?: string;
 };
 
 export const applicationStatusSchema = Joi.string()

@@ -12,6 +12,7 @@ import { PrimaryButton, Stack } from "office-ui-fabric-react";
 import AcceptedStudents from "./AcceptedStudents";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import ConfirmDeny from "./ConfirmDeny";
+import ConfirmAccept from "./ConfirmAccept";
 import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
 import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
 
@@ -58,10 +59,11 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
       name: "Zakariás Adrienn",
       semester: "2020-21-ősz",
       accept: (
-        <PrimaryButton
-          text="Elfogad"
-          onClick={() => this.handleAccept("Garbage Collector működése Javában")}
-        />
+        <ConfirmAccept
+          name="Zakariás Adrienn"
+          myId="Garbage Collector működése Javában"
+          onAccept={this.handleAccept}
+        ></ConfirmAccept>
       ),
       deny: (
         <ConfirmDeny
@@ -76,7 +78,13 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
       title: "Youniversity",
       name: "Zöld Elek",
       semester: "2020-21-ősz",
-      accept: <PrimaryButton text="Elfogad" onClick={() => this.handleAccept("Youniversity")} />,
+      accept: (
+        <ConfirmAccept
+          name="Zöld Elek"
+          myId="Youniversity"
+          onAccept={this.handleAccept}
+        ></ConfirmAccept>
+      ),
       deny: <ConfirmDeny name="Zöld Elek" myId="Youniversity" onDeny={this.onDeny}></ConfirmDeny>
     });
 
@@ -146,13 +154,16 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
 
   onDeny(myId: string, toggleHideDialog: any) {
     toggleHideDialog();
+    // a jelentkezés statászt be kell állítani - hogy? lekérem a jelentkezést? getApplianceById.action? + beállítom a státust + felküldöm?
+    // denyAppliance.action? - ha van denyReason azt is beállítom?
     this.setState({
       items: this.state.items.filter((item) => item.key !== myId)
     });
     this._allItems = this._allItems.filter((item) => item.key !== myId);
   }
 
-  handleAccept(key: string) {
+  handleAccept(key: string, toggleHideDialog: Function) {
+    toggleHideDialog();
     console.log(key);
     this.setState({
       items: this.state.items.filter((item) => item.key !== key)

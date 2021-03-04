@@ -1,12 +1,13 @@
 const Joi = require("joi");
 
-// kell külön a teacherId? vagy az a topic-ban benne van?
 export type denyApplianceAction = {
   type: "deny-appliance";
   payload: {
     studentId: string;
     applicationId: string;
     teacherId: string;
+    // fel kellene küldeni a változtatottat is? vagy szerveroldal állítja a státuszát át?
+    // reason-t esetleg fel kellene küldeni?
   };
   response: {
     success: boolean;

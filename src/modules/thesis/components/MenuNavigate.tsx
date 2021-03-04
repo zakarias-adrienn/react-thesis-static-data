@@ -53,18 +53,23 @@ const MenuNavigate: React.FunctionComponent = () => {
   const location = useLocation();
   console.log(location.pathname);
 
+  let pathToCheck = location.pathname;
+  if (location.pathname.indexOf("/", 2) != -1) {
+    pathToCheck = location.pathname.substring(0, location.pathname.indexOf("/", 2));
+  }
+
   const getSelectedKey = (): string => {
-    if (location.pathname === "/addNewTechnology") {
+    if (pathToCheck === "/addNewTechnology") {
       return "key5";
-    } else if (location.pathname === "/myTopics") {
+    } else if (pathToCheck === "/myTopics") {
       return "key4";
-    } else if (location.pathname === "/searchPage") {
+    } else if (pathToCheck === "/searchPage") {
       return "key3";
-    } else if (location.pathname === "/appliedStudents") {
+    } else if (pathToCheck === "/appliedStudents") {
       return "key6";
-    } else if (location.pathname === "/publishedThesis") {
+    } else if (pathToCheck === "/publishedThesis") {
       return "key2";
-    } else if (location.pathname === "/createThesis") {
+    } else if (pathToCheck === "/createThesis") {
       return "key1";
     } else {
       return "";

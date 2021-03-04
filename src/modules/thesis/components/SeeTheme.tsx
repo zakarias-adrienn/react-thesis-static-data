@@ -25,39 +25,34 @@ let options2: IDropdownOption[] = [
 
 options2 = options2.sort((a, b) => (a.key > b.key ? 1 : -1));
 
-const semesters: IChoiceGroupOption[] = [
-  { key: "autumn", text: "Ősz" },
-  { key: "spring", text: "Tavasz" }
-];
+// const colors = [
+//   "#FFB900",
+//   "#E74856",
+//   "#0078D7",
+//   "#767676",
+//   "#FF8C00",
+//   "#E81123",
+//   "#0063B1",
+//   "#2D7D9A",
+//   "#F7630C",
+//   "#EA005E",
+//   "#8E8CD8",
+//   "#00B7C3",
+//   "#038387",
+//   "#00B294",
+//   "#018574",
+//   "#EF6950",
+//   "#BF0077",
+//   "#744DA9",
+//   "#567C73",
+//   "#647C64",
+//   "#4C4A48",
+//   "#0063B1"
+// ];
 
-const colors = [
-  "#FFB900",
-  "#E74856",
-  "#0078D7",
-  "#767676",
-  "#FF8C00",
-  "#E81123",
-  "#0063B1",
-  "#2D7D9A",
-  "#F7630C",
-  "#EA005E",
-  "#8E8CD8",
-  "#00B7C3",
-  "#038387",
-  "#00B294",
-  "#018574",
-  "#EF6950",
-  "#BF0077",
-  "#744DA9",
-  "#567C73",
-  "#647C64",
-  "#4C4A48",
-  "#0063B1"
-];
-
-function getRandomColor() {
-  return colors[Math.floor(Math.random() * colors.length)];
-}
+// function getRandomColor() {
+//   return colors[Math.floor(Math.random() * colors.length)];
+// }
 
 const myLiStyle: React.CSSProperties = {
   padding: "3px",
@@ -66,7 +61,8 @@ const myLiStyle: React.CSSProperties = {
   display: "inline-block",
   textAlign: "center",
   marginLeft: "5px",
-  color: "white"
+  color: "white",
+  backgroundColor: "#8E8CD8"
 };
 
 const rightStyle = {
@@ -140,6 +136,24 @@ const SeeTheme: React.FunctionComponent<Prop> = (props) => {
         </div>
         <div className="ms-Grid-row" style={{ paddingBottom: "20px" }}>
           <div className="ms-Grid-col ms-sm2">
+            <b>Téma jellege:</b>
+          </div>
+          <div className="ms-Grid-col ms-sm10" style={rightStyle}>
+            {" "}
+            BSc szakdolgozati, BSc TDK
+          </div>
+        </div>
+        <div className="ms-Grid-row" style={{ paddingBottom: "20px" }}>
+          <div className="ms-Grid-col ms-sm2">
+            <b>Témaírás nyelve:</b>
+          </div>
+          <div className="ms-Grid-col ms-sm10" style={rightStyle}>
+            {" "}
+            magyar, angol
+          </div>
+        </div>
+        <div className="ms-Grid-row" style={{ paddingBottom: "20px" }}>
+          <div className="ms-Grid-col ms-sm2">
             <b>Félév:</b>
           </div>
           <div className="ms-Grid-col ms-sm10" style={rightStyle}>
@@ -167,9 +181,9 @@ const SeeTheme: React.FunctionComponent<Prop> = (props) => {
                 marginBottom: "0px"
               }}
             >
-              <li style={{ ...myLiStyle, backgroundColor: getRandomColor() }}>React</li>
+              <li style={{ ...myLiStyle }}>React</li>
               {/* speckó szélesség kellene mindenik li badgenék? */}
-              <li style={{ ...myLiStyle, backgroundColor: getRandomColor() }}>Typescript</li>
+              <li style={{ ...myLiStyle }}>Typescript</li>
             </ul>
           </div>
         </div>
@@ -186,12 +200,12 @@ const SeeTheme: React.FunctionComponent<Prop> = (props) => {
                 marginBottom: "0px"
               }}
             >
-              <li style={{ ...myLiStyle, backgroundColor: getRandomColor() }}>Webprogramozás</li>
-              <li style={{ ...myLiStyle, backgroundColor: getRandomColor() }}>Számításelmélet</li>
+              <li style={{ ...myLiStyle }}>Webprogramozás</li>
+              <li style={{ ...myLiStyle }}>Számításelmélet</li>
             </ul>
           </div>
         </div>
-        {/* ha diák a bejelentkezett felhasználó és nem teltek be a helyek erre a témára */}
+        {/* ha diák a bejelentkezett felhasználó és nem teltek be a helyek erre a témára, akkor tud jelentkezni, akkor van ott a gomb vagy akkor aktív */}
         <div className="ms-Grid-row" style={{ paddingBottom: "20px" }}>
           <div className="ms-Grid-col ms-sm2"></div>
           <div className="ms-Grid-col ms-sm10" style={{ width: "60%", padding: "0px" }}>

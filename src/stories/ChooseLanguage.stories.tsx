@@ -8,4 +8,10 @@ export default {
   component: ChooseLanguage
 };
 
-export const First = () => <ChooseLanguage />;
+let checks = {
+  hungarian: false,
+  english: false
+};
+export const First = () => (
+  <ChooseLanguage checked={checks} onChange={() => console.log("változtat")} />
+);

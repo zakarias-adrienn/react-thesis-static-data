@@ -24,4 +24,5 @@ export type Module = {
   model?: ModuleModel[];
   settings?: ModuleSetting[];
   actions?: ModuleAction[];
+  // ide kellene meta, stb. más Gábornál
 };
