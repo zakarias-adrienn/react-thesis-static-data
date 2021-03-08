@@ -1,6 +1,6 @@
 import * as React from "react";
 import { TextField, MaskedTextField } from "office-ui-fabric-react/lib/TextField";
-import { Stack, IStackProps, IStackStyles } from "office-ui-fabric-react/lib/Stack";
+import { Stack, IStackStyles } from "office-ui-fabric-react/lib/Stack";
 import { Checkbox } from "office-ui-fabric-react/lib/Checkbox";
 import { Dropdown, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 import { PrimaryButton, IIconProps, DefaultButton } from "office-ui-fabric-react";

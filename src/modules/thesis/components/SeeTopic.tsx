@@ -2,6 +2,12 @@ import * as React from "react";
 import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 import { DefaultButton, PrimaryButton } from "office-ui-fabric-react";
 import { Redirect } from "react-router";
+import { Topic } from "../model/topics.model";
+import {
+  convertLanguagesToString,
+  convertSchoolSemesterToString,
+  convertTypeToString
+} from "../helperFunctions";
 
 let options: IDropdownOption[] = [
   { key: "Webprogramozás", text: "Webprogramozás" },
@@ -72,13 +78,11 @@ const rightStyle = {
 
 type Prop = {
   onBack: Function;
-  id: string;
+  topic: Topic;
 };
 
 const SeeTopic: React.FunctionComponent<Prop> = (props) => {
   const [applied, setApplied] = React.useState(false);
-
-  // useState - getTopicById - props.id
 
   const handleApplication = () => {
     // adatbázis hívás - applyToTopic
@@ -104,7 +108,7 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
             <b>Cím:</b>
           </div>
           <div className="ms-Grid-col ms-sm10" style={rightStyle}>
-            Youniversity
+            {props.topic.title}
           </div>
         </div>
         <div className="ms-Grid-row" style={{ paddingBottom: "20px" }}>
@@ -112,12 +116,7 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
             <b>Leírás: </b>
           </div>
           <div className="ms-Grid-col ms-sm10" style={rightStyle}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-            dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-            mollit anim id est laborum.
+            {props.topic.description}
           </div>
         </div>
         <div className="ms-Grid-row" style={{ paddingBottom: "20px" }}>
@@ -126,7 +125,7 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
           </div>
           <div className="ms-Grid-col ms-sm10" style={rightStyle}>
             {" "}
-            Visnovitz Márton
+            {props.topic.teacherId}
           </div>
         </div>
         <div className="ms-Grid-row" style={{ paddingBottom: "20px" }}>
@@ -135,7 +134,7 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
           </div>
           <div className="ms-Grid-col ms-sm10" style={rightStyle}>
             {" "}
-            BSc szakdolgozati, BSc TDK
+            {convertTypeToString(props.topic.type)}
           </div>
         </div>
         <div className="ms-Grid-row" style={{ paddingBottom: "20px" }}>
@@ -144,7 +143,7 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
           </div>
           <div className="ms-Grid-col ms-sm10" style={rightStyle}>
             {" "}
-            magyar, angol
+            {convertLanguagesToString(props.topic.language)}
           </div>
         </div>
         <div className="ms-Grid-row" style={{ paddingBottom: "20px" }}>
@@ -152,7 +151,9 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
             <b>Félév:</b>
           </div>
           <div className="ms-Grid-col ms-sm10" style={rightStyle}>
-            2020/21-ősz
+            {props.topic.schoolSemester === null
+              ? "tetszőleges"
+              : convertSchoolSemesterToString(props.topic.schoolSemester)}
           </div>
         </div>
         <div className="ms-Grid-row" style={{ paddingBottom: "20px" }}>
@@ -160,7 +161,7 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
             <b>Helyek száma:</b>
           </div>
           <div className="ms-Grid-col ms-sm10" style={rightStyle}>
-            1
+            {props.topic.numberOfPlaces}
           </div>
         </div>
         <div className="ms-Grid-row" style={{ paddingBottom: "20px" }}>
@@ -176,9 +177,11 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
                 marginBottom: "0px"
               }}
             >
-              <li style={{ ...myLiStyle }}>React</li>
-              {/* speckó szélesség kellene mindenik li badgenék? */}
-              <li style={{ ...myLiStyle }}>Typescript</li>
+              {props.topic.connectedTechnologyIds.length === 0
+                ? "Nincsen megadva kapcsolódó technológia."
+                : props.topic.connectedTechnologyIds.map((id) => (
+                    <li style={{ ...myLiStyle }}>{id}</li>
+                  ))}
             </ul>
           </div>
         </div>
@@ -195,8 +198,11 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
                 marginBottom: "0px"
               }}
             >
-              <li style={{ ...myLiStyle }}>Webprogramozás</li>
-              <li style={{ ...myLiStyle }}>Számításelmélet</li>
+              {props.topic.connectedSubjectIds.length === 0
+                ? "Nincsen megadva kapcsolódó tantárgy."
+                : props.topic.connectedSubjectIds.map((id) => (
+                    <li style={{ ...myLiStyle }}>{id}</li>
+                  ))}
             </ul>
           </div>
         </div>
@@ -208,7 +214,7 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
               text="Jelentkezés"
               allowDisabledFocus
               style={{ width: "30%" }}
-              disabled={false} /* numofPlaces==0 */
+              disabled={props.topic.numberOfPlaces === 0}
               onClick={handleApplication}
             />
             <DefaultButton

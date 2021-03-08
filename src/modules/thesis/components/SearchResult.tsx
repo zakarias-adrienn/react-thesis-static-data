@@ -69,7 +69,7 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
         language: convertLanguagesToString(topic.language),
         technologies: topic.connectedTechnologyIds.join(", "), //itt majd nem id-kat kell kiírni, hanem neveket
         subjects: topic.connectedSubjectIds.join(", "),
-        places: topic.numberOfPlaces,
+        places: topic.numberOfPlaces === 0 ? "Betelt" : topic.numberOfPlaces,
         view: (
           <IconButton
             iconProps={{ iconName: "RedEye" }}
@@ -223,7 +223,10 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
             </div>
           </>
         ) : (
-          <SeeTheme onBack={this.onBackToSearch} id={this.state.seeTopicId}></SeeTheme>
+          <SeeTheme
+            onBack={this.onBackToSearch}
+            topic={this.props.topicsToShow.filter((topic) => topic.id === this.state.seeTopicId)[0]}
+          ></SeeTheme>
         )}
       </Fabric>
     );

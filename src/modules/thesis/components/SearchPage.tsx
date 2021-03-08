@@ -28,7 +28,7 @@ const topics: Topic[] = [
     description: "Oktatásszervezési csomag fejlesztése egyetemünk számára",
     teacherId: "Visnovitz Márton",
     connectedSubjectIds: ["Webprogramozás", "React"],
-    connectedTechnologyIds: ["Javascript, React"],
+    connectedTechnologyIds: ["Javascript", "React"],
     numberOfPlaces: 3,
     schoolSemester: {
       year: 2020,
@@ -71,7 +71,7 @@ const topics: Topic[] = [
     teacherId: "Dr. Csuhaj Varjú Erzsébet",
     connectedSubjectIds: [],
     connectedTechnologyIds: [],
-    numberOfPlaces: 1,
+    numberOfPlaces: 0,
     schoolSemester: null,
     appliedStudentIds: [],
     language: [Language.Hungarian, Language.English]

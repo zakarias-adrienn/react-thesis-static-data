@@ -2,6 +2,7 @@ import React from "react";
 
 import SeeTopic from "../modules/thesis/components/SeeTopic";
 import { MemoryRouter } from "react-router-dom";
+import { Topic } from "../modules/thesis/model/topics.model";
 
 // This default export determines where your story goes in the story list
 export default {
@@ -16,4 +17,17 @@ export default {
   ]
 };
 
-export const First = () => <SeeTopic id="valami" onBack={() => console.log("vissza")} />;
+let exampleTopic: Topic = {
+  id: "a",
+  type: [],
+  title: "CÍM",
+  description: "LEÍRÁS",
+  teacherId: "1",
+  connectedSubjectIds: [],
+  connectedTechnologyIds: [],
+  numberOfPlaces: 1,
+  schoolSemester: null,
+  appliedStudentIds: [],
+  language: []
+};
+export const First = () => <SeeTopic topic={exampleTopic} onBack={() => console.log("vissza")} />;
