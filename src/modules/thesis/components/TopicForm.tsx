@@ -96,7 +96,6 @@ type TopicData = {
 type State = {
   missingData: MissingData;
   redirectAfterSave: boolean;
-  id: string;
   values: TopicData;
 };
 
@@ -109,51 +108,106 @@ interface IReactRouterParams {
 }
 
 class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRouterParams>, State> {
-  componentDidMount() {
-    if (this.props.match.params.id) {
-      console.log("van id");
-      this.setState({
-        ...this.state,
-        id: this.props.match.params.id
-      });
-    } else {
-      console.log("nincs id");
-    }
-  }
+  private isTopicGiven: boolean = false;
 
   constructor(props: any) {
     super(props);
-    this.state = {
-      missingData: {
-        title: true,
-        description: true,
-        semester: true,
-        places: true,
-        language1: true,
-        language2: false,
-        type1: false,
-        type2: true,
-        type3: true,
-        type4: true,
-        type5: true,
-        every_semester: true,
-        given_semester: false
+
+    if (this.props.match.params.id) {
+      console.log("van id");
+      this.isTopicGiven = true;
+    } else {
+      console.log("nincs id");
+    }
+
+    // mintatéma melyet betöltök módosításkor
+    let exampleTopic: Topic = {
+      id: "a",
+      type: [TopicType.BScTDK, TopicType.MScTDK],
+      title: "MINTA CÍM",
+      description: "MINTA LEÍRÁS",
+      teacherId: "1",
+      connectedSubjectIds: ["Mesterséges intelligencia"],
+      connectedTechnologyIds: ["JAVA", "React"],
+      numberOfPlaces: 10,
+      schoolSemester: {
+        year: 2021,
+        half: Semester.Spring
       },
-      redirectAfterSave: false,
-      id: "", //nem kellene felülírni, csak akkor legyen ez ha nincs id felül
-      values: {
-        title: "",
-        description: "",
-        everySemester: false,
-        autumn: true,
-        year: "",
-        numPlaces: -1,
-        types: [TopicType.BScThesis],
-        languages: [Language.Hungarian],
-        connectedTechnologies: [],
-        connectedSubjects: []
-      }
+      appliedStudentIds: [],
+      language: [Language.English]
     };
+
+    if (this.isTopicGiven) {
+      // most beállítok egy random témát, de majd DB-ből jön URL id alapján
+      this.state = {
+        redirectAfterSave: false,
+        values: {
+          title: exampleTopic.title,
+          description: exampleTopic.description,
+          everySemester: exampleTopic.schoolSemester === null,
+          autumn:
+            exampleTopic.schoolSemester !== null &&
+            exampleTopic.schoolSemester.half === Semester.Autumn,
+          year: exampleTopic.schoolSemester
+            ? exampleTopic.schoolSemester.year.toString().substring(2) +
+              "/" +
+              (exampleTopic.schoolSemester.year + 1).toString().substring(2)
+            : "",
+          numPlaces: exampleTopic.numberOfPlaces,
+          types: exampleTopic.type,
+          languages: exampleTopic.language,
+          connectedTechnologies: exampleTopic.connectedTechnologyIds,
+          connectedSubjects: exampleTopic.connectedSubjectIds
+        },
+        missingData: {
+          title: false,
+          description: false,
+          semester: exampleTopic.schoolSemester === null,
+          places: false,
+          language1: !exampleTopic.language.includes(Language.English),
+          language2: !exampleTopic.language.includes(Language.Hungarian),
+          type1: !exampleTopic.type.includes(TopicType.BScThesis),
+          type2: !exampleTopic.type.includes(TopicType.BScTDK),
+          type3: !exampleTopic.type.includes(TopicType.MScThesis),
+          type4: !exampleTopic.type.includes(TopicType.MScTDK),
+          type5: !exampleTopic.type.includes(TopicType.Project),
+          every_semester: exampleTopic.schoolSemester === null,
+          given_semester: exampleTopic.schoolSemester !== null
+        }
+      };
+    } else {
+      this.state = {
+        missingData: {
+          title: true,
+          description: true,
+          semester: true,
+          places: true,
+          language1: true,
+          language2: false,
+          type1: false,
+          type2: true,
+          type3: true,
+          type4: true,
+          type5: true,
+          every_semester: true,
+          given_semester: false
+        },
+        redirectAfterSave: false,
+        values: {
+          title: "",
+          description: "",
+          everySemester: false,
+          autumn: true,
+          year: "",
+          numPlaces: -1,
+          types: [TopicType.BScThesis],
+          languages: [Language.Hungarian],
+          connectedTechnologies: [],
+          connectedSubjects: []
+        }
+      };
+    }
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.getErrorTitle = this.getErrorTitle.bind(this);
@@ -394,7 +448,6 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
           : [...this.state.values.languages, Language.English]
       }
     }));
-    console.log(this.state);
   };
 
   private changeLanguage2 = () => {
@@ -439,7 +492,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
     return (
       <div style={{ width: "100%" }}>
         <Stack styles={stackStyles2}>
-          <h2>Téma {this.state.id ? <>módosítása</> : <>kiírása</>}</h2>
+          <h2>Téma {this.isTopicGiven ? <>módosítása</> : <>kiírása</>}</h2>
           <form onSubmit={this.handleSubmit}>
             <Stack tokens={stackTokens} styles={stackStyles}>
               <TextField
@@ -480,14 +533,14 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                 <ChoiceGroup
                   styles={horizontalChoiceGroupStyles}
                   name="everyorgiven"
-                  defaultSelectedKey="given"
+                  defaultSelectedKey={this.state.values.everySemester ? "every" : "given"}
                   options={mainSemesters}
                   required={true}
                   onChange={this.changeSemester}
                 />
               </Stack>
               <div className="ms-Grid" dir="ltr">
-                {!this.state.missingData.given_semester && (
+                {!this.state.values.everySemester && (
                   <>
                     <div className="ms-Grid-row">
                       <div className="ms-Grid-col ms-sm6">
@@ -517,7 +570,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                         <ChoiceGroup
                           styles={horizontalChoiceGroupStyles}
                           name="autumnorspring"
-                          defaultSelectedKey="autumn"
+                          defaultSelectedKey={this.state.values.autumn ? "autumn" : "spring"}
                           options={semesters}
                           required={true}
                           onChange={() => {
@@ -547,7 +600,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                         name="bsc_szakdoga"
                         label="Bsc szakdolgozati"
                         title="Bsc szakdolgozati"
-                        defaultChecked
+                        checked={this.state.values.types.includes(TopicType.BScThesis)}
                         onChange={this.changeType1}
                       />
                       <Checkbox
@@ -555,24 +608,28 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                         label="Bsc TDK"
                         title="Bsc TDK"
                         onChange={this.changeType2}
+                        checked={this.state.values.types.includes(TopicType.BScTDK)}
                       />
                       <Checkbox
                         name="msc_szakdoga"
                         label="Msc szakdolgozati"
                         title="Msc szakdolgozati"
                         onChange={this.changeType3}
+                        checked={this.state.values.types.includes(TopicType.MScThesis)}
                       />
                       <Checkbox
                         name="msc_tdk"
                         label="Msc TDK"
                         title="Msc TDK"
                         onChange={this.changeType4}
+                        checked={this.state.values.types.includes(TopicType.MScTDK)}
                       />
                       <Checkbox
                         name="project"
                         label="Projekt"
                         title="Projekt"
                         onChange={this.changeType5}
+                        checked={this.state.values.types.includes(TopicType.Project)}
                       />
                     </Stack>
                     {this.state.missingData.type1 &&
@@ -609,6 +666,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                         label="angol"
                         title="angol"
                         onChange={this.changeLanguage1}
+                        checked={this.state.values.languages.includes(Language.English)}
                       />
                       <Checkbox
                         name="hungarian"
@@ -616,6 +674,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                         title="magyar"
                         defaultChecked
                         onChange={this.changeLanguage2}
+                        checked={this.state.values.languages.includes(Language.Hungarian)}
                       />
                     </Stack>
                     {this.state.missingData.language1 && this.state.missingData.language2 ? (
@@ -691,7 +750,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                   });
                 }}
               />
-              {this.state.id ? (
+              {this.isTopicGiven ? (
                 <div className="ms-Grid-row">
                   <div className="ms-Grid-col ms-sm6">
                     <PrimaryButton
@@ -701,7 +760,6 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                       disabled={
                         this.state.missingData.title ||
                         this.state.missingData.description ||
-                        // this.state.missingData.semester ||
                         this.state.missingData.places ||
                         (this.state.missingData.language1 && this.state.missingData.language2) ||
                         (this.state.missingData.type1 &&
