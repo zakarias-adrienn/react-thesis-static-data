@@ -16,7 +16,7 @@ const dialogContentProps = {
 
 interface DialogProps {
   name: string;
-  onSave?: any;
+  onSave: Function;
   myId: string;
 }
 
@@ -25,8 +25,7 @@ const DialogToEditTechnology: React.FunctionComponent<DialogProps> = (props) => 
   const [name, setName] = React.useState(props.name);
   const [disabled, setDisabled] = React.useState(false);
 
-  // technologies-t le kell kérni - legalábbis az összes névre szükség van
-
+  // technologies-t le kell kérni - legalábbis az összes névre szükség van, hogy vizsgáljon hasonlókat, ugyanazt ne engedje hozzáadni
   function handleChange(e: any) {
     console.log(e.target);
     let element: React.ChangeEvent<HTMLInputElement> = e;
@@ -36,7 +35,6 @@ const DialogToEditTechnology: React.FunctionComponent<DialogProps> = (props) => 
 
   function getErrorMessage(value: string): string {
     let technologyNames: string[] = [];
-    // TODO: ha myId-val megegyező nevűre írja át, az működhessen!!!
     if (value.trim().length >= 1 && !technologyNames.includes(value.trim().toLowerCase())) {
       setDisabled(false);
       return "";
@@ -62,7 +60,6 @@ const DialogToEditTechnology: React.FunctionComponent<DialogProps> = (props) => 
         dialogContentProps={dialogContentProps}
         modalProps={modelProps}
       >
-        {/* formba kellene tenni valahogy? */}
         <TextField
           label="Név"
           value={name}

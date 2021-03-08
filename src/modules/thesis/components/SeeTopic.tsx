@@ -1,7 +1,6 @@
 import * as React from "react";
-import { IDropdownStyles, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 import { PrimaryButton } from "office-ui-fabric-react";
-import { IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
 import { Redirect } from "react-router";
 
 let options: IDropdownOption[] = [
@@ -68,10 +67,6 @@ const myLiStyle: React.CSSProperties = {
 const rightStyle = {
   backgroundColor: "rgb(237, 235, 233)",
   padding: "8px",
-  // border: "solid",
-  // borderRadius: "5px",
-  // borderWidth: "2px",
-  // borderColor: "rgb(0, 120, 215)",
   width: "60%"
 };
 
@@ -80,7 +75,7 @@ type Prop = {
   id: string;
 };
 
-const SeeTheme: React.FunctionComponent<Prop> = (props) => {
+const SeeTopic: React.FunctionComponent<Prop> = (props) => {
   const [applied, setApplied] = React.useState(false);
 
   // useState - getTopicById - props.id
@@ -216,13 +211,11 @@ const SeeTheme: React.FunctionComponent<Prop> = (props) => {
               disabled={false} /* numofPlaces==0 */
               onClick={handleApplication}
             />
-            {/* <Link to="/searchPage"> */}
             <PrimaryButton
               style={{ float: "right" }}
               text="Vissza a böngészéshez"
               onClick={() => props.onBack()}
             ></PrimaryButton>
-            {/* </Link> */}
           </div>
         </div>
       </div>
@@ -230,4 +223,4 @@ const SeeTheme: React.FunctionComponent<Prop> = (props) => {
   );
 };
 
-export default SeeTheme;
+export default SeeTopic;

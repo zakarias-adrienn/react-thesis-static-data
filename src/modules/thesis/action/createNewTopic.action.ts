@@ -6,7 +6,7 @@ export type createNewTopicAction = {
   type: "create-topic";
   payload: {
     topic: Topic;
-    teacherId: string;
+    teacherId: string; // ez benne is lehet a Topic típusban
   };
   response: {
     success: boolean; //visszaadhatja a megkreált témát is

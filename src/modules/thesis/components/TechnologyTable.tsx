@@ -35,6 +35,19 @@ export interface IDetailsListBasicExampleState {
   isFilter: boolean;
 }
 
+const exampleTechnologies = [
+  "JAVA",
+  "C",
+  "C++",
+  "Python",
+  "React",
+  "Angular",
+  "HTML5",
+  "C#",
+  "JavaScript",
+  "TypeScript"
+];
+
 class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState> {
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
@@ -96,142 +109,14 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
     this.onDelete = this.onDelete.bind(this);
     this.addNewTechnology = this.addNewTechnology.bind(this);
 
-    // Populate with items for demos.
     this._allItems = [];
-    this._allItems.push(
-      {
-        key: "JAVA",
-        name: "JAVA",
-        edit: (
-          <DialogToEditTechnology
-            name="JAVA"
-            myId="JAVA"
-            onSave={this.onChangeName}
-          ></DialogToEditTechnology>
-        ),
-        delete: (
-          <ConfirmDelete
-            type="technology"
-            onDelete={this.onDelete}
-            which="JAVA"
-            name="JAVA"
-          ></ConfirmDelete>
-        )
-      },
-      {
-        key: "C++",
-        name: "C++",
-        edit: (
-          <DialogToEditTechnology
-            name="C++"
-            myId="C++"
-            onSave={this.onChangeName}
-          ></DialogToEditTechnology>
-        ),
-        delete: (
-          <ConfirmDelete
-            type="technology"
-            onDelete={this.onDelete}
-            which="C++"
-            name="C++"
-          ></ConfirmDelete>
-        )
-      },
-      {
-        key: "HTML5",
-        name: "HTML5",
-        edit: (
-          <DialogToEditTechnology
-            name="HTML5"
-            myId="HTML5"
-            onSave={this.onChangeName}
-          ></DialogToEditTechnology>
-        ),
-        delete: (
-          <ConfirmDelete
-            type="technology"
-            onDelete={this.onDelete}
-            which="HTML5"
-            name="HTML5"
-          ></ConfirmDelete>
-        )
-      },
-      {
-        key: "CSS3",
-        name: "CSS3",
-        edit: (
-          <DialogToEditTechnology
-            name="CSS3"
-            myId="CSS3"
-            onSave={this.onChangeName}
-          ></DialogToEditTechnology>
-        ),
-        delete: (
-          <ConfirmDelete
-            type="technology"
-            onDelete={this.onDelete}
-            which="CSS3"
-            name="CSS3"
-          ></ConfirmDelete>
-        )
-      },
-      {
-        key: "Mesterséges intelligencia",
-        name: "Mesterséges intelligencia",
-        edit: (
-          <DialogToEditTechnology
-            name="Mesterséges intelligencia"
-            myId="Mesterséges intelligencia"
-            onSave={this.onChangeName}
-          ></DialogToEditTechnology>
-        ),
-        delete: (
-          <ConfirmDelete
-            type="technology"
-            onDelete={this.onDelete}
-            which="Mesterséges intelligencia"
-            name="Mesterséges intelligencia"
-          ></ConfirmDelete>
-        )
-      },
-      {
-        key: "Python",
-        name: "Python",
-        edit: (
-          <DialogToEditTechnology
-            name="Python"
-            myId="Python"
-            onSave={this.onChangeName}
-          ></DialogToEditTechnology>
-        ),
-        delete: (
-          <ConfirmDelete
-            type="technology"
-            onDelete={this.onDelete}
-            which="Python"
-            name="Python"
-          ></ConfirmDelete>
-        )
-      },
-      {
-        key: "C",
-        name: "C",
-        edit: (
-          <DialogToEditTechnology
-            name="C"
-            myId="C"
-            onSave={this.onChangeName}
-          ></DialogToEditTechnology>
-        ),
-        delete: (
-          <ConfirmDelete
-            type="technology"
-            onDelete={this.onDelete}
-            which="C"
-            name="C"
-          ></ConfirmDelete>
-        )
-      }
+    exampleTechnologies.forEach((name) =>
+      this._allItems.push({
+        key: name,
+        name: name,
+        edit: <DialogToEditTechnology name={name} myId={name} onSave={this.onChangeName} />,
+        delete: <ConfirmDelete type={name} onDelete={this.onDelete} id={name} name={name} />
+      })
     );
     this._allItems = this._allItems.sort((a, b) => (a.name > b.name ? 1 : -1));
 
@@ -255,9 +140,6 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
   }
 
   public onChangeName(name: string, id: string, toggleHideDialog: Function) {
-    // console.log(name);
-    // console.log(id);
-    // console.log(this.state);
     toggleHideDialog();
     this.setState({
       items: this.state.items.map((item) => (item.key === id ? { ...item, name } : item)),
@@ -291,17 +173,28 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
         <ConfirmDelete
           type="technology"
           onDelete={this.onDelete}
-          which={name}
+          id={name}
           name={name}
         ></ConfirmDelete>
       )
     };
-    // adatbázishívás -> ha nem sikerül mert már van ilyen nevű, akkor hibaüzenet!!
     this.setState({
       ...this.state,
       items: [...this.state.items, newItem]
     });
   }
+
+  private _onFilter = (
+    ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    text: string | undefined
+  ): void => {
+    this.setState({
+      items: text
+        ? this._allItems.filter((i) => i.name.toLowerCase().indexOf(text.toLowerCase()) === 0)
+        : this._allItems,
+      isFilter: text ? true : false
+    });
+  };
 
   public render(): JSX.Element {
     const { items } = this.state;
@@ -346,18 +239,6 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
       </>
     );
   }
-
-  private _onFilter = (
-    ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-    text: string | undefined
-  ): void => {
-    this.setState({
-      items: text
-        ? this._allItems.filter((i) => i.name.toLowerCase().indexOf(text.toLowerCase()) === 0)
-        : this._allItems,
-      isFilter: text ? true : false
-    });
-  };
 }
 
 export default TechnologyTable;

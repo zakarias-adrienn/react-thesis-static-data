@@ -8,4 +8,6 @@ export default {
   component: DialogToEditTechnology
 };
 
-export const First = () => <DialogToEditTechnology name="VALAMI" myId="valami" />;
+export const First = () => (
+  <DialogToEditTechnology name="VALAMI" myId="valami" onSave={() => console.log("mentés")} />
+);

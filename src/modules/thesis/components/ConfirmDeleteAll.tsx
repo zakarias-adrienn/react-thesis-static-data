@@ -1,19 +1,21 @@
 import * as React from "react";
 import { Dialog, DialogType, DialogFooter } from "office-ui-fabric-react/lib/Dialog";
 import { PrimaryButton, DefaultButton, IIconProps } from "office-ui-fabric-react";
-import { hiddenContentStyle, mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { ContextualMenu } from "office-ui-fabric-react/lib/ContextualMenu";
 import { useId, useBoolean } from "@uifabric/react-hooks";
 
 const deleteIcon: IIconProps = { iconName: "Delete" };
+
+// megjelenő dialógusablak dolgai
 const dialogStyles = { main: { maxWidth: 200 } };
+
 const dragOptions = {
   moveMenuItemText: "Move",
   closeMenuItemText: "Close",
   menu: ContextualMenu,
   keepInBounds: true
 };
-const screenReaderOnly = mergeStyles(hiddenContentStyle);
+
 const dialogContentProps = (number: number) => {
   return {
     type: DialogType.normal,

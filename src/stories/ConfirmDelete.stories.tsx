@@ -12,9 +12,7 @@ const onDelete = (id: string, toggleHideDialog: Function) => {
   console.log("nem tudom ez mi lenne");
 };
 
-export const Topic = () => (
-  <ConfirmDelete type="topic" onDelete={onDelete} which="id" name="name" />
-);
+export const Topic = () => <ConfirmDelete type="topic" onDelete={onDelete} id="id" name="name" />;
 export const Technology = () => (
-  <ConfirmDelete type="technology" onDelete={onDelete} which="id" name="name" />
+  <ConfirmDelete type="technology" onDelete={onDelete} id="id" name="name" />
 );

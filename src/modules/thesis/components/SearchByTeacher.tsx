@@ -2,8 +2,8 @@ import React from "react";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
 import { Stack } from "office-ui-fabric-react/lib/Stack";
-import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
 
+// saját importok
 import DepartmentTeacherDropdown from "./DepartmentTeacherDropdown";
 import TeacherByName from "./TeacherByName";
 

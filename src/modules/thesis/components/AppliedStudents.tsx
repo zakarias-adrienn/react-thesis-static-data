@@ -8,24 +8,26 @@ import {
 } from "office-ui-fabric-react/lib/DetailsList";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
-import { PrimaryButton, Stack } from "office-ui-fabric-react";
-import AcceptedStudents from "./AcceptedStudents";
+import { Stack } from "office-ui-fabric-react";
 import { Text } from "office-ui-fabric-react/lib/Text";
-import ConfirmDeny from "./ConfirmDeny";
-import ConfirmAccept from "./ConfirmAccept";
 import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
 import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
 
-// STYLES
-const exampleChildClass = mergeStyles({
+// saját importok
+import { Application, ApplicationStatus } from "../model/application.model";
+import ConfirmDeny from "./ConfirmDeny";
+import ConfirmAccept from "./ConfirmAccept";
+import AcceptedStudents from "./AcceptedStudents";
+
+// STÍLUSOK
+const textFieldStyle = mergeStyles({
   display: "block",
   marginBottom: "10px"
 });
-
 const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "180px" } };
 
-// TYPES
-export interface IDetailsListBasicExampleItem {
+// TÍPUSOK
+export interface DetailsListItemType {
   key: string;
   title: string;
   name: string;
@@ -34,24 +36,25 @@ export interface IDetailsListBasicExampleItem {
   deny: JSX.Element;
 }
 
-export interface IDetailsListBasicExampleState {
-  items: IDetailsListBasicExampleItem[];
+export interface DetailsListState {
+  items: DetailsListItemType[];
   isFilter: boolean;
 }
 
-class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState> {
-  // FIELDS
-  private _allItems: IDetailsListBasicExampleItem[];
+class AppliedStudents extends React.Component<{}, DetailsListState> {
+  // MEZŐK
+  private _allItems: DetailsListItemType[];
   private _columns: IColumn[];
   private acceptedStudents: any;
 
   constructor(props: {}) {
     super(props);
 
+    // BINDOLT METÓDUSOK
     this.onDeny = this.onDeny.bind(this);
     this.handleAccept = this.handleAccept.bind(this);
 
-    // Populate with items for demos.
+    // Application[] jön majd le a db-ből -> ki kell szűrni azokat amik nincsenek elfogadva
     this._allItems = [];
     this._allItems.push({
       key: "Garbage Collector működése Javában",
@@ -137,8 +140,8 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
     };
   }
 
-  // FUNCTIONS
-
+  // FÜGGVÉNYEK
+  // táblázat headerje görgetéskor fix legyen
   onRenderDetailsHeader(props: any, defaultRender: any) {
     if (!props) {
       return null;
@@ -152,25 +155,25 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
     );
   }
 
-  onDeny(myId: string, toggleHideDialog: any) {
+  public onDeny(myId: string, toggleHideDialog: any) {
     toggleHideDialog();
-    // a jelentkezés statászt be kell állítani - hogy? lekérem a jelentkezést? getApplianceById.action? + beállítom a státust + felküldöm?
-    // denyAppliance.action? - ha van denyReason azt is beállítom?
+    // a jelentkezés statászt be kell állítani - hogy? lekérem a jelentkezést? getApplianceById.action? + beállítom a státuszt + felküldöm?
+    // denyAppliance.action? - ha van denyReason azt is beállítom? - emailt küldtem, még nincs válasz
     this.setState({
       items: this.state.items.filter((item) => item.key !== myId)
     });
     this._allItems = this._allItems.filter((item) => item.key !== myId);
   }
 
-  handleAccept(key: string, toggleHideDialog: Function) {
+  public handleAccept(key: string, toggleHideDialog: Function) {
     toggleHideDialog();
-    console.log(key);
     this.setState({
       items: this.state.items.filter((item) => item.key !== key)
     });
     let title: string = this._allItems.filter((item) => item.key === key)[0].title;
     let student: string = this._allItems.filter((item) => item.key === key)[0].name;
     this._allItems = this._allItems.filter((item) => item.key !== key);
+    // a key-t kell majd csak átadnom, az alapján lekéri majd a komponens
     this.acceptedStudents.updateState(key, title, student);
   }
 
@@ -186,6 +189,11 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
     });
   };
 
+  // Függőben levő jelentkezések kiszűrése
+  private _getPendingApplications(applications: Application[]): Application[] {
+    return applications.filter((appli) => appli.status === ApplicationStatus.Pending);
+  }
+
   public render(): JSX.Element {
     const { items } = this.state;
 
@@ -194,7 +202,7 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
         <h3>Függőben levő jelentkezések</h3>
         <Fabric>
           <TextField
-            className={exampleChildClass}
+            className={textFieldStyle}
             label="Cím szerinti szűrés:"
             onChange={this._onFilter}
             styles={textFieldStyles}
@@ -227,6 +235,7 @@ class AppliedStudents extends React.Component<{}, IDetailsListBasicExampleState>
         </Fabric>
         <br />
         <br />
+        {/* itt jelenítődik meg a AcceptedStudents komponens is, lehet jobb lenne refaktorálni majd */}
         <AcceptedStudents ref={(ele) => (this.acceptedStudents = ele)}></AcceptedStudents>
         <br />
       </div>

@@ -4,7 +4,7 @@ export type deleteTopicAction = {
   type: "delete-topic";
   payload: {
     topicId: string;
-    teacherId: string;
+    teacherId: string; //igazából benne van a topicban
   };
   response: {
     success: boolean;

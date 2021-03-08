@@ -79,12 +79,14 @@ const topics: Topic[] = [
 ];
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// STÍLUSOK
 const horizontalChoiceGroupStyles = {
   flexContainer: { display: "flex", flexDirection: "row" },
   marginTop: "0px",
   paddingTop: "0px"
 };
 
+// CHOICEGROUP OPCIÓK
 const semesters: IChoiceGroupOption[] = [
   { key: "autumn", text: "Ősz", styles: { root: { marginRight: "10px", marginTop: "0px" } } },
   { key: "spring", text: "Tavasz", styles: { root: { marginTop: "0px" } } }
@@ -99,6 +101,7 @@ const mainSemesters: IChoiceGroupOption[] = [
   { key: "given", text: "Adott félév", styles: { root: { marginTop: "0px" } } }
 ];
 
+// KERESÉS ÁLLAPOTA
 type State = {
   isFiltered: boolean;
   isSearchResult: boolean;
@@ -121,16 +124,9 @@ type State = {
 };
 
 class SearchPage extends React.Component<{}, State> {
-  private choiceGroupRef: any;
-  private validityRef: any;
-
   constructor(props: any) {
     super(props);
 
-    this.choiceGroupRef = React.createRef();
-    this.validityRef = React.createRef();
-
-    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onClickSearch = this.onClickSearch.bind(this);
     this.toogleHide = this.toogleHide.bind(this);
@@ -141,7 +137,7 @@ class SearchPage extends React.Component<{}, State> {
     this.changeSpringAutumn = this.changeSpringAutumn.bind(this);
     this.onChangeDepartment = this.onChangeDepartment.bind(this);
     this.onChangeTeacher = this.onChangeTeacher.bind(this);
-    this.onChangeTeacher2 = this.onChangeTeacher2.bind(this);
+    this.onChangeTeacherByName = this.onChangeTeacherByName.bind(this);
     this.onChangeSubjects = this.onChangeSubjects.bind(this);
     this.onChangeTechnologies = this.onChangeTechnologies.bind(this);
 
@@ -176,13 +172,8 @@ class SearchPage extends React.Component<{}, State> {
     };
   }
 
-  handleChange = (selectedItem: any) => {
-    this.setState({
-      ...this.state
-    });
-  };
-
-  getErrorSemester = (value: string): string => {
+  // HELYES KITÖLTÉST ELLENŐRZŐ FGVEK
+  private getErrorSemester = (value: string): string => {
     let first = parseInt(value.substring(2, 4));
     let second = parseInt(value.substring(5, 7));
     const regex = new RegExp("[0-9][0-9][0-9][0-9]/[0-9][0-9]");
@@ -210,7 +201,8 @@ class SearchPage extends React.Component<{}, State> {
     return "";
   };
 
-  onClickSearch() {
+  // töltődést szimuláló fgv
+  private onClickSearch() {
     if (this.state.isSearchResult) {
       this.setState({
         ...this.state,
@@ -232,6 +224,7 @@ class SearchPage extends React.Component<{}, State> {
     }, 2000);
   }
 
+  // KONTROLLÁLT KOMPONENSEK VÁLTOZTATÁSA VÁLTOZTATJA A STATE-ET
   public changeTypeCheckBox(which: string) {
     if (which === "BScThesis") {
       this.setState({
@@ -300,7 +293,8 @@ class SearchPage extends React.Component<{}, State> {
     // lehet aztán id-k ezek
     this.setState({
       ...this.state,
-      selectedDepartment: department
+      selectedDepartment: department,
+      selectedTeacher: ""
     });
   }
 
@@ -312,7 +306,7 @@ class SearchPage extends React.Component<{}, State> {
     });
   }
 
-  public onChangeTeacher2(teacher: string) {
+  public onChangeTeacherByName(teacher: string) {
     this.setState({
       ...this.state,
       selectedTeacher2: teacher
@@ -349,7 +343,205 @@ class SearchPage extends React.Component<{}, State> {
     }
   }
 
-  handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  private changeSemester(
+    ev: React.FormEvent<HTMLInputElement | HTMLElement> | undefined,
+    option: IChoiceGroupOption | undefined
+  ) {
+    this.setState({
+      ...this.state,
+      isGivenSemester: !this.state.isGivenSemester,
+      selectedValidity: option?.key || ""
+    });
+  }
+
+  private changeSpringAutumn(
+    ev: React.FormEvent<HTMLInputElement | HTMLElement> | undefined,
+    option: IChoiceGroupOption | undefined
+  ) {
+    this.setState({
+      ...this.state,
+      selectedSemester: option?.key || ""
+    });
+  }
+
+  // TÉMA MEGTEKINTÉSEKOR NE JELENJEN MEG A KERESÉS FEJLÉCE
+  private toogleHide() {
+    this.setState({
+      ...this.state,
+      hideHeaderSearch: !this.state.hideHeaderSearch
+    });
+  }
+
+  render() {
+    console.log(this.state.selectedDepartment);
+    console.log(this.state.selectedTeacher);
+    return (
+      <>
+        {!this.state.hideHeaderSearch && (
+          <>
+            <form onSubmit={this.handleSubmit}>
+              <div className="ms-Grid" dir="ltr">
+                <div className="ms-Grid-row">
+                  <div className="ms-Grid-col ms-sm6">
+                    <SearchByTitle></SearchByTitle>
+                    <br />
+                    {this.state.isFiltered && (
+                      <>
+                        <ChooseTheme
+                          checked={this.state.chooseTypeCheckBoxes}
+                          onChange={this.changeTypeCheckBox}
+                        ></ChooseTheme>
+                        <ChooseLanguage
+                          checked={this.state.chooseLanguageCheckBoxes}
+                          onChange={this.changeLanguageCheckBox}
+                        ></ChooseLanguage>
+                        {/* <SearchTeacher onChange={this.handleChange}></SearchTeacher> - RÉGEBBI VÁLTOZAT*/}
+                        <SearchByTeacher
+                          byDepartment={this.state.byDepartment}
+                          setByDepartment={() =>
+                            this.setState({ ...this.state, byDepartment: !this.state.byDepartment })
+                          }
+                          selectedDepartment={this.state.selectedDepartment}
+                          onChangeDepartment={this.onChangeDepartment}
+                          selectedTeacher={this.state.selectedTeacher}
+                          onChangeTeacher={this.onChangeTeacher}
+                          selectedTeacher2={this.state.selectedTeacher2}
+                          onChangeTeacher2={this.onChangeTeacherByName}
+                        ></SearchByTeacher>
+                      </>
+                    )}
+                  </div>
+                  <div className="ms-Grid-col ms-sm6">
+                    <Link
+                      style={{ marginBottom: "40px" }}
+                      onClick={() =>
+                        this.setState({
+                          ...this.state,
+                          isFiltered: !this.state.isFiltered
+                        })
+                      }
+                    >
+                      Szűrők {!this.state.isFiltered ? <>megjelenítése</> : <>elrejtése</>}
+                    </Link>
+                    {this.state.isFiltered && (
+                      <>
+                        <div className="ms-Grid" dir="ltr">
+                          <div className="ms-Grid-row" style={{ marginBottom: "10px" }}>
+                            <div className="ms-Grid-col ms-sm12">
+                              <Text style={{ fontWeight: 500, marginTop: "10px" }}>
+                                Téma érvényességi ideje
+                              </Text>
+                              <Stack style={{ marginBottom: "10px", marginTop: "5px" }}>
+                                <ChoiceGroup
+                                  styles={horizontalChoiceGroupStyles}
+                                  name="everyorgiven"
+                                  selectedKey={this.state.selectedValidity}
+                                  options={mainSemesters}
+                                  required={true}
+                                  onChange={this.changeSemester}
+                                />
+                              </Stack>
+                            </div>
+                          </div>
+                          {this.state.isGivenSemester && (
+                            <>
+                              <div className="ms-Grid-row" style={{ marginBottom: "10px" }}>
+                                <div className="ms-Grid-col ms-sm3">
+                                  <MaskedTextField
+                                    label="Tanév"
+                                    name="Tanév"
+                                    mask="2099/99"
+                                    id="maskedField"
+                                    onGetErrorMessage={this.getErrorSemester}
+                                    validateOnLoad={false}
+                                    onChange={(ev, newVa) =>
+                                      this.setState({
+                                        ...this.state,
+                                        year: newVa?.substring(2) || ""
+                                      })
+                                    }
+                                    value={this.state.year}
+                                  />
+                                </div>
+                                <div className="ms-Grid-col ms-sm9" style={{ paddingTop: "10px" }}>
+                                  <Text
+                                    style={{
+                                      fontWeight: 500,
+                                      paddingTop: "60px",
+                                      marginBottom: "0px"
+                                    }}
+                                  >
+                                    Félév
+                                  </Text>
+                                  <ChoiceGroup
+                                    styles={horizontalChoiceGroupStyles}
+                                    name="autumnorspring"
+                                    selectedKey={this.state.selectedSemester}
+                                    onChange={this.changeSpringAutumn}
+                                    options={semesters}
+                                    required={true}
+                                  />
+                                </div>
+                              </div>
+                              <div className="ms-Grid-row" style={{ width: "95%" }}>
+                                <MessageBar
+                                  messageBarType={MessageBarType.warning}
+                                  isMultiline={false}
+                                  dismissButtonAriaLabel="Close"
+                                >
+                                  Kitöltés nélkül az aktuális félévre szóló és a tetszőleges
+                                  időtartamú témák jelenítődnek meg.
+                                </MessageBar>
+                                {/* Akkor is ha simán keresés? Ha nincs aktuális félévben téma?
+                              Honnan jön az aktuális félév? aktuális dátumból */}
+                              </div>
+                              <br />
+                            </>
+                          )}
+                        </div>
+
+                        <Subjects
+                          subjects={this.state.subjects}
+                          onChange={this.onChangeSubjects}
+                        ></Subjects>
+                        <Technologies
+                          technologies={this.state.technologies}
+                          onChange={this.onChangeTechnologies}
+                        ></Technologies>
+                      </>
+                    )}
+                    <br />
+                  </div>
+                </div>
+                <MySubmitButton
+                  onClick={this.onClickSearch}
+                  disabled={
+                    !this.state.isGoodDate ||
+                    (this.state.byDepartment &&
+                      this.state.selectedTeacher === "" &&
+                      this.state.selectedDepartment !== "")
+                  }
+                ></MySubmitButton>
+              </div>
+            </form>
+            <br />
+            <br />
+          </>
+        )}
+        {this.state.isSearchProgress && <MySpinner label="Folyamatban a keresés..."></MySpinner>}
+        {this.state.isSearchResult && (
+          // PROP-ként ADOM ÁT a handleSubmit eredményét
+          <SearchResult
+            hideHeaderSearch={this.toogleHide}
+            topicsToShow={this.state.searchResult}
+          ></SearchResult>
+        )}
+      </>
+    );
+  }
+
+  // KERESÉST MEGOLDÓ ALGORITMUS
+  private handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     console.log(event.target);
     let element = event.target as HTMLInputElement;
@@ -534,200 +726,6 @@ class SearchPage extends React.Component<{}, State> {
       ...this.state,
       searchResult: searchResult
     });
-  }
-
-  private toogleHide() {
-    this.setState({
-      ...this.state,
-      hideHeaderSearch: !this.state.hideHeaderSearch
-    });
-  }
-
-  changeSemester(
-    ev: React.FormEvent<HTMLInputElement | HTMLElement> | undefined,
-    option: IChoiceGroupOption | undefined
-  ) {
-    this.setState({
-      ...this.state,
-      isGivenSemester: !this.state.isGivenSemester,
-      selectedValidity: option?.key || ""
-    });
-  }
-
-  changeSpringAutumn(
-    ev: React.FormEvent<HTMLInputElement | HTMLElement> | undefined,
-    option: IChoiceGroupOption | undefined
-  ) {
-    this.setState({
-      ...this.state,
-      selectedSemester: option?.key || ""
-    });
-  }
-
-  render() {
-    return (
-      <>
-        {!this.state.hideHeaderSearch && (
-          <>
-            <form onSubmit={this.handleSubmit}>
-              <div className="ms-Grid" dir="ltr">
-                <div className="ms-Grid-row">
-                  <div className="ms-Grid-col ms-sm6">
-                    <SearchByTitle></SearchByTitle>
-                    <br />
-                    {this.state.isFiltered && (
-                      <>
-                        <ChooseTheme
-                          checked={this.state.chooseTypeCheckBoxes}
-                          onChange={this.changeTypeCheckBox}
-                        ></ChooseTheme>
-                        <ChooseLanguage
-                          checked={this.state.chooseLanguageCheckBoxes}
-                          onChange={this.changeLanguageCheckBox}
-                        ></ChooseLanguage>
-                        {/* <SearchTeacher onChange={this.handleChange}></SearchTeacher> - RÉGEBBI VÁLTOZAT*/}
-                        <SearchByTeacher
-                          byDepartment={this.state.byDepartment}
-                          setByDepartment={() =>
-                            this.setState({ ...this.state, byDepartment: !this.state.byDepartment })
-                          }
-                          selectedDepartment={this.state.selectedDepartment}
-                          onChangeDepartment={this.onChangeDepartment}
-                          selectedTeacher={this.state.selectedTeacher}
-                          onChangeTeacher={this.onChangeTeacher}
-                          selectedTeacher2={this.state.selectedTeacher2}
-                          onChangeTeacher2={this.onChangeTeacher2}
-                        ></SearchByTeacher>
-                      </>
-                    )}
-                  </div>
-                  <div className="ms-Grid-col ms-sm6">
-                    <Link
-                      style={{ marginBottom: "40px" }}
-                      onClick={() =>
-                        this.setState({
-                          ...this.state,
-                          isFiltered: !this.state.isFiltered
-                        })
-                      }
-                    >
-                      Szűrők {!this.state.isFiltered ? <>megjelenítése</> : <>elrejtése</>}
-                    </Link>
-                    {this.state.isFiltered && (
-                      <>
-                        <div className="ms-Grid" dir="ltr">
-                          <div className="ms-Grid-row" style={{ marginBottom: "10px" }}>
-                            <div className="ms-Grid-col ms-sm12">
-                              <Text style={{ fontWeight: 500, marginTop: "10px" }}>
-                                Téma érvényességi ideje
-                              </Text>
-                              <Stack style={{ marginBottom: "10px", marginTop: "5px" }}>
-                                <ChoiceGroup
-                                  styles={horizontalChoiceGroupStyles}
-                                  name="everyorgiven"
-                                  selectedKey={this.state.selectedValidity}
-                                  options={mainSemesters}
-                                  required={true}
-                                  onChange={this.changeSemester}
-                                  componentRef={this.validityRef}
-                                />
-                              </Stack>
-                            </div>
-                          </div>
-                          {this.state.isGivenSemester && (
-                            <>
-                              <div className="ms-Grid-row" style={{ marginBottom: "10px" }}>
-                                <div className="ms-Grid-col ms-sm3">
-                                  <MaskedTextField
-                                    label="Tanév"
-                                    name="Tanév"
-                                    mask="2099/99"
-                                    id="maskedField"
-                                    onGetErrorMessage={this.getErrorSemester}
-                                    validateOnLoad={false}
-                                    onChange={(ev, newVa) =>
-                                      this.setState({
-                                        ...this.state,
-                                        year: newVa?.substring(2) || ""
-                                      })
-                                    }
-                                    value={this.state.year}
-                                  />
-                                </div>
-                                <div className="ms-Grid-col ms-sm9" style={{ paddingTop: "10px" }}>
-                                  <Text
-                                    style={{
-                                      fontWeight: 500,
-                                      paddingTop: "60px",
-                                      marginBottom: "0px"
-                                    }}
-                                  >
-                                    Félév
-                                  </Text>
-                                  <ChoiceGroup
-                                    styles={horizontalChoiceGroupStyles}
-                                    name="autumnorspring"
-                                    selectedKey={this.state.selectedSemester}
-                                    onChange={this.changeSpringAutumn}
-                                    options={semesters}
-                                    required={true}
-                                    componentRef={this.choiceGroupRef}
-                                  />
-                                </div>
-                              </div>
-                              <div className="ms-Grid-row" style={{ width: "95%" }}>
-                                <MessageBar
-                                  messageBarType={MessageBarType.warning}
-                                  isMultiline={false}
-                                  dismissButtonAriaLabel="Close"
-                                >
-                                  Kitöltés nélkül az aktuális félévre szóló és a tetszőleges
-                                  időtartamú témák jelenítődnek meg.
-                                </MessageBar>
-                                {/* Akkor is ha simán keresés? Ha nincs aktuális félévben téma?
-                              Honnan jön az aktuális félév? aktuális dátumból */}
-                              </div>
-                              <br />
-                            </>
-                          )}
-                        </div>
-
-                        <Subjects
-                          subjects={this.state.subjects}
-                          onChange={this.onChangeSubjects}
-                        ></Subjects>
-                        <Technologies
-                          technologies={this.state.technologies}
-                          onChange={this.onChangeTechnologies}
-                        ></Technologies>
-                      </>
-                    )}
-                    <br />
-                  </div>
-                </div>
-                <MySubmitButton
-                  onClick={this.onClickSearch}
-                  disabled={
-                    !this.state.isGoodDate ||
-                    (this.state.selectedTeacher === "" && this.state.selectedDepartment !== "")
-                  }
-                ></MySubmitButton>
-              </div>
-            </form>
-            <br />
-            <br />
-          </>
-        )}
-        {this.state.isSearchProgress && <MySpinner label="Folyamatban a keresés..."></MySpinner>}
-        {this.state.isSearchResult && (
-          // propként kell majd a resultot megkapja a handleSubmit eredménye alapján
-          <SearchResult
-            hideHeaderSearch={this.toogleHide}
-            topicsToShow={this.state.searchResult}
-          ></SearchResult>
-        )}
-      </>
-    );
   }
 }
 

@@ -1,6 +1,5 @@
 const Joi = require("joi");
 
-// kell külön a teacherId? vagy az a topic-ban benne van?
 export type acceptApplianceAction = {
   type: "accept-appliance";
   payload: {

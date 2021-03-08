@@ -1,12 +1,12 @@
 import React from "react";
 
-import SeeTheme from "../modules/thesis/components/SeeTheme";
-import { Link, MemoryRouter, Route, Router, Switch } from "react-router-dom";
+import SeeTopic from "../modules/thesis/components/SeeTopic";
+import { MemoryRouter } from "react-router-dom";
 
 // This default export determines where your story goes in the story list
 export default {
   title: "SearchPage/SeeThemeStory",
-  component: SeeTheme,
+  component: SeeTopic,
   decorators: [
     (SeeTheme: any) => (
       <MemoryRouter>
@@ -16,4 +16,4 @@ export default {
   ]
 };
 
-export const First = () => <SeeTheme id="valami" onBack={() => console.log("vissza")} />;
+export const First = () => <SeeTopic id="valami" onBack={() => console.log("vissza")} />;

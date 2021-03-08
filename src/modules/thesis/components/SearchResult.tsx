@@ -7,13 +7,19 @@ import {
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { IconButton } from "@fluentui/react/lib/Button";
 import { MessageBar } from "office-ui-fabric-react";
-import { BrowserRouter, Link } from "react-router-dom";
 import { SelectionMode, Stack } from "@fluentui/react";
-import SeeTheme from "./SeeTheme";
+import SeeTheme from "./SeeTopic";
 import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
 import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
 import { Text } from "office-ui-fabric-react/lib/Text";
-import { Topic, TopicType, Semester, Language, SchoolSemester } from "../model/topics.model";
+
+// saját importok
+import { Topic } from "../model/topics.model";
+import {
+  convertLanguagesToString,
+  convertSchoolSemesterToString,
+  convertTypeToString
+} from "../helperFunctions";
 
 export interface IDetailsListBasicExampleItem {
   key: string;
@@ -39,52 +45,6 @@ type Prop = {
   topicsToShow: Topic[];
 };
 
-const convertSchollSemesterToString = (s: SchoolSemester) => {
-  // a null eset már meg lett vizsgálva
-  var stringResult: string = "";
-  stringResult += s.year;
-  stringResult += "-";
-  stringResult += s.half === Semester.Autumn ? "ősz" : "tavasz";
-  return stringResult;
-};
-
-const convertLanguagesToString = (l: Language[]) => {
-  var languages: string = "";
-  l.forEach((language) =>
-    language === Language.Hungarian
-      ? languages.length > 0
-        ? (languages += ", magyar")
-        : (languages += "magyar")
-      : languages.length > 0
-      ? (languages += ", angol")
-      : (languages += "angol")
-  );
-  return languages;
-};
-
-const convertTypeToString = (t: TopicType[]) => {
-  var types: string = "";
-  t.forEach((type) => {
-    switch (type) {
-      case TopicType.BScTDK:
-        types.length > 0 ? (types += ", BSc-TDK") : (types += "BSc-TDK");
-        break;
-      case TopicType.BScThesis:
-        types.length > 0 ? (types += ", BSc-szakdolgozat") : (types += "BSc-szakdolgozat");
-        break;
-      case TopicType.MScTDK:
-        types.length > 0 ? (types += ", MSc-TDK") : (types += "MSc-TDK");
-        break;
-      case TopicType.MScThesis:
-        types.length > 0 ? (types += ", MSc-szakdolgozat") : (types += "MSc-szakdolgozat");
-        break;
-      default:
-        types.length > 0 ? (types += ", projekt") : (types += "projekt");
-    }
-  });
-  return types;
-};
-
 class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> {
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
@@ -105,7 +65,7 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
         semester:
           topic.schoolSemester === null
             ? "tetszőleges"
-            : convertSchollSemesterToString(topic.schoolSemester),
+            : convertSchoolSemesterToString(topic.schoolSemester),
         language: convertLanguagesToString(topic.language),
         technologies: topic.connectedTechnologyIds.join(", "), //itt majd nem id-kat kell kiírni, hanem neveket
         subjects: topic.connectedSubjectIds.join(", "),
@@ -245,7 +205,7 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
     };
   }
 
-  onRenderDetailsHeader(props: any, defaultRender: any) {
+  private onRenderDetailsHeader(props: any, defaultRender: any) {
     if (!props) {
       return null;
     }

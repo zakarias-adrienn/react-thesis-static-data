@@ -4,7 +4,7 @@ import { IStackProps, IStackStyles, Stack } from "@fluentui/react";
 import ConfirmAction from "./ConfirmAction";
 import { MessageBar, MessageBarType } from "office-ui-fabric-react";
 
-// STYLES
+// STÍLUSOK
 const stackTokens = { childrenGap: 50 };
 const stackStyles: Partial<IStackStyles> = {
   root: { width: "100%", textAlign: "center" }
@@ -14,6 +14,7 @@ const columnProps: Partial<IStackProps> = {
   styles: { root: { width: "30%", margin: "auto" } }
 };
 
+// PROP TÍPUS
 interface AddProps {
   onAddNew: Function;
   name: string;
@@ -28,8 +29,7 @@ const AddNewTechnology: React.FunctionComponent<AddProps> = (props) => {
   let technologiesOriginalNames = props.technologies.map((item: any) => item.name);
   let technologySmallNames = props.technologies.map((item: any) => item.name.toLowerCase());
 
-  // technológiákat megkaphatja propként vagy useState-adatbázisból
-
+  // hibaüzenet üres illetve már létező technológia esetén
   const getErrorMessage = (value: string): string => {
     if (
       (reset === true || value.trim().length >= 1) &&
@@ -45,6 +45,7 @@ const AddNewTechnology: React.FunctionComponent<AddProps> = (props) => {
     }
   };
 
+  // hasonló nevű technológiák kikeresése
   function handleChange(e: any) {
     setReset(false);
     console.log(e.target);
@@ -61,6 +62,7 @@ const AddNewTechnology: React.FunctionComponent<AddProps> = (props) => {
     }
   }
 
+  // hozzáadás után a kezdeti állapot visszaalakítása
   function updateState() {
     setName("");
     setReset(true);

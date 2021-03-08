@@ -1,5 +1,4 @@
 import { Application, applicationSchema } from "../model/application.model";
-import { Topic, topicSchema } from "../model/topics.model";
 
 const Joi = require("joi");
 

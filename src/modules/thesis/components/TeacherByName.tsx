@@ -93,7 +93,6 @@ type Prop = {
 };
 
 const TeacherByName: React.FunctionComponent<Prop> = (props) => {
-  // All pickers extend from BasePicker specifying the item type.
   const picker = React.useRef<IBasePicker<ITag>>(null);
   const [tagPicker, { toggle: toggleIsTagPickerVisible }] = useBoolean(false);
   const [selectedItem, setSelectedItem] = React.useState<ITag[]>(

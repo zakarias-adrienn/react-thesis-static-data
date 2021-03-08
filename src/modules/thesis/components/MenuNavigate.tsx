@@ -43,7 +43,7 @@ const navLinkGroups: INavLinkGroup[] = [
         name: "Technológiák kezelése",
         url: "/addNewTechnology",
         key: "key5"
-        //disabled: true
+        //disabled: true - ha nincs jogosultsága? nem is kellene megjelenjen inkább
       }
     ]
   }

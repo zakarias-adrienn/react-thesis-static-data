@@ -306,10 +306,19 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
     let second = parseInt(value.substring(5, 7));
     const regex = new RegExp("[0-9][0-9][0-9][0-9]/[0-9][0-9]");
     let currentYear = new Date().getFullYear();
-    console.log(currentYear);
     let enteredValueString = value.substring(0, 2) + value.substring(5, 7);
-    console.log(enteredValueString);
+    console.log(value);
     let enteredValue = parseInt(enteredValueString);
+    if (value === "20__/__") {
+      this.setState((state) => ({
+        ...this.state,
+        missingData: {
+          ...state.missingData,
+          semester: true
+        }
+      }));
+      return "Tanév megadása kötelező!";
+    }
     if (!regex.test(value)) {
       this.setState((state) => ({
         ...this.state,

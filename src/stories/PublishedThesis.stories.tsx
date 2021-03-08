@@ -1,12 +1,12 @@
 import React from "react";
 
-import PublishedThesis from "../modules/thesis/components/PublishedThesis";
+import ValidTeacherTopics from "../modules/thesis/components/ValidTeacherTopics";
 import { Link, MemoryRouter, Route, Router, Switch } from "react-router-dom";
 
 // This default export determines where your story goes in the story list
 export default {
   title: "Teacher/PublishedThesisStory",
-  component: PublishedThesis,
+  component: ValidTeacherTopics,
   decorators: [
     (PublishedThesis: any) => (
       <MemoryRouter>
@@ -16,4 +16,4 @@ export default {
   ]
 };
 
-export const First = () => <PublishedThesis />;
+export const First = () => <ValidTeacherTopics topics={[]} />;

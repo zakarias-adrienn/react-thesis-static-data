@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Announced } from "office-ui-fabric-react/lib/Announced";
 import { TextField, ITextFieldStyles } from "office-ui-fabric-react/lib/TextField";
 import {
   DetailsList,
@@ -62,7 +61,6 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
     }
   };
 
-  // valahogy adhatok paramétert hogy mit jelenítsen meg???
   onRenderPlainCard = (reason: string): JSX.Element => {
     return (
       <div className={classNames.plainCard}>
@@ -83,7 +81,7 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
 
     this.onDelete = this.onDelete.bind(this);
 
-    // Populate with items for demos.
+    // getStudentApplications()
     this._allItems = [];
     this._allItems.push({
       key: "Youniversity",
@@ -198,6 +196,18 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
     this._allItems = this._allItems.filter((item) => item.key !== id);
   }
 
+  private _onFilter = (
+    ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    text: string | undefined
+  ): void => {
+    this.setState({
+      items: text
+        ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text.toLowerCase()) > -1)
+        : this._allItems,
+      isFilter: text ? true : false
+    });
+  };
+
   public render(): JSX.Element {
     const { items } = this.state;
 
@@ -229,18 +239,6 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
       </Fabric>
     );
   }
-
-  private _onFilter = (
-    ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-    text: string | undefined
-  ): void => {
-    this.setState({
-      items: text
-        ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text.toLowerCase()) > -1)
-        : this._allItems,
-      isFilter: text ? true : false
-    });
-  };
 }
 
 export default UserThemes;

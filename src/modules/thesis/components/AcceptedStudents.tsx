@@ -12,35 +12,41 @@ import { Stack } from "office-ui-fabric-react";
 import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
 import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
 
-// STYLES
+// saját importok
+import { Application, ApplicationStatus } from "../model/application.model";
 
+// MEZŐK STÍLUSAI
 const textFieldStyles: Partial<ITextFieldStyles> = {
   root: { maxWidth: "200px", float: "left", paddingRight: "20px", paddingLeft: "0px" }
 };
 
-export interface IDetailsListBasicExampleItem {
+// LISTA ELEMEK TÍPUSA
+export interface DetailsListItemType {
   key: string;
   title: string;
   semester: string;
   name: string;
 }
 
-export interface IDetailsListBasicExampleState {
-  items: IDetailsListBasicExampleItem[];
+// TÁBLÁZAT ÁLLAPOTÁNAK TÍPUSA
+export interface DetailsListStateType {
+  items: DetailsListItemType[];
   isFilter: boolean;
 }
 
-class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState> {
-  // FIELDS
-  private _allItems: IDetailsListBasicExampleItem[];
+class AcceptedStudents extends React.Component<{}, DetailsListStateType> {
+  // MEZŐK
+  private _allItems: DetailsListItemType[];
   private _columns: IColumn[];
 
   constructor(props: {}) {
     super(props);
 
+    // BINDOLT METÓDUSOK
     this.updateState = this.updateState.bind(this);
 
-    // Populate with items for demos.
+    // EZEK MAJD AZ ADATBÁZISBÓL JÖNNEK - Application[] -> ebből kell a topicId alaján a Topic -> studentId alapján kell a Student neve
+    // Application[]-ből még ki kell szűrni a status alapján azokat, amik ACCEPTED-ek
     this._allItems = [];
     this._allItems.push({
       key: "Régi projekt 1",
@@ -55,6 +61,7 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
       semester: "2019/20-ősz"
     });
 
+    // OSZLOPOK TÍPUSA
     this._columns = [
       {
         key: "column1",
@@ -82,13 +89,15 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
       }
     ];
 
+    // ÁLLAPOT BEÁLLÍTÁSA
     this.state = {
       items: this._allItems,
       isFilter: false
     };
   }
 
-  // FUNCTIONS
+  // FÜGGVÉNYEK
+  // fixen maradó header görgetéskor
   onRenderDetailsHeader(props: any, defaultRender: any) {
     if (!props) {
       return null;
@@ -102,8 +111,10 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
     );
   }
 
+  // ha a felső táblázatban elfogad valakit, akkor átkerül a jelentkezése az alsó táblázatba
+  // TODO: csak a key alapján lekérni a jelentkezést db-ből, státuszt átállítani, acceptedItem-et megkreálni
   public updateState(key: string, title: string, name: string) {
-    let acceptedItem: IDetailsListBasicExampleItem = {
+    let acceptedItem: DetailsListItemType = {
       key: key,
       title: title,
       name: name,
@@ -115,11 +126,11 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
     this._allItems.push(acceptedItem);
   }
 
-  private _onFilter = (
+  // szűrések - nem csak kezdeti egyezés, hanem belső egyezéseket is vizsgál
+  private _onFilterByTitle = (
     ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     text: string | undefined
   ): void => {
-    console.log(this.state.items);
     this.setState({
       items: text
         ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text?.toLowerCase()) > -1)
@@ -128,7 +139,7 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
     });
   };
 
-  private _onFilter2 = (
+  private _onFilterByStudentName = (
     ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     text: string | undefined
   ): void => {
@@ -141,6 +152,11 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
     });
   };
 
+  // elfogadott jelentkezések kiszűrése - TODO: használni majd
+  private _getAcceptedApplications(applications: Application[]): Application[] {
+    return applications.filter((appli) => appli.status === ApplicationStatus.Accepted);
+  }
+
   public render(): JSX.Element {
     const { items } = this.state;
 
@@ -151,12 +167,12 @@ class AcceptedStudents extends React.Component<{}, IDetailsListBasicExampleState
           <div className="ms-Grid" dir="ltr" style={{ overflow: "hidden" }}>
             <TextField
               label="Cím szerinti szűrés:"
-              onChange={this._onFilter}
+              onChange={this._onFilterByTitle}
               styles={textFieldStyles}
             />
             <TextField
               label="Hallgató szerinti szűrés:"
-              onChange={this._onFilter2}
+              onChange={this._onFilterByStudentName}
               styles={textFieldStyles}
             />
           </div>

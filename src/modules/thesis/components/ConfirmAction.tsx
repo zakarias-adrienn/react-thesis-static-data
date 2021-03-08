@@ -1,18 +1,19 @@
 import * as React from "react";
 import { Dialog, DialogType, DialogFooter } from "office-ui-fabric-react/lib/Dialog";
 import { PrimaryButton, DefaultButton } from "office-ui-fabric-react/lib/Button";
-//import { hiddenContentStyle, mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { ContextualMenu } from "office-ui-fabric-react/lib/ContextualMenu";
 import { useId, useBoolean } from "@uifabric/react-hooks";
 
+// megjelenő dialógusablak dolgai
 const dialogStyles = { main: { maxWidth: 450 } };
+
 const dragOptions = {
   moveMenuItemText: "Move",
   closeMenuItemText: "Close",
   menu: ContextualMenu,
   keepInBounds: true
 };
-//const screenReaderOnly = mergeStyles(hiddenContentStyle);
+
 const dialogContentProps = (name: string) => {
   return {
     type: DialogType.normal,

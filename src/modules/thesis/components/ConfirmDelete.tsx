@@ -1,29 +1,31 @@
 import * as React from "react";
 import { Dialog, DialogType, DialogFooter } from "office-ui-fabric-react/lib/Dialog";
 import { PrimaryButton, DefaultButton } from "office-ui-fabric-react/lib/Button";
-import { hiddenContentStyle, mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { ContextualMenu } from "office-ui-fabric-react/lib/ContextualMenu";
 import { useId, useBoolean } from "@uifabric/react-hooks";
 import { IconButton } from "@fluentui/react/lib/Button";
 
+// megjelenő dialógusablak dolgai
 const dialogStyles = { main: { maxWidth: 450 } };
+
 const dragOptions = {
   moveMenuItemText: "Move",
   closeMenuItemText: "Close",
   menu: ContextualMenu,
   keepInBounds: true
 };
-const screenReaderOnly = mergeStyles(hiddenContentStyle);
 
 interface ConfirmDeleteProps {
   type: string;
-  which: string; //id
+  id: string; //id
   name: string;
   onDelete: Function;
 }
 
-const ConfirmAction: React.FunctionComponent<ConfirmDeleteProps> = (props) => {
-  console.log(props.which);
+// TECHNOLÓGIA ÉS TÉMA TÖRLÉSÉRE IS HASZNÁLVA VAN
+// TÉMA CSAK AKKOR TÖRLŐDJÖN HA NINCS RÁ FÜGGŐBEN LEVŐ JELENTKEZÉS?
+const ConfirmDelete: React.FunctionComponent<ConfirmDeleteProps> = (props) => {
+  console.log(props.id);
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
   const [isDraggable, { toggle: toggleIsDraggable }] = useBoolean(false);
   const labelId: string = useId("dialogLabel");
@@ -66,10 +68,7 @@ const ConfirmAction: React.FunctionComponent<ConfirmDeleteProps> = (props) => {
         modalProps={modalProps}
       >
         <DialogFooter>
-          <PrimaryButton
-            onClick={() => props.onDelete(props.which, toggleHideDialog)}
-            text="Törlés"
-          />
+          <PrimaryButton onClick={() => props.onDelete(props.id, toggleHideDialog)} text="Törlés" />
           <DefaultButton onClick={toggleHideDialog} text="Mégse" />
         </DialogFooter>
       </Dialog>
@@ -77,4 +76,4 @@ const ConfirmAction: React.FunctionComponent<ConfirmDeleteProps> = (props) => {
   );
 };
 
-export default ConfirmAction;
+export default ConfirmDelete;

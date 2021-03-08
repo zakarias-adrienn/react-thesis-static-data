@@ -11,22 +11,30 @@ import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import { Stack } from "office-ui-fabric-react";
 import { IconButton } from "@fluentui/react/lib/Button";
-import { BrowserRouter, Link } from "react-router-dom";
-import ConfirmDelete from "./ConfirmDelete";
-import { SelectionMode } from "@fluentui/react";
+import { Link } from "react-router-dom";
 import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
 import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
-import { PrimaryButton } from "office-ui-fabric-react";
-import ConfirmDeleteAll from "./ConfirmDeleteAll";
 
-const exampleChildClass = mergeStyles({
+// saját importok
+import ConfirmDeleteAll from "./ConfirmDeleteAll";
+import { Topic } from "../model/topics.model";
+import ConfirmDelete from "./ConfirmDelete";
+import {
+  convertLanguagesToString,
+  convertSchoolSemesterToString,
+  convertTypeToString
+} from "../helperFunctions";
+
+// STÍLUSOK
+const textFieldStyle = mergeStyles({
   display: "block",
-  marginBottom: "10px"
+  marginBottom: "10px",
+  marginLeft: "50px"
 });
 
 const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "180px" } };
 
-export interface IDetailsListBasicExampleItem {
+export interface DetailsListItemType {
   key: string;
   title: string;
   semester: string;
@@ -37,18 +45,22 @@ export interface IDetailsListBasicExampleItem {
   delete: JSX.Element;
 }
 
-export interface IDetailsListBasicExampleState {
-  items: IDetailsListBasicExampleItem[];
+export interface DetailsListState {
+  items: DetailsListItemType[];
   isFilter: boolean;
   selectionDetails: string;
 }
 
-class ExpiredThesis extends React.Component<{}, IDetailsListBasicExampleState> {
+type Prop = {
+  topics: Topic[];
+};
+
+class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
   private _selection: Selection;
-  private _allItems: IDetailsListBasicExampleItem[];
+  private _allItems: DetailsListItemType[];
   private _columns: IColumn[];
 
-  constructor(props: {}) {
+  constructor(props: any) {
     super(props);
 
     this._selection = new Selection({
@@ -119,51 +131,78 @@ class ExpiredThesis extends React.Component<{}, IDetailsListBasicExampleState> {
       }
     ];
 
-    // Populate with items for demos.
+    // TOPIC[]-ok jönnek propban s azokhoz kellene ezeket kigenerálni
     this._allItems = [];
-    this._allItems.push({
-      key: "Garbage Collector működése Javában",
-      title: "Garbage Collector működése Javában",
-      semester: "2020/21-ősz",
-      technologies: "Java",
-      subjects: "Programozási nyelvek - Java",
-      places: 2,
-      view: (
-        <Link to={{ pathname: "/publishedThesis/editTopic/" + "1" }}>
-          {/* browserrouter kell storybooknál köréje */}
-          <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
-        </Link>
-      ),
-      delete: (
-        <ConfirmDelete
-          type="topic"
-          which="Garbage Collector működése Javában"
-          name="Garbage Collector működése Javában"
-          onDelete={this.onDelete}
-        ></ConfirmDelete>
-      )
-    });
-    this._allItems.push({
-      key: "Youniversity",
-      title: "Youniversity",
-      semester: "2020/21-tavasz",
-      technologies: "React, Javascript",
-      subjects: "Webprogramozás, Kliensoldali webprogramozás",
-      places: 4,
-      view: (
-        <Link to={{ pathname: "/publishedThesis/editTopic/" + "2" }}>
-          <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
-        </Link>
-      ),
-      delete: (
-        <ConfirmDelete
-          type="topic"
-          which="Youniversity"
-          name="Youniversity"
-          onDelete={this.onDelete}
-        ></ConfirmDelete>
-      )
-    });
+    this.props.topics.forEach((topic) =>
+      this._allItems.push({
+        key: topic.id,
+        title: topic.title,
+        semester:
+          topic.schoolSemester === null
+            ? "tetszőleges"
+            : convertSchoolSemesterToString(topic.schoolSemester),
+        technologies: topic.connectedTechnologyIds.join(", "),
+        subjects: topic.connectedSubjectIds.join(", "),
+        places: topic.numberOfPlaces,
+        view: (
+          <Link to={{ pathname: "/publishedThesis/editTopic/" + `${topic.id}` }}>
+            <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
+          </Link>
+        ),
+        delete: (
+          <ConfirmDelete
+            type="topic"
+            id={topic.id}
+            name={topic.title}
+            onDelete={this.onDelete}
+          ></ConfirmDelete>
+        )
+      })
+    );
+
+    // this._allItems.push({
+    //   key: "Garbage Collector működése Javában",
+    //   title: "Garbage Collector működése Javában",
+    //   semester: "2020/21-ősz",
+    //   technologies: "Java",
+    //   subjects: "Programozási nyelvek - Java",
+    //   places: 2,
+    //   view: (
+    //     <Link to={{ pathname: "/publishedThesis/editTopic/" + "1" }}>
+    //       {/* browserrouter kell storybooknál köréje */}
+    //       <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
+    //     </Link>
+    //   ),
+    //   delete: (
+    //     <ConfirmDelete
+    //       type="topic"
+    //       id="Garbage Collector működése Javában"
+    //       name="Garbage Collector működése Javában"
+    //       onDelete={this.onDelete}
+    //     ></ConfirmDelete>
+    //   )
+    // });
+    // this._allItems.push({
+    //   key: "Youniversity",
+    //   title: "Youniversity",
+    //   semester: "2020/21-tavasz",
+    //   technologies: "React, Javascript",
+    //   subjects: "Webprogramozás, Kliensoldali webprogramozás",
+    //   places: 4,
+    //   view: (
+    //     <Link to={{ pathname: "/publishedThesis/editTopic/" + "2" }}>
+    //       <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
+    //     </Link>
+    //   ),
+    //   delete: (
+    //     <ConfirmDelete
+    //       type="topic"
+    //       id="Youniversity"
+    //       name="Youniversity"
+    //       onDelete={this.onDelete}
+    //     ></ConfirmDelete>
+    //   )
+    // });
 
     this.state = {
       items: this._allItems,
@@ -172,7 +211,8 @@ class ExpiredThesis extends React.Component<{}, IDetailsListBasicExampleState> {
     };
   }
 
-  onRenderDetailsHeader(props: any, defaultRender: any) {
+  // fix pozicióban maradó header görgetéskor
+  private onRenderDetailsHeader(props: any, defaultRender: any) {
     if (!props) {
       return null;
     }
@@ -185,8 +225,10 @@ class ExpiredThesis extends React.Component<{}, IDetailsListBasicExampleState> {
     );
   }
 
-  getDeleteIds(): string[] {
-    console.log(this._selection.getSelectedIndices()); //ebből megkapom az indexeket a táblázatbeli helyüket, az alapján majd a key-t s tudom törölni
+  // SEGÉDFGV
+  private getDeleteIds(): string[] {
+    //console.log(this._selection.getSelectedIndices());
+    //ebből megkapom az indexeket a táblázatbeli helyüket, az alapján majd a key-t s tudom törölni
     let tableIndexes = this._selection.getSelectedIndices();
     let ids: string[] = [];
     for (let e in tableIndexes) {
@@ -195,7 +237,8 @@ class ExpiredThesis extends React.Component<{}, IDetailsListBasicExampleState> {
     return ids;
   }
 
-  public onDeleteAll(toggleHideDialog: Function) {
+  // összes kijelölt törlése
+  private onDeleteAll(toggleHideDialog: Function) {
     // akkor is törölheti ha van rá jelentkezés?
     // adatbből is törölni kell!
     toggleHideDialog();
@@ -206,6 +249,7 @@ class ExpiredThesis extends React.Component<{}, IDetailsListBasicExampleState> {
     this._allItems = this._allItems.filter((item) => !this.getDeleteIds().includes(item.key));
   }
 
+  // adott sorban levő törlése
   public onDelete(id: string, toggleHideDialog: Function) {
     // csak akkor ha nincsen rá jelentkezés?
     // adatbből is törölni kell!
@@ -218,6 +262,30 @@ class ExpiredThesis extends React.Component<{}, IDetailsListBasicExampleState> {
     this._allItems = this._allItems.filter((item) => item.key !== id);
   }
 
+  private _onFilter = (
+    ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
+    text: string | undefined
+  ): void => {
+    this.setState({
+      ...this.state,
+      items: text
+        ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text.toLowerCase()) > -1)
+        : this._allItems,
+      isFilter: text ? true : false
+    });
+  };
+
+  private _getSelectionDetails(): string {
+    const selectionCount = this._selection.getSelectedCount();
+
+    switch (selectionCount) {
+      case 0:
+        return "";
+      default:
+        return `${selectionCount} elem kiválasztva`;
+    }
+  }
+
   public render(): JSX.Element {
     const { items, selectionDetails } = this.state;
 
@@ -227,14 +295,13 @@ class ExpiredThesis extends React.Component<{}, IDetailsListBasicExampleState> {
           <div className="ms-Grid-row">
             <div className="ms-Grid-col ms-sm9">
               <TextField
-                className={exampleChildClass}
+                className={textFieldStyle}
                 label="Cím szerinti szűrés:"
                 onChange={this._onFilter}
                 styles={textFieldStyles}
               />
             </div>
             <div className="ms-Grid-col ms-sm3">
-              {/* onClick={this.onDeleteSelection} */}
               <ConfirmDeleteAll
                 count={this._selection.getSelectedCount()}
                 onDelete={this.onDeleteAll}
@@ -271,30 +338,6 @@ class ExpiredThesis extends React.Component<{}, IDetailsListBasicExampleState> {
       </Fabric>
     );
   }
-
-  private _onFilter = (
-    ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-    text: string | undefined
-  ): void => {
-    this.setState({
-      ...this.state,
-      items: text
-        ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text.toLowerCase()) > -1)
-        : this._allItems,
-      isFilter: text ? true : false
-    });
-  };
-
-  private _getSelectionDetails(): string {
-    const selectionCount = this._selection.getSelectedCount();
-
-    switch (selectionCount) {
-      case 0:
-        return "";
-      default:
-        return `${selectionCount} elem kiválasztva`;
-    }
-  }
 }
 
-export default ExpiredThesis;
+export default ExpiredTeacherTopics;

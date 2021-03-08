@@ -1,6 +1,8 @@
 import React from "react";
 import "semantic-ui-css/semantic.min.css";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+
+// saját importok
 import SearchPage from "./SearchPage";
 import Header from "./Header";
 import MenuNavigate from "./MenuNavigate";
@@ -48,9 +50,6 @@ function Root() {
                 <Route path="/publishedThesis/editTopic/:id">
                   <TopicForm />
                 </Route>
-                {/* <Route path="/seeTopic/:id">
-                    <SeeTheme></SeeTheme>
-                  </Route> */}
                 <Route path="/appliedStudents">
                   <AppliedStudents></AppliedStudents>
                 </Route>

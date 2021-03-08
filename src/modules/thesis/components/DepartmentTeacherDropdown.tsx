@@ -1,22 +1,11 @@
 import * as React from "react";
-import {
-  ComboBox,
-  IComboBoxOption,
-  IComboBox,
-  SelectableOptionMenuItemType
-} from "office-ui-fabric-react/lib/index";
 import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
-import {
-  Dropdown,
-  DropdownMenuItemType,
-  IDropdownStyles,
-  IDropdownOption
-} from "office-ui-fabric-react/lib/Dropdown";
+import { Dropdown, IDropdownStyles, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 import { FormEvent } from "react";
 
 initializeIcons();
 
-let items: IComboBoxOption[] = [
+let items: IDropdownOption[] = [
   { key: "Algoritmusok és alkalmazásaik", text: "Algoritmusok és alkalmazásaik" },
   { key: "Információs rendszerek", text: "Információs rendszerek" },
   { key: "Komputeralgebra", text: "Komputeralgebra" },
@@ -85,13 +74,12 @@ teachersToDepartments.set("Média és oktatásinformatika", [
   "Visnovitz Márton"
 ]);
 
-// STYLES
-const comboBoxStyle = { maxWidth: 300 };
+// STÍLUSOK
 const dropdownStyles: Partial<IDropdownStyles> = {
   dropdown: { width: 300 }
 };
 
-// PROP
+// PROP TÍPUS
 type Prop = {
   selectedDepartment: string;
   onChangeDepartment: Function;
@@ -126,6 +114,7 @@ const DepartmentTeacherDropdown: React.FC<Prop> = (props) => {
     options = options.sort((a, b) => (a.key > b.key ? 1 : -1));
     if (o) {
       setSelectedKey(o.key.toString());
+      setSelectedItem("");
       props.onChangeDepartment(o.key.toString());
     }
   };

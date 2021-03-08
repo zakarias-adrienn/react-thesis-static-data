@@ -12,7 +12,6 @@ import { specializationBScSetting } from "./settings/specializationBSc.config";
 import { specializationMScSetting } from "./settings/specializationMSc.config";
 import { startYearSetting } from "./settings/startYear.config";
 
-import WelcomePage from "./components/WelcomePage";
 import { acceptApplianceActionSchema } from "./action/acceptAppliance.action";
 import { addNewTechnologyActionSchema } from "./action/addNewTechnology.action";
 import { applyToTopicActionSchema } from "./action/applyToTopic.action";
@@ -35,9 +34,10 @@ import { modifyTechnologyActionSchema } from "./action/modifyTechnology.action";
 import { modifyTopicActionSchema } from "./action/modifyTopic.action";
 import { searchTopicActionSchema } from "./action/searchTopic.action";
 import { withdrawApplianceActionSchema } from "./action/withdrawAppliance.action";
+import Root from "./components/Root";
 
 export const ThesisModule: Module = {
-  root: WelcomePage, //temporaly
+  root: Root,
   model: [
     studentSchema,
     subjectSchema,
