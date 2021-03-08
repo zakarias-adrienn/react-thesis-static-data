@@ -82,47 +82,6 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
     );
     this._allItems = this._allItems.sort((a, b) => (a.title > b.title ? 1 : -1));
 
-    // this._allItems.push({
-    //   key: "Garbage Collector működése Javában",
-    //   title: "Garbage Collector működése Javában",
-    //   teacher: "Kozsik Tamás",
-    //   type: "BSc szakdolgozati",
-    //   semester: "2020/21-ősz",
-    //   language: "magyar",
-    //   technologies: "Java",
-    //   subjects: "Programozási nyelvek - Java",
-    //   places: "Betelt",
-    //   view: (
-    //     // így nem veszik el a keresés eredménye, de a keresés felül ott lesz
-    //     <IconButton
-    //       iconProps={{ iconName: "RedEye" }}
-    //       title="Megtekint"
-    //       ariaLabel="Megtekint"
-    //       onClick={() => this.setSeeTheme("Garbage Collector műküdése Javában")}
-    //     />
-    //   )
-    // });
-    // this._allItems.push({
-    //   key: "Youniversity",
-    //   title: "Youniversity",
-    //   teacher: "Visnovitz Márton",
-    //   type: "BSc szakdolgozati",
-    //   semester: "2020/21-tavasz",
-    //   language: "magyar",
-    //   technologies: "React, Javascript",
-    //   subjects: "Webprogramozás, \nKliensoldali webprogramozás",
-    //   places: 4,
-    //   view: (
-    //     // lehet így linkkel lekérni, de visszakor elveszik a keresés eredménye
-    //     <IconButton
-    //       iconProps={{ iconName: "RedEye" }}
-    //       title="Megtekint"
-    //       ariaLabel="Megtekint"
-    //       onClick={() => this.setSeeTheme("Youniversity")}
-    //     />
-    //   )
-    // });
-
     this._columns = [
       {
         key: "column1",

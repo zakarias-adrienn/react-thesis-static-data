@@ -6,12 +6,27 @@ import { Dropdown, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 import { PrimaryButton, IIconProps, DefaultButton } from "office-ui-fabric-react";
 import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
 import { Text } from "office-ui-fabric-react/lib/Text";
-import { Language, Semester, TopicType } from "../model/topics.model";
+import { Language, Semester, Topic, TopicType } from "../model/topics.model";
 import { Redirect } from "react-router";
 import { RouteComponentProps } from "react-router";
 import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 
+// BEÉGETETT ADATOK JELENLEG
+// majd - getSubjects().map(subj => subj.name)
+const subjects = [
+  "Mesterséges intelligencia",
+  "Webprogramozás",
+  "Webfejlesztés",
+  "Telekommunikációs hálózatok",
+  "Konkurens programozás",
+  "Algoritmusok és adatszerkezetek 1",
+  "Algoritmusok és adatszerkezetek 2"
+];
+// majd - getTechnologies().map(subj => subj.name)
+const technologies = ["JAVA", "C++", "HTML5", "CSS", "JavaScript", "TypeScript", "React"];
+
+// STÍLUSOK
 const stackTokens = { childrenGap: 5 };
 const stackStyles: Partial<IStackStyles> = { root: { width: "100%" } };
 const stackStyles2: Partial<IStackStyles> = {
@@ -22,32 +37,19 @@ const horizontalChoiceGroupStyles = {
   marginTop: "0px",
   paddingTop: "0px"
 };
-const columnProps: Partial<IStackProps> = {
-  // tokens: { childrenGap: 5 },
-  styles: { root: { width: "100%" } }
-};
 
-let options: IDropdownOption[] = [
-  { key: "Webprogramozás", text: "Webprogramozás" },
-  { key: "Mesterséges intelligencia", text: "Mesterséges intelligencia" },
-  { key: "Telekommunikációs hálózatok", text: "Telekommunikációs hálózatok" },
-  { key: "Konkurens programozás", text: "Konkurens programozás" },
-  { key: "Algoritmusok és adatszerkezetek 1", text: "Algoritmusok és adatszerkezetek 1" }
-];
+// DROPDOWN ELEMEK
+let subjectOptions: IDropdownOption[] = [];
+subjects.forEach((name) => subjectOptions.push({ key: name, text: name }));
 
-options = options.sort((a, b) => (a.key > b.key ? 1 : -1));
+subjectOptions = subjectOptions.sort((a, b) => (a.key > b.key ? 1 : -1));
 
-let options2: IDropdownOption[] = [
-  { key: "JAVA", text: "JAVA" },
-  { key: "C++", text: "C++" },
-  { key: "HTML5", text: "HTML5" },
-  { key: "CSS", text: "CSS" },
-  { key: "Javascript", text: "Javascript" },
-  { key: "React", text: "React" }
-];
+let technologyOptions: IDropdownOption[] = [];
+technologies.forEach((name) => technologyOptions.push({ key: name, text: name }));
 
-options2 = options2.sort((a, b) => (a.key > b.key ? 1 : -1));
+technologyOptions = technologyOptions.sort((a, b) => (a.key > b.key ? 1 : -1));
 
+// CHOICEGROUP ELEMEK
 const semesters: IChoiceGroupOption[] = [
   { key: "autumn", text: "Ősz", styles: { root: { marginRight: "10px", marginTop: "0px" } } },
   { key: "spring", text: "Tavasz", styles: { root: { marginTop: "0px" } } }
@@ -78,10 +80,24 @@ type MissingData = {
   given_semester: boolean;
 };
 
+type TopicData = {
+  title: string;
+  description: string;
+  everySemester: boolean;
+  autumn: boolean;
+  year: string;
+  numPlaces: number;
+  types: TopicType[];
+  languages: Language[];
+  connectedTechnologies: string[];
+  connectedSubjects: string[];
+};
+
 type State = {
   missingData: MissingData;
   redirectAfterSave: boolean;
   id: string;
+  values: TopicData;
 };
 
 const publishIcon: IIconProps = { iconName: "PublishContent" };
@@ -93,19 +109,6 @@ interface IReactRouterParams {
 }
 
 class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRouterParams>, State> {
-  private autumnOrSpringSemester: any;
-  private bscThesisRef: any;
-  private bscTdkRef: any;
-  private mscThesisRef: any;
-  private mscTdkRef: any;
-  private hungarianRef: any;
-  private englishRef: any;
-  private subjectsRef: any;
-  private technologiesRef: any;
-  private projectRef: any;
-  private everyOrGivenRef: any;
-
-  // nem működik megfelelően - valahogy így kell majd elkérnem s akkor az adatbázisból elkérni a megfelelő id-jú témát
   componentDidMount() {
     if (this.props.match.params.id) {
       console.log("van id");
@@ -137,125 +140,37 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
         given_semester: false
       },
       redirectAfterSave: false,
-      id: ""
+      id: "", //nem kellene felülírni, csak akkor legyen ez ha nincs id felül
+      values: {
+        title: "",
+        description: "",
+        everySemester: false,
+        autumn: true,
+        year: "",
+        numPlaces: -1,
+        types: [TopicType.BScThesis],
+        languages: [Language.Hungarian],
+        connectedTechnologies: [],
+        connectedSubjects: []
+      }
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.autumnOrSpringSemester = React.createRef();
-    this.bscThesisRef = React.createRef();
-    this.bscTdkRef = React.createRef();
-    this.mscThesisRef = React.createRef();
-    this.mscTdkRef = React.createRef();
-    this.hungarianRef = React.createRef();
-    this.englishRef = React.createRef();
-    this.subjectsRef = React.createRef();
-    this.technologiesRef = React.createRef();
-    this.projectRef = React.createRef();
-    this.everyOrGivenRef = React.createRef();
+    this.getErrorTitle = this.getErrorTitle.bind(this);
+    this.getErrorDescription = this.getErrorDescription.bind(this);
+    this.getErrorSemester = this.getErrorSemester.bind(this);
+    this.getErrorNumPlaces = this.getErrorNumPlaces.bind(this);
+    this.changeType1 = this.changeType1.bind(this);
+    this.changeType2 = this.changeType2.bind(this);
+    this.changeType3 = this.changeType3.bind(this);
+    this.changeType4 = this.changeType4.bind(this);
+    this.changeType5 = this.changeType5.bind(this);
+    this.changeLanguage1 = this.changeLanguage1.bind(this);
+    this.changeLanguage2 = this.changeLanguage2.bind(this);
+    this.changeSemester = this.changeSemester.bind(this);
   }
 
-  handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    console.log("Beküldték");
-    console.log(event.target);
-    const fields = Array.prototype.slice
-      .call(event.target)
-      .filter((el) => el.name)
-      .filter((el) => el.value !== "on")
-      .reduce(
-        (form, el) => ({
-          ...form,
-          [el.name]: el.value
-        }),
-        {}
-      );
-    console.log(fields);
-    console.log("BSC szakdoga: ", this.bscThesisRef.current.checked);
-    console.log("BSC tdk: ", this.bscTdkRef.current.checked);
-    console.log("MSC szakdoga: ", this.mscThesisRef.current.checked);
-    console.log("MSC tdk: ", this.mscTdkRef.current.checked);
-    console.log("Projekt: ", this.projectRef.current.checked);
-    console.log("Magyar nyelvű:", this.hungarianRef.current.checked);
-    console.log("Angol nyelvű: ", this.englishRef.current.checked);
-    console.log("Tantárgyak: ", this.subjectsRef.current.selectedOptions);
-    console.log("Technológiák: ", this.technologiesRef.current.selectedOptions);
-
-    // az összeállított téma
-    let types: TopicType[] = [];
-    if (this.bscThesisRef.current.checked) {
-      types.push(TopicType.BScThesis);
-    }
-    if (this.bscTdkRef.current.checked) {
-      types.push(TopicType.BScTDK);
-    }
-    if (this.mscThesisRef.current.checked) {
-      types.push(TopicType.MScThesis);
-    }
-    if (this.mscTdkRef.current.cheched) {
-      types.push(TopicType.MScTDK);
-    }
-    if (this.projectRef.current.checked) {
-      types.push(TopicType.Project);
-    }
-
-    let languages: Language[] = [];
-    if (this.hungarianRef.current.checked) {
-      languages.push(Language.Hungarian);
-    }
-    if (this.englishRef.current.cheched) {
-      languages.push(Language.English);
-    }
-
-    let year, half;
-    if (fields["Tanév"]) {
-      // ez ha a fields[Tanév] létezik
-      let semester = fields["Tanév"];
-      year = parseInt(semester.substring(0, 4));
-      half =
-        this.autumnOrSpringSemester.current.checkedOption.key === "autumn"
-          ? Semester.Autumn
-          : Semester.Spring;
-    } else {
-      year = undefined;
-      half = undefined;
-    }
-
-    let subjectIds: string[] = this.subjectsRef.current.selectedOptions.map(
-      (subject: any) => subject.key
-    );
-
-    let technologyIds: string[] = this.technologiesRef.current.selectedOptions.map(
-      (technology: any) => technology.key
-    );
-
-    let newTopic = {
-      // id: string;
-      type: types,
-      title: fields["Cím"],
-      description: fields["Leírás"],
-      // teacherId: string;
-      connectedSubjectIds: subjectIds,
-      connectedTechnologyIds: technologyIds,
-      numberOfPlaces: parseInt(fields["numberofplaces"]),
-      schoolSemester: year
-        ? {
-            year: year,
-            half: half
-          }
-        : null, // tetszőleges félév
-      appliedStudentIds: [],
-      language: languages
-    };
-    console.log(newTopic);
-
-    //visszairányítás a publishedthesis-ekhez
-    this.setState({
-      ...this.state,
-      redirectAfterSave: true
-    });
-  }
-
-  getErrorMessage = (value: string): string => {
+  private getErrorTitle = (value: string): string => {
     if (value.trim().length >= 1) {
       this.setState((state) => ({
         ...this.state,
@@ -278,7 +193,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
     }
   };
 
-  getErrorDescription = (value: string): string => {
+  private getErrorDescription = (value: string): string => {
     if (value.trim().length >= 1) {
       this.setState((state) => ({
         ...this.state,
@@ -301,7 +216,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
     }
   };
 
-  getErrorSemester = (value: string): string => {
+  private getErrorSemester = (value: string): string => {
     let first = parseInt(value.substring(2, 4));
     let second = parseInt(value.substring(5, 7));
     const regex = new RegExp("[0-9][0-9][0-9][0-9]/[0-9][0-9]");
@@ -361,7 +276,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
     return "";
   };
 
-  getErrorNumPlaces = (value: string): string => {
+  private getErrorNumPlaces = (value: string): string => {
     if (!isNaN(parseInt(value))) {
       this.setState((state) => ({
         ...this.state,
@@ -385,71 +300,120 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
     //return value.length >= 1 ? "" : `Helyek számának megadása kötelező!`;
   };
 
-  changeType1 = () => {
+  private changeType1 = () => {
     this.setState((state) => ({
       ...this.state,
       missingData: {
         ...state.missingData,
         type1: !state.missingData.type1
+      },
+      values: {
+        ...this.state.values,
+        types: this.state.values.types.includes(TopicType.BScThesis)
+          ? this.state.values.types.filter((type) => type !== TopicType.BScThesis)
+          : [...this.state.values.types, TopicType.BScThesis]
       }
     }));
   };
-  changeType2 = () => {
+
+  private changeType2 = () => {
     this.setState((state) => ({
       ...this.state,
       missingData: {
         ...state.missingData,
         type2: !state.missingData.type2
+      },
+      values: {
+        ...this.state.values,
+        types: this.state.values.types.includes(TopicType.BScTDK)
+          ? this.state.values.types.filter((type) => type !== TopicType.BScTDK)
+          : [...this.state.values.types, TopicType.BScTDK]
       }
     }));
   };
-  changeType3 = () => {
+
+  private changeType3 = () => {
     this.setState((state) => ({
       ...this.state,
       missingData: {
         ...state.missingData,
         type3: !state.missingData.type3
+      },
+      values: {
+        ...this.state.values,
+        types: this.state.values.types.includes(TopicType.MScThesis)
+          ? this.state.values.types.filter((type) => type !== TopicType.MScThesis)
+          : [...this.state.values.types, TopicType.MScThesis]
       }
     }));
   };
-  changeType4 = () => {
+
+  private changeType4 = () => {
     this.setState((state) => ({
       ...this.state,
       missingData: {
         ...state.missingData,
         type4: !state.missingData.type4
+      },
+      values: {
+        ...this.state.values,
+        types: this.state.values.types.includes(TopicType.MScTDK)
+          ? this.state.values.types.filter((type) => type !== TopicType.MScTDK)
+          : [...this.state.values.types, TopicType.MScTDK]
       }
     }));
   };
-  changeType5 = () => {
+
+  private changeType5 = () => {
     this.setState((state) => ({
       ...this.state,
       missingData: {
         ...state.missingData,
         type5: !state.missingData.type5
+      },
+      values: {
+        ...this.state.values,
+        types: this.state.values.types.includes(TopicType.Project)
+          ? this.state.values.types.filter((type) => type !== TopicType.Project)
+          : [...this.state.values.types, TopicType.Project]
       }
     }));
   };
-  changeLanguage1 = () => {
+
+  private changeLanguage1 = () => {
     this.setState((state) => ({
       ...this.state,
       missingData: {
         ...state.missingData,
         language1: !state.missingData.language1
+      },
+      values: {
+        ...this.state.values,
+        languages: this.state.values.languages.includes(Language.English)
+          ? this.state.values.languages.filter((type) => type !== Language.English)
+          : [...this.state.values.languages, Language.English]
       }
     }));
     console.log(this.state);
   };
-  changeLanguage2 = () => {
+
+  private changeLanguage2 = () => {
     this.setState((state) => ({
       ...this.state,
       missingData: {
         ...state.missingData,
         language2: !state.missingData.language2
+      },
+      values: {
+        ...this.state.values,
+        languages: this.state.values.languages.includes(Language.Hungarian)
+          ? this.state.values.languages.filter((type) => type !== Language.Hungarian)
+          : [...this.state.values.languages, Language.Hungarian]
       }
     }));
   };
-  changeSemester = () => {
+
+  private changeSemester = () => {
     this.setState((state) => ({
       ...this.state,
       missingData: {
@@ -457,10 +421,13 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
         semester: true,
         every_semester: !state.missingData.every_semester,
         given_semester: !state.missingData.given_semester
+      },
+      values: {
+        ...this.state.values,
+        everySemester: !this.state.values.everySemester
       }
     }));
   };
-  // TODO: ezeket nem kellene bindolni this-hez?
 
   render() {
     let redirectToPublishedThesis: boolean = this.state.redirectAfterSave;
@@ -479,40 +446,33 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                 label="Cím"
                 name="Cím"
                 required
-                onGetErrorMessage={this.getErrorMessage}
+                onGetErrorMessage={this.getErrorTitle}
                 validateOnLoad={false}
-                // value={this.state.values.title}
-                // onChange={(e) => {
-                //   this.setState((state) => ({
-                //     ...state,
-                //     values: {
-                //       ...state.values,
-                //       title: (e.target as HTMLInputElement).value
-                //     }
-                //   }));
-                // }}
+                value={this.state.values.title}
+                onChange={(ev, nTitle) =>
+                  this.setState({
+                    ...this.state,
+                    values: { ...this.state.values, title: nTitle ? nTitle : "" }
+                  })
+                }
               />
               <TextField
                 label="Leírás"
-                //value={this.state.values.description}
                 name="Leírás"
                 multiline
                 rows={3}
                 required
                 onGetErrorMessage={this.getErrorDescription}
                 validateOnLoad={false}
-                onChange={(e) => {
-                  this.setState((state) => ({
-                    ...state,
-                    values: {
-                      //...state.values,
-                      description: (e.target as HTMLInputElement).value
-                    }
-                  }));
-                }}
+                value={this.state.values.description}
+                onChange={(ev, nDesc) =>
+                  this.setState({
+                    ...this.state,
+                    values: { ...this.state.values, description: nDesc ? nDesc : "" }
+                  })
+                }
               />
 
-              {/* félév refaktor */}
               <Text style={{ fontWeight: 500, marginTop: "10px" }}>
                 Téma érvényességi ideje <span style={{ color: "rgb(164, 38, 44)" }}> *</span>
               </Text>
@@ -524,7 +484,6 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                   options={mainSemesters}
                   required={true}
                   onChange={this.changeSemester}
-                  componentRef={this.everyOrGivenRef}
                 />
               </Stack>
               <div className="ms-Grid" dir="ltr">
@@ -539,6 +498,16 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                           required
                           onGetErrorMessage={this.getErrorSemester}
                           validateOnLoad={false}
+                          value={this.state.values.year}
+                          onChange={(ev, nValue) => {
+                            this.setState({
+                              ...this.state,
+                              values: {
+                                ...this.state.values,
+                                year: nValue ? nValue.substring(2) : ""
+                              }
+                            });
+                          }}
                         />
                       </div>
                       <div className="ms-Grid-col ms-sm6" style={{ paddingTop: "10px" }}>
@@ -551,7 +520,12 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                           defaultSelectedKey="autumn"
                           options={semesters}
                           required={true}
-                          componentRef={this.autumnOrSpringSemester}
+                          onChange={() => {
+                            this.setState({
+                              ...this.state,
+                              values: { ...this.state.values, autumn: !this.state.values.autumn }
+                            });
+                          }}
                         />
                       </div>
                     </div>
@@ -574,14 +548,12 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                         label="Bsc szakdolgozati"
                         title="Bsc szakdolgozati"
                         defaultChecked
-                        componentRef={this.bscThesisRef}
                         onChange={this.changeType1}
                       />
                       <Checkbox
                         name="bsc_tdk"
                         label="Bsc TDK"
                         title="Bsc TDK"
-                        componentRef={this.bscTdkRef}
                         onChange={this.changeType2}
                       />
                       <Checkbox
@@ -589,20 +561,17 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                         label="Msc szakdolgozati"
                         title="Msc szakdolgozati"
                         onChange={this.changeType3}
-                        componentRef={this.mscThesisRef}
                       />
                       <Checkbox
                         name="msc_tdk"
                         label="Msc TDK"
                         title="Msc TDK"
-                        componentRef={this.mscTdkRef}
                         onChange={this.changeType4}
                       />
                       <Checkbox
                         name="project"
                         label="Projekt"
                         title="Projekt"
-                        componentRef={this.projectRef}
                         onChange={this.changeType5}
                       />
                     </Stack>
@@ -640,7 +609,6 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                         label="angol"
                         title="angol"
                         onChange={this.changeLanguage1}
-                        componentRef={this.englishRef}
                       />
                       <Checkbox
                         name="hungarian"
@@ -648,7 +616,6 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                         title="magyar"
                         defaultChecked
                         onChange={this.changeLanguage2}
-                        componentRef={this.hungarianRef}
                       />
                     </Stack>
                     {this.state.missingData.language1 && this.state.missingData.language2 ? (
@@ -677,37 +644,52 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                 name="numberofplaces"
                 onGetErrorMessage={this.getErrorNumPlaces}
                 validateOnLoad={false}
-                // value={
-                //   this.state.values.numOfPlaces === 0
-                //     ? ""
-                //     : this.state.values.numOfPlaces.toString()
-                // }
-                onChange={(e) => {
-                  this.setState((state) => ({
-                    ...state,
-                    values: {
-                      //...state.values,
-                      numOfPlaces: parseInt((e.target as HTMLInputElement).value)
-                    }
-                  }));
-                }}
+                value={
+                  this.state.values.numPlaces === -1 ? "" : this.state.values.numPlaces.toString()
+                }
+                onChange={(ev, nValue) =>
+                  this.setState({
+                    ...this.state,
+                    values: { ...this.state.values, numPlaces: nValue ? parseInt(nValue) : -1 }
+                  })
+                }
               />
               <Dropdown
-                //name="subjects"
                 placeholder="Válassza ki a kapcsolódó tantárgyakat..."
                 label="Tantárgyak"
                 multiSelect
-                options={options}
-                //styles={dropdownStyles}
-                componentRef={this.subjectsRef}
+                options={subjectOptions}
+                selectedKeys={this.state.values.connectedSubjects}
+                onChange={(ev, option) => {
+                  this.setState({
+                    ...this.state,
+                    values: {
+                      ...this.state.values,
+                      connectedSubjects: option?.selected
+                        ? [...this.state.values.connectedSubjects, option.key.toString()]
+                        : this.state.values.connectedSubjects.filter((k) => k != option?.key)
+                    }
+                  });
+                }}
               />
               <Dropdown
                 placeholder="Válassza ki a kapcsolódó technológiákat..."
                 label="Technológiák"
                 multiSelect
-                options={options2}
+                options={technologyOptions}
                 style={{ marginBottom: "10px" }}
-                componentRef={this.technologiesRef}
+                selectedKeys={this.state.values.connectedTechnologies}
+                onChange={(ev, option) => {
+                  this.setState({
+                    ...this.state,
+                    values: {
+                      ...this.state.values,
+                      connectedTechnologies: option?.selected
+                        ? [...this.state.values.connectedTechnologies, option.key.toString()]
+                        : this.state.values.connectedTechnologies.filter((k) => k != option?.key)
+                    }
+                  });
+                }}
               />
               {this.state.id ? (
                 <div className="ms-Grid-row">
@@ -767,6 +749,41 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
         </Stack>
       </div>
     );
+  }
+
+  // új téma összeállítása
+  private handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    console.log("Beküldték");
+    let year = "20" + this.state.values.year.substring(0, 2);
+    let yearInNumber = parseInt(year);
+
+    // új téma összeállítása
+    let newTopic: Topic = {
+      id: "valami", // TODO
+      type: this.state.values.types,
+      title: this.state.values.title,
+      description: this.state.values.description,
+      teacherId: "valami", // TODO
+      connectedSubjectIds: this.state.values.connectedSubjects,
+      connectedTechnologyIds: this.state.values.connectedTechnologies,
+      numberOfPlaces: this.state.values.numPlaces,
+      schoolSemester: this.state.values.everySemester
+        ? null
+        : {
+            year: yearInNumber,
+            half: this.state.values.autumn ? Semester.Autumn : Semester.Spring
+          },
+      appliedStudentIds: [],
+      language: this.state.values.languages
+    };
+    console.log(newTopic);
+
+    //visszairányítás a publishedthesis-ekhez
+    this.setState({
+      ...this.state,
+      redirectAfterSave: true
+    });
   }
 }
 

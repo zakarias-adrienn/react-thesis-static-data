@@ -31,7 +31,6 @@ interface ConfirmActionProps {
 }
 
 const ConfirmAction: React.FunctionComponent<ConfirmActionProps> = (props) => {
-  console.log(props.notEmpty);
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
   const [isDraggable, { toggle: toggleIsDraggable }] = useBoolean(false);
   const labelId: string = useId("dialogLabel");

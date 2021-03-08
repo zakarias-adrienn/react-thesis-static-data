@@ -25,7 +25,6 @@ interface ConfirmDeleteProps {
 // TECHNOLÓGIA ÉS TÉMA TÖRLÉSÉRE IS HASZNÁLVA VAN
 // TÉMA CSAK AKKOR TÖRLŐDJÖN HA NINCS RÁ FÜGGŐBEN LEVŐ JELENTKEZÉS?
 const ConfirmDelete: React.FunctionComponent<ConfirmDeleteProps> = (props) => {
-  console.log(props.id);
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
   const [isDraggable, { toggle: toggleIsDraggable }] = useBoolean(false);
   const labelId: string = useId("dialogLabel");

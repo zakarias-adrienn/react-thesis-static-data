@@ -68,13 +68,12 @@ const exampleTopics: Topic[] = [
 ];
 
 // fel kellene gyűrűzzön a törlés ide?
-const TeachersTopics: React.FunctionComponent = () => {
+const TeachersTopic: React.FunctionComponent = () => {
   const [topics, setTopics] = React.useState(exampleTopics);
 
   const getValidTopics = (): Topic[] => {
     const now = new Date().getFullYear();
     const month = new Date().getMonth();
-    // JANUÁRTÓL A MÁSODIK FÉLÉVNEK SZÁMÍTSON MOST
     const half: Semester = month <= 6 ? Semester.Spring : Semester.Autumn;
 
     return topics.filter(
@@ -101,4 +100,4 @@ const TeachersTopics: React.FunctionComponent = () => {
   );
 };
 
-export default TeachersTopics;
+export default TeachersTopic;

@@ -483,7 +483,7 @@ class SearchPage extends React.Component<{}, State> {
                                   />
                                 </div>
                               </div>
-                              <div className="ms-Grid-row" style={{ width: "95%" }}>
+                              {/* <div className="ms-Grid-row" style={{ width: "95%" }}>
                                 <MessageBar
                                   messageBarType={MessageBarType.warning}
                                   isMultiline={false}
@@ -493,8 +493,8 @@ class SearchPage extends React.Component<{}, State> {
                                   időtartamú témák jelenítődnek meg.
                                 </MessageBar>
                                 {/* Akkor is ha simán keresés? Ha nincs aktuális félévben téma?
-                              Honnan jön az aktuális félév? aktuális dátumból */}
-                              </div>
+                              Honnan jön az aktuális félév? aktuális dátumból
+                              </div> */}
                               <br />
                             </>
                           )}

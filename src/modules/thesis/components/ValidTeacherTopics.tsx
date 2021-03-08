@@ -31,7 +31,7 @@ const exampleChildClass = mergeStyles({
 
 const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "180px" } };
 
-export interface IDetailsListBasicExampleItem {
+export interface DetailsListItem {
   key: string;
   title: string;
   semester: string;
@@ -42,8 +42,8 @@ export interface IDetailsListBasicExampleItem {
   delete: JSX.Element;
 }
 
-export interface IDetailsListBasicExampleState {
-  items: IDetailsListBasicExampleItem[];
+export interface DetailsListState {
+  items: DetailsListItem[];
   isFilter: boolean;
 }
 
@@ -51,8 +51,8 @@ type Prop = {
   topics: Topic[];
 };
 
-class ValidTeacherTopics extends React.Component<Prop, IDetailsListBasicExampleState> {
-  private _allItems: IDetailsListBasicExampleItem[];
+class ValidTeacherTopics extends React.Component<Prop, DetailsListState> {
+  private _allItems: DetailsListItem[];
   private _columns: IColumn[];
 
   constructor(props: any) {

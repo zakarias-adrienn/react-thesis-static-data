@@ -10,7 +10,7 @@ import UserThemes from "./UserThemes";
 import TopicForm from "./TopicForm";
 import TechnologyTable from "./TechnologyTable";
 import AppliedStudents from "./AppliedStudents";
-import TeachersTopics from "./TeachersTopics";
+import TeachersTopic from "./TeacherTopics";
 
 function Root() {
   return (
@@ -39,7 +39,7 @@ function Root() {
                   <TopicForm />
                 </Route>
                 <Route exact path="/publishedThesis">
-                  <TeachersTopics />
+                  <TeachersTopic />
                 </Route>
                 <Route path="/myTopics">
                   <UserThemes />

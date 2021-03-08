@@ -1,6 +1,6 @@
 import * as React from "react";
 import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
-import { PrimaryButton } from "office-ui-fabric-react";
+import { DefaultButton, PrimaryButton } from "office-ui-fabric-react";
 import { Redirect } from "react-router";
 
 let options: IDropdownOption[] = [
@@ -211,11 +211,11 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
               disabled={false} /* numofPlaces==0 */
               onClick={handleApplication}
             />
-            <PrimaryButton
+            <DefaultButton
               style={{ float: "right" }}
               text="Vissza a böngészéshez"
               onClick={() => props.onBack()}
-            ></PrimaryButton>
+            ></DefaultButton>
           </div>
         </div>
       </div>
