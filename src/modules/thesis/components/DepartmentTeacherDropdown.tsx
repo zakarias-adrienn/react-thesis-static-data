@@ -20,7 +20,7 @@ let items: IDropdownOption[] = [
   },
   { key: "Média és oktatásinformatika", text: "Média és oktatásinformatika" }
 ];
-items = items.sort((a, b) => (a.key > b.key ? 1 : -1));
+items = items.sort((a, b) => (a.text > b.text ? 1 : -1));
 
 let options: IDropdownOption[] = [];
 
@@ -111,7 +111,7 @@ const DepartmentTeacherDropdown: React.FC<Prop> = (props) => {
         ?.map((s) => optionsToDepartment.push({ key: s.toString(), text: s.toString() }));
     }
     options = optionsToDepartment;
-    options = options.sort((a, b) => (a.key > b.key ? 1 : -1));
+    options = options.sort((a, b) => (a.text > b.text ? 1 : -1));
     if (o) {
       setSelectedKey(o.key.toString());
       setSelectedItem("");

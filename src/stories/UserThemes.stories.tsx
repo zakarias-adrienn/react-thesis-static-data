@@ -1,11 +1,11 @@
 import React from "react";
 
-import UserThemes from "../modules/thesis/components/UserThemes";
+import UserTopics from "../modules/thesis/components/UserTopics";
 
 // This default export determines where your story goes in the story list
 export default {
   title: "StudentData/UserThemesStory",
-  component: UserThemes
+  component: UserTopics
 };
 
-export const First = () => <UserThemes />;
+export const First = () => <UserTopics />;

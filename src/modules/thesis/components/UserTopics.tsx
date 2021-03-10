@@ -12,8 +12,43 @@ import ConfirmWithdraw from "./ConfirmWithdraw";
 import { Stack } from "office-ui-fabric-react";
 import { HoverCard, HoverCardType } from "office-ui-fabric-react/lib/HoverCard";
 import { mergeStyleSets } from "office-ui-fabric-react/lib/Styling";
-import { Icon } from "@fluentui/react";
+import { Icon, ScrollablePane, ScrollbarVisibility } from "@fluentui/react";
 import { SelectionMode } from "@fluentui/react";
+import { Application, ApplicationStatus } from "../model/application.model";
+import { Language, Semester, Topic, TopicType } from "../model/topics.model";
+import { ALPN_ENABLED } from "constants";
+import { convertSchoolSemesterToString } from "../helperFunctions";
+
+// MINTA ADAT AHOGYAN MAJD AZ ADATBÁZISBÓL JÖN... REMÉLHETŐLEG
+const myApplications: Application[] = [
+  {
+    id: "első",
+    studentId: "a",
+    topicId: "Youniversity",
+    status: ApplicationStatus.Accepted,
+    acceptReason:
+      "Kérlek mihamarabb jelezz vissza, hogy mikor lenne megfelelő neked egy megbeszélés!"
+  }
+];
+const topics: Topic[] = [
+  {
+    id: "Youniversity",
+    type: [TopicType.BScThesis],
+    title: "Youniversity",
+    description: "Valami...",
+    teacherId: "Visnovitz Márton",
+    connectedSubjectIds: [],
+    connectedTechnologyIds: [],
+    numberOfPlaces: 2,
+    schoolSemester: {
+      year: 2020,
+      half: Semester.Spring
+    },
+    appliedStudentIds: ["a"],
+    language: [Language.Hungarian]
+  }
+];
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 const exampleChildClass = mergeStyles({
   display: "block",
@@ -39,7 +74,7 @@ export interface IDetailsListBasicExampleState {
 const classNames = mergeStyleSets({
   plainCard: {
     width: 200,
-    height: 100,
+    height: 200,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -50,7 +85,7 @@ const classNames = mergeStyleSets({
   }
 });
 
-class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
+class UserTopics extends React.Component<{}, IDetailsListBasicExampleState> {
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
   private hoverCard: any;
@@ -83,60 +118,44 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
 
     // getStudentApplications()
     this._allItems = [];
-    this._allItems.push({
-      key: "Youniversity",
-      title: "Youniversity",
-      teacher: "Visnovitz Márton",
-      semester: "2020/21-ősz",
-      status: (
-        <HoverCard
-          cardDismissDelay={300}
-          type={HoverCardType.plain}
-          plainCardProps={{ onRenderPlainCard: () => this.onRenderPlainCard("") }} //itt kell megadnom az indoklást
-          componentRef={this.hoverCard}
-          onCardHide={this.onCardHide}
-        >
-          <>
-            Elfogadva
-            <Icon className={classNames.target} iconName="StatusCircleQuestionMark"></Icon>
-          </>
-        </HoverCard>
-      ),
-      remove: (
-        <ConfirmWithdraw
-          myId="Youniversity"
-          onWithdraw={this.onDelete}
-          name="Youniversity"
-        ></ConfirmWithdraw>
-      )
+    myApplications.forEach((appl) => {
+      const topicToApplication = topics.filter((topic) => topic.id === appl.topicId)[0];
+      // ide a megfelelő tanárt is le kell marj kérni
+      this._allItems.push({
+        key: appl.id,
+        title: topicToApplication.title,
+        teacher: topicToApplication.teacherId,
+        semester:
+          topicToApplication.schoolSemester === null
+            ? "tetszőleges"
+            : convertSchoolSemesterToString(topicToApplication.schoolSemester),
+        status: (
+          <HoverCard
+            cardDismissDelay={300}
+            type={HoverCardType.plain}
+            plainCardProps={{
+              onRenderPlainCard: () =>
+                this.onRenderPlainCard(appl.acceptReason ? appl.acceptReason : "")
+            }}
+            componentRef={this.hoverCard}
+            onCardHide={this.onCardHide}
+          >
+            <>
+              {appl.status === ApplicationStatus.Accepted ? <>Elfogadva</> : <>Elutasítva</>}
+              <Icon className={classNames.target} iconName="StatusCircleQuestionMark"></Icon>
+            </>
+          </HoverCard>
+        ),
+        remove: (
+          <ConfirmWithdraw
+            myId={appl.id}
+            onWithdraw={this.onDelete}
+            name={topicToApplication.title}
+          ></ConfirmWithdraw>
+        )
+      });
     });
-    this._allItems.push({
-      key: "TDK Dolgozat",
-      title: "TDK Dolgozat",
-      teacher: "Pusztai Kinga",
-      semester: "2020/21-tavasz",
-      status: (
-        <HoverCard
-          cardDismissDelay={300}
-          type={HoverCardType.plain}
-          plainCardProps={{ onRenderPlainCard: () => this.onRenderPlainCard("") }} //itt kell megadnom az indoklást
-          componentRef={this.hoverCard}
-          onCardHide={this.onCardHide}
-        >
-          <>
-            Elutasítva
-            <Icon className={classNames.target} iconName="StatusCircleQuestionMark"></Icon>
-          </>
-        </HoverCard>
-      ),
-      remove: (
-        <ConfirmWithdraw
-          myId="TDK Dolgozat"
-          onWithdraw={this.onDelete}
-          name="TDK Dolgozat"
-        ></ConfirmWithdraw>
-      )
-    });
+    this._allItems = this._allItems.sort((a, b) => (a.title > b.title ? 1 : -1));
 
     this._columns = [
       {
@@ -145,7 +164,8 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
         fieldName: "title",
         minWidth: 100,
         maxWidth: 200,
-        isResizable: true
+        isResizable: true,
+        isMultiline: true
       },
       {
         key: "column2",
@@ -153,7 +173,8 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
         fieldName: "teacher",
         minWidth: 80,
         maxWidth: 100,
-        isResizable: true
+        isResizable: true,
+        isMultiline: true
       },
       {
         key: "column3",
@@ -212,33 +233,37 @@ class UserThemes extends React.Component<{}, IDetailsListBasicExampleState> {
     const { items } = this.state;
 
     return (
-      <Fabric>
+      <Fabric style={{ marginTop: "10px" }}>
         <TextField
           className={exampleChildClass}
           label="Cím szerinti szűrés:"
           onChange={this._onFilter}
           styles={textFieldStyles}
         />
-        <DetailsList
-          items={items}
-          columns={this._columns}
-          layoutMode={DetailsListLayoutMode.justified}
-          setKey="none"
-          selectionMode={SelectionMode.none}
-        />
-        {!this.state.items.length && !this.state.isFilter && (
-          <Stack>
-            <Text>Nem történt még egy témára sem jelentkezés!</Text>
-          </Stack>
-        )}
-        {!this.state.items.length && this.state.isFilter && (
-          <Stack>
-            <Text>Nincs a keresésnek megfelelő jelentkezés!</Text>
-          </Stack>
-        )}
+        <div style={{ height: "500px", position: "relative" }}>
+          <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
+            <DetailsList
+              items={items}
+              columns={this._columns}
+              layoutMode={DetailsListLayoutMode.justified}
+              setKey="none"
+              selectionMode={SelectionMode.none}
+            />
+            {!this.state.items.length && !this.state.isFilter && (
+              <Stack>
+                <Text>Nem történt még egy témára sem jelentkezés!</Text>
+              </Stack>
+            )}
+            {!this.state.items.length && this.state.isFilter && (
+              <Stack>
+                <Text>Nincs a keresésnek megfelelő jelentkezés!</Text>
+              </Stack>
+            )}
+          </ScrollablePane>
+        </div>
       </Fabric>
     );
   }
 }
 
-export default UserThemes;
+export default UserTopics;

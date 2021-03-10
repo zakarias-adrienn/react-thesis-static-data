@@ -17,7 +17,7 @@ let options: IDropdownOption[] = [
   { key: "Algoritmusok és adatszerkezetek 1", text: "Algoritmusok és adatszerkezetek 1" }
 ];
 
-options = options.sort((a, b) => (a.key > b.key ? 1 : -1));
+options = options.sort((a, b) => (a.text > b.text ? 1 : -1));
 
 let options2: IDropdownOption[] = [
   { key: "JAVA", text: "JAVA" },
@@ -28,7 +28,7 @@ let options2: IDropdownOption[] = [
   { key: "React", text: "React" }
 ];
 
-options2 = options2.sort((a, b) => (a.key > b.key ? 1 : -1));
+options2 = options2.sort((a, b) => (a.text > b.text ? 1 : -1));
 
 // const colors = [
 //   "#FFB900",

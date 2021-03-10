@@ -44,6 +44,11 @@ const navLinkGroups: INavLinkGroup[] = [
         url: "/addNewTechnology",
         key: "key5"
         //disabled: true - ha nincs jogosultsága? nem is kellene megjelenjen inkább
+      },
+      {
+        name: "Elérhetőségek",
+        url: "/contact",
+        key: "key7"
       }
     ]
   }
@@ -71,6 +76,8 @@ const MenuNavigate: React.FunctionComponent = () => {
       return "key2";
     } else if (pathToCheck === "/createThesis") {
       return "key1";
+    } else if (pathToCheck === "/contact") {
+      return "key7";
     } else {
       return "";
     }

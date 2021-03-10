@@ -1,32 +1,32 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 
 const Header: React.FunctionComponent = () => {
   return (
-    <>
-      <img
-        src={process.env.PUBLIC_URL + "/ik.jpg"}
-        alt="logo"
-        height="66px"
-        style={{ float: "left", paddingRight: "10px", marginTop: "10px" }}
-      />
-      <h2
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          fontFamily: "Garamond",
-          letterSpacing: "3px",
-          height: "80px",
-          backgroundColor: "#0078D7",
-          color: "white",
-          fontSize: "180%",
-          marginTop: "0px"
-        }}
-      >
-        Szakdolgozat és TDK témakereső modul
-      </h2>
-      {/* TODO: react-responsive for mobile header? */}
-    </>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "80px",
+        backgroundColor: "#0078D7",
+        marginTop: "0px",
+        marginBottom: "5px"
+      }}
+    >
+      <Link to={{ pathname: "/" }}>
+        <h2
+          style={{
+            fontFamily: "Parkavenue, cursive",
+            letterSpacing: "3px",
+            color: "white",
+            fontSize: "180%"
+          }}
+        >
+          Szakdolgozat és TDK témakereső modul
+        </h2>
+      </Link>
+    </div>
   );
 };
 

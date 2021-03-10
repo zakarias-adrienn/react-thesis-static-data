@@ -6,13 +6,15 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import SearchPage from "./SearchPage";
 import Header from "./Header";
 import MenuNavigate from "./MenuNavigate";
-import UserThemes from "./UserThemes";
+import UserTopics from "./UserTopics";
 import TopicForm from "./TopicForm";
 import TechnologyTable from "./TechnologyTable";
 import AppliedStudents from "./AppliedStudents";
 import TeachersTopic from "./TeacherTopics";
+import WelcomeMessage from "./WelcomeMessage";
+import Contact from "./Contact";
 
-function Root() {
+const Root: React.FunctionComponent = () => {
   return (
     <Router>
       <React.StrictMode>
@@ -20,17 +22,13 @@ function Root() {
         <div className="ms-Grid" dir="ltr">
           <div className="ms-Grid-row">
             <div className="ms-Grid-col ms-sm12 ms-smPull ms-md12 ms-lg12 ms-xl3">
+              <img src={process.env.PUBLIC_URL + "/logo.png"} alt="Logo" style={{ width: "60%" }} />
               <MenuNavigate></MenuNavigate>
             </div>
             <div className="ms-Grid-col ms-sm12 ms-smPull ms-md12 ms-lg12 ms-xl9">
               <Switch>
                 <Route exact path="/">
-                  <p style={{ fontSize: "18px" }}>
-                    <b>Üdvözlet a témakereső modulban!</b> <br />
-                    <br />
-                    Diákként témaböngészésre és témára való jelentkezésre van lehetőség, tanároknak
-                    pedig ez a modul a témameghirdetés, témaelfogadás/elutasítás funkciókat nyújtja.
-                  </p>
+                  <WelcomeMessage />
                 </Route>
                 <Route path="/searchPage">
                   <SearchPage />
@@ -42,7 +40,7 @@ function Root() {
                   <TeachersTopic />
                 </Route>
                 <Route path="/myTopics">
-                  <UserThemes />
+                  <UserTopics />
                 </Route>
                 <Route path="/addNewTechnology">
                   <TechnologyTable></TechnologyTable>
@@ -53,6 +51,9 @@ function Root() {
                 <Route path="/appliedStudents">
                   <AppliedStudents></AppliedStudents>
                 </Route>
+                <Route path="/contact">
+                  <Contact></Contact>
+                </Route>
               </Switch>
             </div>
           </div>
@@ -60,6 +61,6 @@ function Root() {
       </React.StrictMode>
     </Router>
   );
-}
+};
 
 export default Root;

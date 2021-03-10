@@ -2,19 +2,33 @@ import * as React from "react";
 import { IStackTokens, Stack } from "office-ui-fabric-react/lib/Stack";
 import { Dropdown, IDropdownStyles, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 
-const dropdownStyles: Partial<IDropdownStyles> = {
-  dropdown: { width: 300, marginBottom: "10px" }
-};
-
-let options: IDropdownOption[] = [
-  { key: "Webprogramozás", text: "Webprogramozás" },
-  { key: "Mesterséges intelligencia", text: "Mesterséges intelligencia" },
-  { key: "Telekommunikációs hálózatok", text: "Telekommunikációs hálózatok" },
-  { key: "Konkurens programozás", text: "Konkurens programozás" },
-  { key: "Algoritmusok és adatszerkezetek 1", text: "Algoritmusok és adatszerkezetek 1" }
+// BEÉGETETT TANTÁRGYAK
+const subjects = [
+  "Mesterséges intelligencia",
+  "Webprogramozás",
+  "Webfejlesztés",
+  "Telekommunikációs hálózatok",
+  "Konkurens programozás",
+  "Algoritmusok és adatszerkezetek 1",
+  "Algoritmusok és adatszerkezetek 2",
+  "Programozás",
+  "Numerikus módszerek",
+  "A számításelmélet alapjai 1",
+  "A számításelmélet alapjai 2",
+  "Valószínűségszámítás és statisztika",
+  "Diszkrét modellek alkalmazásai",
+  "Szoftvertechnológia"
 ];
 
-options = options.sort((a, b) => (a.key > b.key ? 1 : -1));
+const dropdownStyles: Partial<IDropdownStyles> = {
+  dropdown: { width: 300, marginBottom: "10px" },
+  dropdownItemsWrapper: { overflowY: "auto", overflowX: "hidden", maxHeight: "300px" }
+};
+
+let options: IDropdownOption[] = [];
+subjects.forEach((name) => options.push({ key: name, text: name }));
+
+options = options.sort((a, b) => (a.text > b.text ? 1 : -1));
 
 const stackTokens: IStackTokens = { childrenGap: 20 };
 

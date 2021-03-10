@@ -14,6 +14,52 @@ import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
 
 // saját importok
 import { Application, ApplicationStatus } from "../model/application.model";
+import { Language, Semester, Topic, TopicType } from "../model/topics.model";
+import { convertSchoolSemesterToString } from "../helperFunctions";
+
+// MINTA ADAT AHOGYAN MAJD AZ ADATBÁZISBÓL JÖN... REMÉLHETŐLEG
+const myApplications: Application[] = [
+  {
+    id: "első",
+    studentId: "Szemenyei Mónika",
+    topicId: "Youniversity",
+    status: ApplicationStatus.Accepted,
+    acceptReason:
+      "Kérlek mihamarabb jelezz vissza, hogy mikor lenne megfelelő neked egy megbeszélés!"
+  },
+  {
+    id: "második",
+    studentId: "Zakariás Adrienn",
+    topicId: "Youniversity",
+    status: ApplicationStatus.Pending
+  }
+];
+const topics: Topic[] = [
+  {
+    id: "Youniversity",
+    type: [TopicType.BScThesis],
+    title: "Youniversity",
+    description: "Valami...",
+    teacherId: "Visnovitz Márton",
+    connectedSubjectIds: [],
+    connectedTechnologyIds: [],
+    numberOfPlaces: 2,
+    schoolSemester: {
+      year: 2020,
+      half: Semester.Spring
+    },
+    appliedStudentIds: ["a"],
+    language: [Language.Hungarian]
+  }
+];
+
+// elfogadott jelentkezések kiszűrése - TODO: használni majd
+const _getAcceptedApplications = (applications: Application[]): Application[] => {
+  return applications.filter((appli) => appli.status === ApplicationStatus.Accepted);
+};
+
+const acceptedApplications = _getAcceptedApplications(myApplications);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // MEZŐK STÍLUSAI
 const textFieldStyles: Partial<ITextFieldStyles> = {
@@ -45,21 +91,21 @@ class AcceptedStudents extends React.Component<{}, DetailsListStateType> {
     // BINDOLT METÓDUSOK
     this.updateState = this.updateState.bind(this);
 
-    // EZEK MAJD AZ ADATBÁZISBÓL JÖNNEK - Application[] -> ebből kell a topicId alaján a Topic -> studentId alapján kell a Student neve
-    // Application[]-ből még ki kell szűrni a status alapján azokat, amik ACCEPTED-ek
     this._allItems = [];
-    this._allItems.push({
-      key: "Régi projekt 1",
-      title: "Régi projekt 1",
-      name: "Zakariás Adrienn",
-      semester: "2020/21-tavasz"
+    acceptedApplications.forEach((appl) => {
+      const topicToApplication = topics.filter((topic) => topic.id === appl.topicId)[0];
+      // TODO: student lekérése id alapján
+      this._allItems.push({
+        key: appl.id,
+        title: topicToApplication.title,
+        name: appl.studentId,
+        semester:
+          topicToApplication.schoolSemester === null
+            ? "tetszőleges"
+            : convertSchoolSemesterToString(topicToApplication.schoolSemester)
+      });
     });
-    this._allItems.push({
-      key: "Régi projekt 2",
-      title: "Régi projekt 2",
-      name: "Zöld Elek",
-      semester: "2019/20-ősz"
-    });
+    this._allItems.sort((a, b) => (a.title > b.title ? 1 : -1));
 
     // OSZLOPOK TÍPUSA
     this._columns = [
@@ -69,7 +115,8 @@ class AcceptedStudents extends React.Component<{}, DetailsListStateType> {
         fieldName: "title",
         minWidth: 200,
         maxWidth: 200,
-        isResizable: true
+        isResizable: true,
+        isMultiline: true
       },
       {
         key: "column2",
@@ -77,7 +124,8 @@ class AcceptedStudents extends React.Component<{}, DetailsListStateType> {
         fieldName: "name",
         minWidth: 100,
         maxWidth: 200,
-        isResizable: true
+        isResizable: true,
+        isMultiline: true
       },
       {
         key: "column3",
@@ -98,7 +146,7 @@ class AcceptedStudents extends React.Component<{}, DetailsListStateType> {
 
   // FÜGGVÉNYEK
   // fixen maradó header görgetéskor
-  onRenderDetailsHeader(props: any, defaultRender: any) {
+  private onRenderDetailsHeader(props: any, defaultRender: any) {
     if (!props) {
       return null;
     }
@@ -112,18 +160,20 @@ class AcceptedStudents extends React.Component<{}, DetailsListStateType> {
   }
 
   // ha a felső táblázatban elfogad valakit, akkor átkerül a jelentkezése az alsó táblázatba
-  // TODO: csak a key alapján lekérni a jelentkezést db-ből, státuszt átállítani, acceptedItem-et megkreálni
-  public updateState(key: string, title: string, name: string) {
+  public updateState(key: string, title: string, name: string, semester: string) {
     let acceptedItem: DetailsListItemType = {
       key: key,
       title: title,
       name: name,
-      semester: "2020/21-ősz" // TODO: aktuális félévet kellene
+      semester: semester
     };
+    let newState = [...this.state.items, acceptedItem];
+    newState = newState.sort((a, b) => (a.title > b.title ? 1 : -1));
     this.setState({
-      items: [...this.state.items, acceptedItem]
+      items: newState
     });
     this._allItems.push(acceptedItem);
+    this._allItems = this._allItems.sort((a, b) => (a.title > b.title ? 1 : -1));
   }
 
   // szűrések - nem csak kezdeti egyezés, hanem belső egyezéseket is vizsgál
@@ -151,11 +201,6 @@ class AcceptedStudents extends React.Component<{}, DetailsListStateType> {
       isFilter: text ? true : false
     });
   };
-
-  // elfogadott jelentkezések kiszűrése - TODO: használni majd
-  private _getAcceptedApplications(applications: Application[]): Application[] {
-    return applications.filter((appli) => appli.status === ApplicationStatus.Accepted);
-  }
 
   public render(): JSX.Element {
     const { items } = this.state;

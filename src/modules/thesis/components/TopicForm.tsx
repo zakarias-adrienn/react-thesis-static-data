@@ -2,7 +2,7 @@ import * as React from "react";
 import { TextField, MaskedTextField } from "office-ui-fabric-react/lib/TextField";
 import { Stack, IStackStyles } from "office-ui-fabric-react/lib/Stack";
 import { Checkbox } from "office-ui-fabric-react/lib/Checkbox";
-import { Dropdown, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { Dropdown, IDropdownOption, IDropdownStyles } from "office-ui-fabric-react/lib/Dropdown";
 import { PrimaryButton, IIconProps, DefaultButton } from "office-ui-fabric-react";
 import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
 import { Text } from "office-ui-fabric-react/lib/Text";
@@ -21,7 +21,10 @@ const subjects = [
   "Telekommunikációs hálózatok",
   "Konkurens programozás",
   "Algoritmusok és adatszerkezetek 1",
-  "Algoritmusok és adatszerkezetek 2"
+  "Algoritmusok és adatszerkezetek 2",
+  "A számításelmélet alapjai 1",
+  "A számításelmélet alapjai 2",
+  "Formális nyelvek és automaták"
 ];
 // majd - getTechnologies().map(subj => subj.name)
 const technologies = ["JAVA", "C++", "HTML5", "CSS", "JavaScript", "TypeScript", "React"];
@@ -30,24 +33,31 @@ const technologies = ["JAVA", "C++", "HTML5", "CSS", "JavaScript", "TypeScript",
 const stackTokens = { childrenGap: 5 };
 const stackStyles: Partial<IStackStyles> = { root: { width: "100%" } };
 const stackStyles2: Partial<IStackStyles> = {
-  root: { width: "70%", margin: "auto" }
+  root: { width: "70%", margin: "auto", marginTop: "10px" }
 };
 const horizontalChoiceGroupStyles = {
   flexContainer: { display: "flex", flexDirection: "row" },
   marginTop: "0px",
   paddingTop: "0px"
 };
+const dropdownStyles: Partial<IDropdownStyles> = {
+  dropdownItemsWrapper: { overflowY: "auto", overflowX: "hidden", maxHeight: "300px" }
+};
+const dropdownStyles2: Partial<IDropdownStyles> = {
+  dropdown: { marginBottom: "10px" },
+  dropdownItemsWrapper: { overflowY: "auto", overflowX: "hidden", maxHeight: "300px" }
+};
 
 // DROPDOWN ELEMEK
 let subjectOptions: IDropdownOption[] = [];
 subjects.forEach((name) => subjectOptions.push({ key: name, text: name }));
 
-subjectOptions = subjectOptions.sort((a, b) => (a.key > b.key ? 1 : -1));
+subjectOptions = subjectOptions.sort((a, b) => (a.text > b.text ? 1 : -1));
 
 let technologyOptions: IDropdownOption[] = [];
 technologies.forEach((name) => technologyOptions.push({ key: name, text: name }));
 
-technologyOptions = technologyOptions.sort((a, b) => (a.key > b.key ? 1 : -1));
+technologyOptions = technologyOptions.sort((a, b) => (a.text > b.text ? 1 : -1));
 
 // CHOICEGROUP ELEMEK
 const semesters: IChoiceGroupOption[] = [
@@ -717,6 +727,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                 placeholder="Válassza ki a kapcsolódó tantárgyakat..."
                 label="Tantárgyak"
                 multiSelect
+                styles={dropdownStyles}
                 options={subjectOptions}
                 selectedKeys={this.state.values.connectedSubjects}
                 onChange={(ev, option) => {
@@ -736,7 +747,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                 label="Technológiák"
                 multiSelect
                 options={technologyOptions}
-                style={{ marginBottom: "10px" }}
+                styles={dropdownStyles2}
                 selectedKeys={this.state.values.connectedTechnologies}
                 onChange={(ev, option) => {
                   this.setState({

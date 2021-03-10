@@ -27,7 +27,11 @@ const topics: Topic[] = [
     title: "Youniversity",
     description: "Oktatásszervezési csomag fejlesztése egyetemünk számára",
     teacherId: "Visnovitz Márton",
-    connectedSubjectIds: ["Webprogramozás", "React"],
+    connectedSubjectIds: [
+      "Webprogramozás",
+      "Kliensoldali webprogramozás",
+      "Szerveroldali webprogramozás"
+    ],
     connectedTechnologyIds: ["Javascript", "React"],
     numberOfPlaces: 3,
     schoolSemester: {
@@ -43,7 +47,11 @@ const topics: Topic[] = [
     title: "Téma1",
     description: "Oktatásszervezési csomag fejlesztése egyetemünk számára",
     teacherId: "Vadász Péter",
-    connectedSubjectIds: ["Konkurens programozás"],
+    connectedSubjectIds: [
+      "Konkurens programozás",
+      "Számítógépes rendszerek",
+      "Telekommunikációs hálózatok"
+    ],
     connectedTechnologyIds: ["JAVA"],
     numberOfPlaces: 1,
     schoolSemester: null,
@@ -56,7 +64,7 @@ const topics: Topic[] = [
     title: "Téma2",
     description: "Oktatásszervezési csomag fejlesztése egyetemünk számára",
     teacherId: "Dr. Csuhaj Varjú Erzsébet",
-    connectedSubjectIds: [],
+    connectedSubjectIds: ["Algoritmusok és adatszerkezetek 1"],
     connectedTechnologyIds: ["C"],
     numberOfPlaces: 2,
     schoolSemester: null,
@@ -75,6 +83,32 @@ const topics: Topic[] = [
     schoolSemester: null,
     appliedStudentIds: [],
     language: [Language.Hungarian, Language.English]
+  },
+  {
+    id: "e",
+    type: [TopicType.MScTDK],
+    title: "Téma4",
+    description: "Bonyolult",
+    teacherId: "Brányi László",
+    connectedSubjectIds: ["Algoritmusok és adatszekrezetek 2"],
+    connectedTechnologyIds: ["C++"],
+    numberOfPlaces: 1,
+    schoolSemester: null,
+    appliedStudentIds: [],
+    language: [Language.Hungarian]
+  },
+  {
+    id: "f",
+    type: [TopicType.BScThesis],
+    title: "Téma5",
+    description: "Bonyolult",
+    teacherId: "Brányi László",
+    connectedSubjectIds: ["Adatbázisok 1", "Adatbázisok 2"],
+    connectedTechnologyIds: ["Oracle", "MySQL", "SQLite"],
+    numberOfPlaces: 1,
+    schoolSemester: null,
+    appliedStudentIds: [],
+    language: [Language.Hungarian]
   }
 ];
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -413,7 +447,7 @@ class SearchPage extends React.Component<{}, State> {
                   </div>
                   <div className="ms-Grid-col ms-sm6">
                     <Link
-                      style={{ marginBottom: "40px" }}
+                      style={{ marginBottom: "40px", marginTop: "10px" }}
                       onClick={() =>
                         this.setState({
                           ...this.state,

@@ -18,6 +18,68 @@ import { Application, ApplicationStatus } from "../model/application.model";
 import ConfirmDeny from "./ConfirmDeny";
 import ConfirmAccept from "./ConfirmAccept";
 import AcceptedStudents from "./AcceptedStudents";
+import { Language, Semester, Topic, TopicType } from "../model/topics.model";
+import { convertSchoolSemesterToString } from "../helperFunctions";
+
+// MINTA ADAT AHOGYAN MAJD AZ ADATBÁZISBÓL JÖN... REMÉLHETŐLEG
+const myApplications: Application[] = [
+  {
+    id: "első",
+    studentId: "Szemenyei Mónika",
+    topicId: "Youniversity",
+    status: ApplicationStatus.Accepted,
+    acceptReason:
+      "Kérlek mihamarabb jelezz vissza, hogy mikor lenne megfelelő neked egy megbeszélés!"
+  },
+  {
+    id: "második",
+    studentId: "Zakariás Adrienn",
+    topicId: "Application1",
+    status: ApplicationStatus.Pending
+  }
+];
+const topics: Topic[] = [
+  {
+    id: "Youniversity",
+    type: [TopicType.BScThesis],
+    title: "Youniversity",
+    description: "Valami...",
+    teacherId: "Visnovitz Márton",
+    connectedSubjectIds: [],
+    connectedTechnologyIds: [],
+    numberOfPlaces: 2,
+    schoolSemester: {
+      year: 2020,
+      half: Semester.Spring
+    },
+    appliedStudentIds: ["a"],
+    language: [Language.Hungarian]
+  },
+  {
+    id: "Application1",
+    type: [TopicType.BScThesis],
+    title: "Application1",
+    description: "Valami...",
+    teacherId: "Visnovitz Márton",
+    connectedSubjectIds: [],
+    connectedTechnologyIds: [],
+    numberOfPlaces: 2,
+    schoolSemester: {
+      year: 2022,
+      half: Semester.Spring
+    },
+    appliedStudentIds: ["a"],
+    language: [Language.Hungarian]
+  }
+];
+
+// Függőben levő jelentkezések kiszűrése
+const _getPendingApplications = (applications: Application[]): Application[] => {
+  return applications.filter((appli) => appli.status === ApplicationStatus.Pending);
+};
+
+const pendingApplications = _getPendingApplications(myApplications);
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // STÍLUSOK
 const textFieldStyle = mergeStyles({
@@ -56,40 +118,28 @@ class AppliedStudents extends React.Component<{}, DetailsListState> {
 
     // Application[] jön majd le a db-ből -> ki kell szűrni azokat amik nincsenek elfogadva
     this._allItems = [];
-    this._allItems.push({
-      key: "Garbage Collector működése Javában",
-      title: "Garbage Collector működése Javában",
-      name: "Zakariás Adrienn",
-      semester: "2020-21-ősz",
-      accept: (
-        <ConfirmAccept
-          name="Zakariás Adrienn"
-          myId="Garbage Collector működése Javában"
-          onAccept={this.handleAccept}
-        ></ConfirmAccept>
-      ),
-      deny: (
-        <ConfirmDeny
-          name="Zakariás Adrienn"
-          myId="Garbage Collector működése Javában"
-          onDeny={this.onDeny}
-        ></ConfirmDeny>
-      )
+    pendingApplications.forEach((appl) => {
+      const topicToApplication = topics.filter((topic) => topic.id === appl.topicId)[0];
+      // TODO: student lekérése id alapján
+      this._allItems.push({
+        key: appl.id,
+        title: topicToApplication.title,
+        name: appl.studentId,
+        semester:
+          topicToApplication.schoolSemester === null
+            ? "tetszőleges"
+            : convertSchoolSemesterToString(topicToApplication.schoolSemester),
+        accept: (
+          <ConfirmAccept
+            name={appl.studentId}
+            myId={appl.id}
+            onAccept={this.handleAccept}
+          ></ConfirmAccept>
+        ),
+        deny: <ConfirmDeny name={appl.studentId} myId={appl.id} onDeny={this.onDeny}></ConfirmDeny>
+      });
     });
-    this._allItems.push({
-      key: "Youniversity",
-      title: "Youniversity",
-      name: "Zöld Elek",
-      semester: "2020-21-ősz",
-      accept: (
-        <ConfirmAccept
-          name="Zöld Elek"
-          myId="Youniversity"
-          onAccept={this.handleAccept}
-        ></ConfirmAccept>
-      ),
-      deny: <ConfirmDeny name="Zöld Elek" myId="Youniversity" onDeny={this.onDeny}></ConfirmDeny>
-    });
+    this._allItems.sort((a, b) => (a.title > b.title ? 1 : -1));
 
     this._columns = [
       {
@@ -98,7 +148,8 @@ class AppliedStudents extends React.Component<{}, DetailsListState> {
         fieldName: "title",
         minWidth: 200,
         maxWidth: 200,
-        isResizable: true
+        isResizable: true,
+        isMultiline: true
       },
       {
         key: "column2",
@@ -106,7 +157,8 @@ class AppliedStudents extends React.Component<{}, DetailsListState> {
         fieldName: "name",
         minWidth: 100,
         maxWidth: 200,
-        isResizable: true
+        isResizable: true,
+        isMultiline: true
       },
       {
         key: "column3",
@@ -142,7 +194,7 @@ class AppliedStudents extends React.Component<{}, DetailsListState> {
 
   // FÜGGVÉNYEK
   // táblázat headerje görgetéskor fix legyen
-  onRenderDetailsHeader(props: any, defaultRender: any) {
+  private onRenderDetailsHeader(props: any, defaultRender: any) {
     if (!props) {
       return null;
     }
@@ -172,9 +224,10 @@ class AppliedStudents extends React.Component<{}, DetailsListState> {
     });
     let title: string = this._allItems.filter((item) => item.key === key)[0].title;
     let student: string = this._allItems.filter((item) => item.key === key)[0].name;
+    let semester: string = this._allItems.filter((item) => item.key === key)[0].semester;
     this._allItems = this._allItems.filter((item) => item.key !== key);
     // a key-t kell majd csak átadnom, az alapján lekéri majd a komponens
-    this.acceptedStudents.updateState(key, title, student);
+    this.acceptedStudents.updateState(key, title, student, semester);
   }
 
   private _onFilter = (
@@ -189,16 +242,11 @@ class AppliedStudents extends React.Component<{}, DetailsListState> {
     });
   };
 
-  // Függőben levő jelentkezések kiszűrése
-  private _getPendingApplications(applications: Application[]): Application[] {
-    return applications.filter((appli) => appli.status === ApplicationStatus.Pending);
-  }
-
   public render(): JSX.Element {
     const { items } = this.state;
 
     return (
-      <div className="ms-Grid" dir="ltr">
+      <div className="ms-Grid" dir="ltr" style={{ marginTop: "10px" }}>
         <h3>Függőben levő jelentkezések</h3>
         <Fabric>
           <TextField

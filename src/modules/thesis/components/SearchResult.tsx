@@ -89,7 +89,8 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
         fieldName: "title",
         minWidth: 20,
         maxWidth: 100,
-        isResizable: true
+        isResizable: true,
+        isMultiline: true
       },
       {
         key: "column2",
@@ -97,7 +98,8 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
         fieldName: "teacher",
         minWidth: 20,
         maxWidth: 100,
-        isResizable: true
+        isResizable: true,
+        isMultiline: true
       },
       {
         key: "column3",
@@ -105,7 +107,8 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
         fieldName: "type",
         minWidth: 20,
         maxWidth: 100,
-        isResizable: true
+        isResizable: true,
+        isMultiline: true
       },
       {
         key: "column4",
@@ -121,7 +124,8 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
         fieldName: "language",
         minWidth: 30,
         maxWidth: 90,
-        isResizable: true
+        isResizable: true,
+        isMultiline: true
       },
       {
         key: "column6",
@@ -129,15 +133,17 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
         fieldName: "technologies",
         minWidth: 30,
         maxWidth: 100,
-        isResizable: true
+        isResizable: true,
+        isMultiline: true
       },
       {
         key: "column7",
         name: "Tantárgyak",
         fieldName: "subjects",
         minWidth: 30,
-        maxWidth: 100,
-        isResizable: true
+        maxWidth: 110,
+        isResizable: true,
+        isMultiline: true
       },
       {
         key: "column8",

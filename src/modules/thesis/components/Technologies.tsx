@@ -3,19 +3,26 @@ import { IStackTokens, Stack } from "office-ui-fabric-react/lib/Stack";
 import { Dropdown, IDropdownStyles, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 
 const dropdownStyles: Partial<IDropdownStyles> = {
-  dropdown: { width: 300 }
+  dropdown: { width: 300 },
+  dropdownItemsWrapper: { overflowY: "auto", overflowX: "hidden", maxHeight: "300px" }
 };
 
-let options: IDropdownOption[] = [
-  { key: "JAVA", text: "JAVA" },
-  { key: "C++", text: "C++" },
-  { key: "HTML5", text: "HTML5" },
-  { key: "CSS", text: "CSS" },
-  { key: "Javascript", text: "Javascript" },
-  { key: "React", text: "React" }
+// beégetett adat, majd map(item => item.name)
+const technologies = [
+  "JAVA",
+  "C++",
+  "HTML5",
+  "CSS",
+  "JavaScript",
+  "TypeScript",
+  "React",
+  "Oracle",
+  "MySQL",
+  "SQLite"
 ];
 
-options = options.sort((a, b) => (a.key > b.key ? 1 : -1));
+let technologyOptions: IDropdownOption[] = [];
+technologies.forEach((name) => technologyOptions.push({ key: name, text: name }));
 
 const stackTokens: IStackTokens = { childrenGap: 20 };
 
@@ -43,7 +50,7 @@ const Technologies: React.FunctionComponent<Prop> = (props) => {
         placeholder="Válassz technológiákat..."
         label="Témához kapcsolódó technológiák"
         multiSelect
-        options={options}
+        options={technologyOptions}
         styles={dropdownStyles}
         selectedKeys={selectedKeys}
         onChange={onChange}

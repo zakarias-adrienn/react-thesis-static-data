@@ -61,7 +61,7 @@ let testTags: ITag[] = [
   "Dr. Horváth Győző"
 ].map((item) => ({ key: item, name: item }));
 
-testTags = testTags.sort((a, b) => (a.key > b.key ? 1 : -1));
+testTags = testTags.sort((a, b) => (a.name > b.name ? 1 : -1));
 
 const listContainsTagList = (tag: ITag, tagList?: ITag[]) => {
   if (!tagList || !tagList.length || tagList.length === 0) {

@@ -79,7 +79,8 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
         fieldName: "title",
         minWidth: 100,
         maxWidth: 200,
-        isResizable: true
+        isResizable: true,
+        isMultiline: true
       },
       {
         key: "column3",
@@ -95,7 +96,8 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
         fieldName: "technologies",
         minWidth: 30,
         maxWidth: 100,
-        isResizable: true
+        isResizable: true,
+        isMultiline: true
       },
       {
         key: "column5",
@@ -103,7 +105,8 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
         fieldName: "subjects",
         minWidth: 30,
         maxWidth: 200,
-        isResizable: true
+        isResizable: true,
+        isMultiline: true
       },
       {
         key: "column6",

@@ -10,7 +10,12 @@ const exampleTopics: Topic[] = [
     title: "Példa1",
     description: "Leírás1",
     teacherId: "1",
-    connectedSubjectIds: ["Mesterséges intelligencia"],
+    connectedSubjectIds: [
+      "Mesterséges intelligencia",
+      "Formális nyelvek és automaták",
+      "Webfejlesztés",
+      "Webprogramozás"
+    ],
     connectedTechnologyIds: ["JavaScript", "React"],
     numberOfPlaces: 3,
     schoolSemester: null, // tetszőleges
@@ -90,7 +95,7 @@ const TeachersTopic: React.FunctionComponent = () => {
   };
 
   return (
-    <div className="ms-Grid" dir="ltr">
+    <div className="ms-Grid" dir="ltr" style={{ marginTop: "10px" }}>
       <h3>Érvényben levő témák</h3>
       <ValidTeacherTopics topics={getValidTopics()}></ValidTeacherTopics>
       <br />
