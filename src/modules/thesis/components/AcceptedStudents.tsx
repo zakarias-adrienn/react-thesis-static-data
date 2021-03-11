@@ -77,6 +77,7 @@ export interface DetailsListItemType {
 // TÁBLÁZAT ÁLLAPOTÁNAK TÍPUSA
 export interface DetailsListStateType {
   items: DetailsListItemType[];
+  columns: IColumn[];
   isFilter: boolean;
 }
 
@@ -116,7 +117,8 @@ class AcceptedStudents extends React.Component<{}, DetailsListStateType> {
         minWidth: 200,
         maxWidth: 200,
         isResizable: true,
-        isMultiline: true
+        isMultiline: true,
+        onColumnClick: this._onColumnClick
       },
       {
         key: "column2",
@@ -125,7 +127,8 @@ class AcceptedStudents extends React.Component<{}, DetailsListStateType> {
         minWidth: 100,
         maxWidth: 200,
         isResizable: true,
-        isMultiline: true
+        isMultiline: true,
+        onColumnClick: this._onColumnClick
       },
       {
         key: "column3",
@@ -133,13 +136,15 @@ class AcceptedStudents extends React.Component<{}, DetailsListStateType> {
         fieldName: "semester",
         minWidth: 50,
         maxWidth: 100,
-        isResizable: true
+        isResizable: true,
+        onColumnClick: this._onColumnClick
       }
     ];
 
     // ÁLLAPOT BEÁLLÍTÁSA
     this.state = {
       items: this._allItems,
+      columns: this._columns,
       isFilter: false
     };
   }
@@ -202,6 +207,26 @@ class AcceptedStudents extends React.Component<{}, DetailsListStateType> {
     });
   };
 
+  private _onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
+    const { columns, items } = this.state;
+    const newColumns: IColumn[] = columns.slice();
+    const currColumn: IColumn = newColumns.filter((currCol) => column.key === currCol.key)[0];
+    newColumns.forEach((newCol: IColumn) => {
+      if (newCol === currColumn) {
+        currColumn.isSortedDescending = !currColumn.isSortedDescending;
+        currColumn.isSorted = true;
+      } else {
+        newCol.isSorted = false;
+        newCol.isSortedDescending = true;
+      }
+    });
+    const newItems = _copyAndSort(items, currColumn.fieldName!, currColumn.isSortedDescending);
+    this.setState({
+      columns: newColumns,
+      items: newItems
+    });
+  };
+
   public render(): JSX.Element {
     const { items } = this.state;
 
@@ -251,6 +276,13 @@ class AcceptedStudents extends React.Component<{}, DetailsListStateType> {
       </>
     );
   }
+}
+
+function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
+  const key = columnKey as keyof T;
+  return items
+    .slice(0)
+    .sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
 }
 
 export default AcceptedStudents;

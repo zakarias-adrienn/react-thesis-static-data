@@ -3,6 +3,7 @@ import { TextField, ITextFieldStyles } from "office-ui-fabric-react/lib/TextFiel
 import {
   DetailsList,
   DetailsListLayoutMode,
+  Selection,
   IColumn
 } from "office-ui-fabric-react/lib/DetailsList";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
@@ -23,10 +24,12 @@ import {
   convertSchoolSemesterToString,
   convertTypeToString
 } from "../helperFunctions";
+import ConfirmDeleteAll from "./ConfirmDeleteAll";
 
-const exampleChildClass = mergeStyles({
+const textFieldStyle = mergeStyles({
   display: "block",
-  marginBottom: "10px"
+  marginBottom: "10px",
+  marginLeft: "50px"
 });
 
 const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "180px" } };
@@ -44,7 +47,9 @@ export interface DetailsListItem {
 
 export interface DetailsListState {
   items: DetailsListItem[];
+  columns: IColumn[];
   isFilter: boolean;
+  selectionDetails: string;
 }
 
 type Prop = {
@@ -52,13 +57,21 @@ type Prop = {
 };
 
 class ValidTeacherTopics extends React.Component<Prop, DetailsListState> {
+  private _selection: Selection;
   private _allItems: DetailsListItem[];
   private _columns: IColumn[];
 
   constructor(props: any) {
     super(props);
 
+    this._selection = new Selection({
+      onSelectionChanged: () =>
+        this.setState({ ...this.state, selectionDetails: this._getSelectionDetails() })
+    });
+
     this.onDelete = this.onDelete.bind(this);
+    this.onDeleteAll = this.onDeleteAll.bind(this);
+    this.getDeleteIds = this.getDeleteIds.bind(this);
 
     this._columns = [
       {
@@ -68,7 +81,8 @@ class ValidTeacherTopics extends React.Component<Prop, DetailsListState> {
         minWidth: 100,
         maxWidth: 200,
         isResizable: true,
-        isMultiline: true
+        isMultiline: true,
+        onColumnClick: this._onColumnClick
       },
       {
         key: "column3",
@@ -76,7 +90,8 @@ class ValidTeacherTopics extends React.Component<Prop, DetailsListState> {
         fieldName: "semester",
         minWidth: 10,
         maxWidth: 100,
-        isResizable: true
+        isResizable: true,
+        onColumnClick: this._onColumnClick
       },
       {
         key: "column4",
@@ -150,57 +165,15 @@ class ValidTeacherTopics extends React.Component<Prop, DetailsListState> {
       })
     );
 
-    // this._allItems.push({
-    //   key: "Garbage Collector működése Javában",
-    //   title: "Garbage Collector működése Javában",
-    //   semester: "2020/21-ősz",
-    //   technologies: "Java",
-    //   subjects: "Programozási nyelvek - Java",
-    //   places: 2,
-    //   view: (
-    //     <Link to={{ pathname: "/publishedThesis/editTopic/" + "1" }}>
-    //       {/* browserrouter kell storybooknál köréje */}
-    //       <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
-    //     </Link>
-    //   ),
-    //   delete: (
-    //     <ConfirmDelete
-    //       type="topic"
-    //       id="Garbage Collector működése Javában"
-    //       name="Garbage Collector működése Javában"
-    //       onDelete={this.onDelete}
-    //     ></ConfirmDelete>
-    //   )
-    // });
-    // this._allItems.push({
-    //   key: "Youniversity",
-    //   title: "Youniversity",
-    //   semester: "2020/21-tavasz",
-    //   technologies: "React, Javascript",
-    //   subjects: "Webprogramozás, Kliensoldali webprogramozás",
-    //   places: 4,
-    //   view: (
-    //     <Link to={{ pathname: "/publishedThesis/editTopic/" + "2" }}>
-    //       <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
-    //     </Link>
-    //   ),
-    //   delete: (
-    //     <ConfirmDelete
-    //       type="topic"
-    //       id="Youniversity"
-    //       name="Youniversity"
-    //       onDelete={this.onDelete}
-    //     ></ConfirmDelete>
-    //   )
-    // });
-
     this.state = {
       items: this._allItems,
-      isFilter: false
+      columns: this._columns,
+      isFilter: false,
+      selectionDetails: this._getSelectionDetails()
     };
   }
 
-  onRenderDetailsHeader(props: any, defaultRender: any) {
+  private onRenderDetailsHeader(props: any, defaultRender: any) {
     if (!props) {
       return null;
     }
@@ -223,6 +196,30 @@ class ValidTeacherTopics extends React.Component<Prop, DetailsListState> {
     this._allItems = this._allItems.filter((item) => item.key !== id);
   }
 
+  // SEGÉDFGV
+  private getDeleteIds(): string[] {
+    //console.log(this._selection.getSelectedIndices());
+    //ebből megkapom az indexeket a táblázatbeli helyüket, az alapján majd a key-t s tudom törölni
+    let tableIndexes = this._selection.getSelectedIndices();
+    let ids: string[] = [];
+    for (let e in tableIndexes) {
+      ids.push(this.state.items[e].key);
+    }
+    return ids;
+  }
+
+  // összes kijelölt törlése
+  private onDeleteAll(toggleHideDialog: Function) {
+    // akkor is törölheti ha van rá jelentkezés?
+    // adatbből is törölni kell!
+    toggleHideDialog();
+    this.setState({
+      ...this.state,
+      items: this.state.items.filter((item) => !this.getDeleteIds().includes(item.key))
+    });
+    this._allItems = this._allItems.filter((item) => !this.getDeleteIds().includes(item.key));
+  }
+
   private _onFilter = (
     ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     text: string | undefined
@@ -235,30 +232,74 @@ class ValidTeacherTopics extends React.Component<Prop, DetailsListState> {
     });
   };
 
+  private _getSelectionDetails(): string {
+    const selectionCount = this._selection.getSelectedCount();
+
+    switch (selectionCount) {
+      case 0:
+        return "";
+      default:
+        return `${selectionCount} elem kiválasztva`;
+    }
+  }
+
+  private _onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
+    const { columns, items } = this.state;
+    const newColumns: IColumn[] = columns.slice();
+    const currColumn: IColumn = newColumns.filter((currCol) => column.key === currCol.key)[0];
+    newColumns.forEach((newCol: IColumn) => {
+      if (newCol === currColumn) {
+        currColumn.isSortedDescending = !currColumn.isSortedDescending;
+        currColumn.isSorted = true;
+      } else {
+        newCol.isSorted = false;
+        newCol.isSortedDescending = true;
+      }
+    });
+    const newItems = _copyAndSort(items, currColumn.fieldName!, currColumn.isSortedDescending);
+    this.setState({
+      columns: newColumns,
+      items: newItems
+    });
+  };
+
   public render(): JSX.Element {
     const { items } = this.state;
 
     return (
       <Fabric>
-        <TextField
-          className={exampleChildClass}
-          label="Cím szerinti szűrés:"
-          onChange={this._onFilter}
-          styles={textFieldStyles}
-        />
+        <div className="ms-Grid" dir="ltr">
+          <div className="ms-Grid-row">
+            <div className="ms-Grid-col ms-sm9">
+              <TextField
+                className={textFieldStyle}
+                label="Cím szerinti szűrés:"
+                onChange={this._onFilter}
+                styles={textFieldStyles}
+              />
+            </div>
+            <div className="ms-Grid-col ms-sm3">
+              <ConfirmDeleteAll
+                count={this._selection.getSelectedCount()}
+                onDelete={this.onDeleteAll}
+              />
+            </div>
+          </div>
+        </div>
         <div style={{ height: "200px", position: "relative" }}>
           <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
             <DetailsList
               items={items}
               columns={this._columns}
               layoutMode={DetailsListLayoutMode.justified}
-              setKey="none"
-              selectionMode={SelectionMode.none}
+              setKey="set"
+              selection={this._selection}
+              selectionPreservedOnEmptyClick={true}
               onRenderDetailsHeader={this.onRenderDetailsHeader}
             />
             {!this.state.items.length && !this.state.isFilter && (
               <Stack horizontalAlign="center">
-                <Text>Nincsenek még meghirdetett témák!</Text>
+                <Text>Nincsenek jelenleg meghirdetett témák!</Text>
               </Stack>
             )}
             {!this.state.items.length && this.state.isFilter && (
@@ -271,6 +312,13 @@ class ValidTeacherTopics extends React.Component<Prop, DetailsListState> {
       </Fabric>
     );
   }
+}
+
+function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
+  const key = columnKey as keyof T;
+  return items
+    .slice(0)
+    .sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
 }
 
 export default ValidTeacherTopics;

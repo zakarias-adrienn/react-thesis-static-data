@@ -58,7 +58,8 @@ let testTags: ITag[] = [
   "Dr. Abonyi-Tóth Andor",
   "Dr. Zsakó László",
   "Dr. Bernát Péter",
-  "Dr. Horváth Győző"
+  "Dr. Horváth Győző",
+  "Visnovitz Márton"
 ].map((item) => ({ key: item, name: item }));
 
 testTags = testTags.sort((a, b) => (a.name > b.name ? 1 : -1));
@@ -88,28 +89,32 @@ const returnMostRecentlyUsed = (): ITag[] | Promise<ITag[]> => {
 const getTextFromItem = (item: ITag) => item.name;
 
 type Prop = {
-  selectedTeacher: string;
+  selectedTeacher: string[];
   setSelectedTeacher: Function;
 };
 
 const TeacherByName: React.FunctionComponent<Prop> = (props) => {
+  const getSelectedTeachers = (): ITag[] => {
+    let result: ITag[] = [];
+    props.selectedTeacher.forEach((sT) => result.push({ key: sT, name: sT }));
+    return result;
+  };
+
   const picker = React.useRef<IBasePicker<ITag>>(null);
   const [tagPicker, { toggle: toggleIsTagPickerVisible }] = useBoolean(false);
-  const [selectedItem, setSelectedItem] = React.useState<ITag[]>(
-    props.selectedTeacher ? [{ key: props.selectedTeacher, name: props.selectedTeacher }] : []
-  );
-
-  const onItemSelected = React.useCallback((item): ITag | null => {
-    if (picker.current && listContainsTagList(item, picker.current.items)) {
-      return null;
-    }
-    props.setSelectedTeacher(item.key);
-    return item;
-  }, []);
+  const [selectedItem, setSelectedItem] = React.useState<ITag[]>(getSelectedTeachers());
 
   const changeItem = (item: ITag[] | undefined) => {
-    item ? setSelectedItem(item) : setSelectedItem([]);
-    props.setSelectedTeacher(item?.[0]?.key || "");
+    console.log(item);
+    if (item) {
+      // a közösek
+      let result = selectedItem.filter((i) => item.includes(i));
+      let newOnes = item.filter((i) => !selectedItem.includes(i));
+      setSelectedItem([...result, ...newOnes]);
+      let rKeys = result.map((i) => i.key);
+      let nKeys = newOnes.map((i) => i.key);
+      props.setSelectedTeacher([...rKeys, ...nKeys]);
+    }
   };
 
   return (
@@ -119,10 +124,9 @@ const TeacherByName: React.FunctionComponent<Prop> = (props) => {
         componentRef={picker}
         onEmptyInputFocus={returnMostRecentlyUsed}
         onResolveSuggestions={filterSelectedTags}
-        onItemSelected={onItemSelected}
         getTextFromItem={getTextFromItem}
         pickerSuggestionsProps={pickerSuggestionsProps}
-        itemLimit={1}
+        itemLimit={3} //legyen ennyi?
         disabled={tagPicker}
         inputProps={inputProps}
         selectedItems={selectedItem}

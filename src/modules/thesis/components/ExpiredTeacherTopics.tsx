@@ -47,6 +47,7 @@ export interface DetailsListItemType {
 
 export interface DetailsListState {
   items: DetailsListItemType[];
+  columns: IColumn[];
   isFilter: boolean;
   selectionDetails: string;
 }
@@ -80,7 +81,8 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
         minWidth: 100,
         maxWidth: 200,
         isResizable: true,
-        isMultiline: true
+        isMultiline: true,
+        onColumnClick: this._onColumnClick
       },
       {
         key: "column3",
@@ -88,7 +90,8 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
         fieldName: "semester",
         minWidth: 10,
         maxWidth: 100,
-        isResizable: true
+        isResizable: true,
+        onColumnClick: this._onColumnClick
       },
       {
         key: "column4",
@@ -163,52 +166,9 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
       })
     );
 
-    // this._allItems.push({
-    //   key: "Garbage Collector működése Javában",
-    //   title: "Garbage Collector működése Javában",
-    //   semester: "2020/21-ősz",
-    //   technologies: "Java",
-    //   subjects: "Programozási nyelvek - Java",
-    //   places: 2,
-    //   view: (
-    //     <Link to={{ pathname: "/publishedThesis/editTopic/" + "1" }}>
-    //       {/* browserrouter kell storybooknál köréje */}
-    //       <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
-    //     </Link>
-    //   ),
-    //   delete: (
-    //     <ConfirmDelete
-    //       type="topic"
-    //       id="Garbage Collector működése Javában"
-    //       name="Garbage Collector működése Javában"
-    //       onDelete={this.onDelete}
-    //     ></ConfirmDelete>
-    //   )
-    // });
-    // this._allItems.push({
-    //   key: "Youniversity",
-    //   title: "Youniversity",
-    //   semester: "2020/21-tavasz",
-    //   technologies: "React, Javascript",
-    //   subjects: "Webprogramozás, Kliensoldali webprogramozás",
-    //   places: 4,
-    //   view: (
-    //     <Link to={{ pathname: "/publishedThesis/editTopic/" + "2" }}>
-    //       <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
-    //     </Link>
-    //   ),
-    //   delete: (
-    //     <ConfirmDelete
-    //       type="topic"
-    //       id="Youniversity"
-    //       name="Youniversity"
-    //       onDelete={this.onDelete}
-    //     ></ConfirmDelete>
-    //   )
-    // });
-
     this.state = {
       items: this._allItems,
+      columns: this._columns,
       isFilter: false,
       selectionDetails: this._getSelectionDetails()
     };
@@ -289,6 +249,26 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
     }
   }
 
+  private _onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
+    const { columns, items } = this.state;
+    const newColumns: IColumn[] = columns.slice();
+    const currColumn: IColumn = newColumns.filter((currCol) => column.key === currCol.key)[0];
+    newColumns.forEach((newCol: IColumn) => {
+      if (newCol === currColumn) {
+        currColumn.isSortedDescending = !currColumn.isSortedDescending;
+        currColumn.isSorted = true;
+      } else {
+        newCol.isSorted = false;
+        newCol.isSortedDescending = true;
+      }
+    });
+    const newItems = _copyAndSort(items, currColumn.fieldName!, currColumn.isSortedDescending);
+    this.setState({
+      columns: newColumns,
+      items: newItems
+    });
+  };
+
   public render(): JSX.Element {
     const { items, selectionDetails } = this.state;
 
@@ -341,6 +321,13 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
       </Fabric>
     );
   }
+}
+
+function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
+  const key = columnKey as keyof T;
+  return items
+    .slice(0)
+    .sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
 }
 
 export default ExpiredTeacherTopics;

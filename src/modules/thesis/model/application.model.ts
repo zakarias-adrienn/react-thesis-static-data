@@ -3,7 +3,8 @@ const Joi = require("joi");
 export enum ApplicationStatus {
   Accepted,
   Denied,
-  Pending
+  Pending,
+  Deleted // ha a téma törlésre került?
 }
 
 export type Application = {

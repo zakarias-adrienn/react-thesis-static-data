@@ -36,6 +36,7 @@ export interface IDetailsListBasicExampleItem {
 
 export interface IDetailsListBasicExampleState {
   items: IDetailsListBasicExampleItem[];
+  columns: IColumn[];
   seeTheme: boolean;
   seeTopicId: string;
 }
@@ -90,7 +91,8 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
         minWidth: 20,
         maxWidth: 100,
         isResizable: true,
-        isMultiline: true
+        isMultiline: true,
+        onColumnClick: this._onColumnClick
       },
       {
         key: "column2",
@@ -99,7 +101,8 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
         minWidth: 20,
         maxWidth: 100,
         isResizable: true,
-        isMultiline: true
+        isMultiline: true,
+        onColumnClick: this._onColumnClick
       },
       {
         key: "column3",
@@ -116,7 +119,8 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
         fieldName: "semester",
         minWidth: 10,
         maxWidth: 100,
-        isResizable: true
+        isResizable: true,
+        onColumnClick: this._onColumnClick
       },
       {
         key: "column5",
@@ -165,6 +169,7 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
 
     this.state = {
       items: this._allItems,
+      columns: this._columns,
       seeTheme: false,
       seeTopicId: ""
     };
@@ -182,6 +187,26 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
       </Sticky>
     );
   }
+
+  private _onColumnClick = (ev: React.MouseEvent<HTMLElement>, column: IColumn): void => {
+    const { columns, items } = this.state;
+    const newColumns: IColumn[] = columns.slice();
+    const currColumn: IColumn = newColumns.filter((currCol) => column.key === currCol.key)[0];
+    newColumns.forEach((newCol: IColumn) => {
+      if (newCol === currColumn) {
+        currColumn.isSortedDescending = !currColumn.isSortedDescending;
+        currColumn.isSorted = true;
+      } else {
+        newCol.isSorted = false;
+        newCol.isSortedDescending = true;
+      }
+    });
+    const newItems = _copyAndSort(items, currColumn.fieldName!, currColumn.isSortedDescending);
+    this.setState({
+      columns: newColumns,
+      items: newItems
+    });
+  };
 
   private setSeeTheme(id: string) {
     this.props.hideHeaderSearch();
@@ -208,7 +233,11 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
       <Fabric>
         {!this.state.seeTheme ? (
           <>
-            <MessageBar>Jelentkezni a téma részleteinek megtekintése során lehet.</MessageBar>
+            {this.state.items.length ? (
+              <MessageBar>Jelentkezni a téma részleteinek megtekintése során lehet.</MessageBar>
+            ) : (
+              ""
+            )}
             <div style={{ height: "500px", position: "relative" }}>
               <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
                 <DetailsList
@@ -237,6 +266,13 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
       </Fabric>
     );
   }
+}
+
+function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boolean): T[] {
+  const key = columnKey as keyof T;
+  return items
+    .slice(0)
+    .sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
 }
 
 export default SearchResult;

@@ -29,7 +29,7 @@ type Prop = {
   setByDepartment: Function;
   selectedTeacher: string;
   onChangeTeacher: Function;
-  selectedTeacher2: string;
+  selectedTeacher2: string[];
   onChangeTeacher2: Function;
 };
 

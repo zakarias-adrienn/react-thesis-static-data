@@ -21,7 +21,7 @@ const dialogContentProps = (number: number) => {
     type: DialogType.normal,
     title: "Lejárt témák törlése",
     closeButtonAriaLabel: "Close",
-    subText: `Biztosan töröl ${number} darab témát? A hozzá(juk) tartozó jelentkezések is törlésre kerülnek!`
+    subText: `Biztosan töröl ${number} darab témát? A hozzá(juk) tartozó jelentkezések státusza TÖRÖLTRE állítódik!`
   };
 };
 

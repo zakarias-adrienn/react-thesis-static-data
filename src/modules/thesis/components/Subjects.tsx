@@ -1,6 +1,7 @@
 import * as React from "react";
 import { IStackTokens, Stack } from "office-ui-fabric-react/lib/Stack";
-import { Dropdown, IDropdownStyles, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { ComboBox } from "office-ui-fabric-react/lib/index";
+import { IComboBox, IComboBoxStyles, IComboBoxOption } from "@fluentui/react";
 
 // BEÉGETETT TANTÁRGYAK
 const subjects = [
@@ -20,12 +21,17 @@ const subjects = [
   "Szoftvertechnológia"
 ];
 
-const dropdownStyles: Partial<IDropdownStyles> = {
-  dropdown: { width: 300, marginBottom: "10px" },
-  dropdownItemsWrapper: { overflowY: "auto", overflowX: "hidden", maxHeight: "300px" }
+const comboboxStyles: Partial<IComboBoxStyles> = {
+  root: { width: 300 },
+  optionsContainerWrapper: {
+    overflowY: "auto",
+    overflowX: "hidden",
+    maxHeight: "300px",
+    width: 300
+  }
 };
 
-let options: IDropdownOption[] = [];
+let options: IComboBoxOption[] = [];
 subjects.forEach((name) => options.push({ key: name, text: name }));
 
 options = options.sort((a, b) => (a.text > b.text ? 1 : -1));
@@ -40,7 +46,12 @@ type Prop = {
 const Subjects: React.FunctionComponent<Prop> = (props) => {
   const [selectedKeys, setSelectedKeys] = React.useState<string[]>(props.subjects);
 
-  const onChange = (ev: React.FormEvent<HTMLDivElement>, option: IDropdownOption | undefined) => {
+  const onChange = (
+    event: React.FormEvent<IComboBox>,
+    option?: IComboBoxOption | undefined,
+    index?: number | undefined,
+    value?: string | undefined
+  ) => {
     if (selectedKeys.includes(option?.key.toString() || "")) {
       let keys = selectedKeys.filter((key) => key != option?.key.toString() || "");
       setSelectedKeys(keys);
@@ -52,13 +63,15 @@ const Subjects: React.FunctionComponent<Prop> = (props) => {
 
   return (
     <Stack tokens={stackTokens}>
-      <Dropdown
-        placeholder="Válassz tantárgyakat..."
+      <ComboBox
         label="Témához kapcsolódó tantárgyak"
+        placeholder="Válassz tantárgyakat..."
         multiSelect
+        allowFreeform
+        autoComplete="on"
         options={options}
-        styles={dropdownStyles}
-        selectedKeys={selectedKeys}
+        styles={comboboxStyles}
+        selectedKey={selectedKeys}
         onChange={onChange}
       />
     </Stack>

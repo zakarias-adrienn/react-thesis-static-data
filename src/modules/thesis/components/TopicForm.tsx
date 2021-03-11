@@ -11,6 +11,8 @@ import { Redirect } from "react-router";
 import { RouteComponentProps } from "react-router";
 import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { ComboBox } from "office-ui-fabric-react/lib/index";
+import { IComboBox, IComboBoxStyles, IComboBoxOption } from "@fluentui/react";
 
 // BEÉGETETT ADATOK JELENLEG
 // majd - getSubjects().map(subj => subj.name)
@@ -43,9 +45,14 @@ const horizontalChoiceGroupStyles = {
 const dropdownStyles: Partial<IDropdownStyles> = {
   dropdownItemsWrapper: { overflowY: "auto", overflowX: "hidden", maxHeight: "300px" }
 };
-const dropdownStyles2: Partial<IDropdownStyles> = {
-  dropdown: { marginBottom: "10px" },
-  dropdownItemsWrapper: { overflowY: "auto", overflowX: "hidden", maxHeight: "300px" }
+const comboboxStyles2: Partial<IComboBoxStyles> = {
+  root: { marginBottom: "10px" },
+  optionsContainerWrapper: {
+    overflowY: "auto",
+    overflowX: "hidden",
+    maxHeight: "300px",
+    width: 300
+  }
 };
 
 // DROPDOWN ELEMEK
@@ -723,13 +730,13 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                   })
                 }
               />
-              <Dropdown
+              <ComboBox
                 placeholder="Válassza ki a kapcsolódó tantárgyakat..."
                 label="Tantárgyak"
                 multiSelect
                 styles={dropdownStyles}
                 options={subjectOptions}
-                selectedKeys={this.state.values.connectedSubjects}
+                selectedKey={this.state.values.connectedSubjects}
                 onChange={(ev, option) => {
                   this.setState({
                     ...this.state,
@@ -742,13 +749,15 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                   });
                 }}
               />
-              <Dropdown
-                placeholder="Válassza ki a kapcsolódó technológiákat..."
+              <ComboBox
                 label="Technológiák"
+                placeholder="Válassza ki a kapcsolódó technológiákat..."
                 multiSelect
+                allowFreeform
+                autoComplete="on"
                 options={technologyOptions}
-                styles={dropdownStyles2}
-                selectedKeys={this.state.values.connectedTechnologies}
+                styles={comboboxStyles2}
+                selectedKey={this.state.values.connectedTechnologies}
                 onChange={(ev, option) => {
                   this.setState({
                     ...this.state,

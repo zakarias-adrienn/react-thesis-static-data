@@ -1,10 +1,16 @@
 import * as React from "react";
 import { IStackTokens, Stack } from "office-ui-fabric-react/lib/Stack";
-import { Dropdown, IDropdownStyles, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
+import { ComboBox } from "office-ui-fabric-react/lib/index";
+import { IComboBox, IComboBoxStyles, IComboBoxOption } from "@fluentui/react";
 
-const dropdownStyles: Partial<IDropdownStyles> = {
-  dropdown: { width: 300 },
-  dropdownItemsWrapper: { overflowY: "auto", overflowX: "hidden", maxHeight: "300px" }
+const comboboxStyles: Partial<IComboBoxStyles> = {
+  root: { width: 300 },
+  optionsContainerWrapper: {
+    overflowY: "auto",
+    overflowX: "hidden",
+    maxHeight: "300px",
+    width: 300
+  }
 };
 
 // beégetett adat, majd map(item => item.name)
@@ -21,7 +27,7 @@ const technologies = [
   "SQLite"
 ];
 
-let technologyOptions: IDropdownOption[] = [];
+let technologyOptions: IComboBoxOption[] = [];
 technologies.forEach((name) => technologyOptions.push({ key: name, text: name }));
 
 const stackTokens: IStackTokens = { childrenGap: 20 };
@@ -34,7 +40,12 @@ type Prop = {
 const Technologies: React.FunctionComponent<Prop> = (props) => {
   const [selectedKeys, setSelectedKeys] = React.useState<string[]>(props.technologies);
 
-  const onChange = (ev: React.FormEvent<HTMLDivElement>, option: IDropdownOption | undefined) => {
+  const onChange = (
+    event: React.FormEvent<IComboBox>,
+    option?: IComboBoxOption | undefined,
+    index?: number | undefined,
+    value?: string | undefined
+  ) => {
     if (selectedKeys.includes(option?.key.toString() || "")) {
       let keys = selectedKeys.filter((key) => key != option?.key.toString() || "");
       setSelectedKeys(keys);
@@ -46,13 +57,15 @@ const Technologies: React.FunctionComponent<Prop> = (props) => {
 
   return (
     <Stack tokens={stackTokens}>
-      <Dropdown
-        placeholder="Válassz technológiákat..."
+      <ComboBox
         label="Témához kapcsolódó technológiák"
+        placeholder="Válassz technológiákat..."
         multiSelect
+        allowFreeform
+        autoComplete="on"
         options={technologyOptions}
-        styles={dropdownStyles}
-        selectedKeys={selectedKeys}
+        styles={comboboxStyles}
+        selectedKey={selectedKeys}
         onChange={onChange}
       />
     </Stack>

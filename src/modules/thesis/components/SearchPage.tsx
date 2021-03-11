@@ -90,7 +90,7 @@ const topics: Topic[] = [
     title: "Téma4",
     description: "Bonyolult",
     teacherId: "Brányi László",
-    connectedSubjectIds: ["Algoritmusok és adatszekrezetek 2"],
+    connectedSubjectIds: ["Algoritmusok és adatszerkezetek 2"],
     connectedTechnologyIds: ["C++"],
     numberOfPlaces: 1,
     schoolSemester: null,
@@ -150,7 +150,7 @@ type State = {
   selectedSemester: string;
   selectedDepartment: string;
   selectedTeacher: string;
-  selectedTeacher2: string;
+  selectedTeacher2: string[];
   byDepartment: boolean;
   year: string;
   subjects: string[];
@@ -198,7 +198,7 @@ class SearchPage extends React.Component<{}, State> {
       selectedSemester: "autumn",
       selectedDepartment: "",
       selectedTeacher: "",
-      selectedTeacher2: "",
+      selectedTeacher2: [],
       byDepartment: true,
       year: "",
       subjects: [],
@@ -340,7 +340,7 @@ class SearchPage extends React.Component<{}, State> {
     });
   }
 
-  public onChangeTeacherByName(teacher: string) {
+  public onChangeTeacherByName(teacher: string[]) {
     this.setState({
       ...this.state,
       selectedTeacher2: teacher
@@ -407,8 +407,6 @@ class SearchPage extends React.Component<{}, State> {
   }
 
   render() {
-    console.log(this.state.selectedDepartment);
-    console.log(this.state.selectedTeacher);
     return (
       <>
         {!this.state.hideHeaderSearch && (
@@ -538,6 +536,7 @@ class SearchPage extends React.Component<{}, State> {
                           subjects={this.state.subjects}
                           onChange={this.onChangeSubjects}
                         ></Subjects>
+                        <br />
                         <Technologies
                           technologies={this.state.technologies}
                           onChange={this.onChangeTechnologies}
@@ -602,7 +601,7 @@ class SearchPage extends React.Component<{}, State> {
     let bscTDK = checkBoxes?.item(1).getAttribute("aria-checked");
     let mscThesis = checkBoxes?.item(2).getAttribute("aria-checked");
     let mscTDK = checkBoxes?.item(3).getAttribute("aria-checked");
-    let projekt = checkBoxes?.item(3).getAttribute("aria-checked");
+    let projekt = checkBoxes?.item(4).getAttribute("aria-checked");
     // ha az egyik benne van már elég - listák uniója kell
     let searchResult1: Topic[] = [];
     let searchResult2: Topic[] = [];
@@ -674,12 +673,13 @@ class SearchPage extends React.Component<{}, State> {
       );
       wasSearchByTeacher = true;
     }
-    if (!this.state.byDepartment && this.state.selectedTeacher2) {
-      searchResultByTeacher = searchResult.filter(
-        (topic) => topic.teacherId == this.state.selectedTeacher2
+    if (!this.state.byDepartment && this.state.selectedTeacher2.length > 0) {
+      searchResultByTeacher = searchResult.filter((topic) =>
+        this.state.selectedTeacher2.includes(topic.teacherId)
       );
       wasSearchByTeacher = true;
     }
+    console.log("VÁLASZTOTT TANÁROK", this.state.selectedTeacher2);
     console.log("TANÁROS KERESÉS UTÁNI TÉMÁK: ", searchResultByTeacher);
 
     // KERESÉS FÉLÉV ALAPJÁN
