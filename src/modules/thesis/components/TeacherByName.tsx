@@ -17,8 +17,8 @@ const rootClass = mergeStyles({
 const inputProps: IInputProps = {
   "onBlur": (ev: React.FocusEvent<HTMLInputElement>) => console.log("onBlur called"),
   "onFocus": (ev: React.FocusEvent<HTMLInputElement>) => console.log("onFocus called"),
-  "aria-label": "Tag picker",
-  "placeholder": "Kezdj el gépelni..."
+  "aria-label": "Tanár választó",
+  "placeholder": "Kezdj el gépelni legfeljebb 3 tanárnevet..."
 };
 
 const pickerSuggestionsProps: IBasePickerSuggestionsProps = {

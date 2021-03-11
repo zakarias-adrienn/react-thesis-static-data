@@ -402,7 +402,7 @@ class SearchPage extends React.Component<{}, State> {
 
   public onChangeSubjects(subject: string) {
     if (this.state.subjects.includes(subject)) {
-      let newSubjects = this.state.subjects.filter((s) => s != subject);
+      let newSubjects = this.state.subjects.filter((s) => s !== subject);
       this.setState({
         ...this.state,
         subjects: newSubjects
@@ -417,7 +417,7 @@ class SearchPage extends React.Component<{}, State> {
 
   public onChangeTechnologies(technology: string) {
     if (this.state.technologies.includes(technology)) {
-      let newTechnologies = this.state.technologies.filter((s) => s != technology);
+      let newTechnologies = this.state.technologies.filter((s) => s !== technology);
       this.setState({
         ...this.state,
         technologies: newTechnologies
@@ -735,7 +735,7 @@ class SearchPage extends React.Component<{}, State> {
     if (this.state.byDepartment && this.state.selectedTeacher) {
       console.log("A témavezetőtanár, akit keresünk: ", this.state.selectedTeacher);
       searchResultByTeacher = searchResult.filter(
-        (topic) => topic.teacherId == this.state.selectedTeacher
+        (topic) => topic.teacherId === this.state.selectedTeacher
       );
       wasSearchByTeacher = true;
     }

@@ -21,7 +21,7 @@ import { convertSchoolSemesterToString } from "../helperFunctions";
 const myApplications: Application[] = [
   {
     id: "első",
-    studentId: "Szemenyei Mónika",
+    studentId: "Szemenyei Mónika Réka",
     topicId: "Youniversity",
     status: ApplicationStatus.Accepted,
     acceptReason:
