@@ -77,7 +77,7 @@ const filterSelectedTags = (filterText: string): ITag[] => {
     ? testTags.filter(
         (tag) =>
           tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0 ||
-          tag.name.toLowerCase().substring(4).indexOf(filterText.toLowerCase()) == 0
+          tag.name.toLowerCase().substring(4).indexOf(filterText.toLowerCase()) === 0
       )
     : [];
 };

@@ -663,6 +663,8 @@ class SearchPage extends React.Component<{}, State> {
 
     // más ha alapból üres s más ha azért üres mert a filter miatt üres lett!
 
+    // TODO: TANSZÉK ALAPJÁN KERESNI
+
     /// KERESÉS TANÁR ALAPJÁN
     console.log("A témavezetőtanár, akit keresünk: ", this.state.selectedTeacher);
     let searchResultByTeacher: Topic[] = [];
@@ -730,30 +732,34 @@ class SearchPage extends React.Component<{}, State> {
 
     //////////////////////////////////////////////////////////////////////
     //////////////// EREDMÉNY: az összes metszete
-    if (searchResultByLanguage.length > 0 || wasTitleSearch) {
-      searchResult = searchResultByLanguage;
+    if (searchResultByTitle.length > 0 || wasTitleSearch) {
+      searchResult = searchResultByTitle;
+      console.log("VOLT CÍM");
     }
     if (searchResultByType.length > 0 || wasTypeSearch) {
       // amik közösek eddig
       searchResult = searchResult.filter((value) => searchResultByType.includes(value));
+      console.log("VOLT TÍPUS");
     }
     if (searchResultByLanguage.length > 0 || wasLanguageSearch) {
       searchResult = searchResult.filter((value) => searchResultByLanguage.includes(value));
+      console.log("VOLT NYELV");
     }
     if (searchResultByTeacher.length > 0 || wasSearchByTeacher) {
       searchResult = searchResult.filter((value) => searchResultByTeacher.includes(value));
+      console.log("VOLT TANÁR");
     }
     if (searchResultBySemester.length > 0 || wasSearchBySemester) {
       searchResult = searchResult.filter((value) => searchResultBySemester.includes(value));
-    }
-    if (searchResultBySemester.length > 0 || wasSearchBySemester) {
-      searchResult = searchResult.filter((value) => searchResultBySemester.includes(value));
+      console.log("VOLT FÉLÉV");
     }
     if (searchResultBySubjects.length > 0 || wasSearchBySubjects) {
       searchResult = searchResult.filter((value) => searchResultBySubjects.includes(value));
+      console.log("VOLT TANTÁRGY");
     }
     if (searchResultByTechnologies.length > 0 || wasSearchByTechnologies) {
       searchResult = searchResult.filter((value) => searchResultByTechnologies.includes(value));
+      console.log("VOLT TECHNOLÓGIA");
     }
 
     this.setState({
