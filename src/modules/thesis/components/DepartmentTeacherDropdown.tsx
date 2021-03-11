@@ -18,7 +18,8 @@ let items: IDropdownOption[] = [
     key: "Programozási nyelvek és fordítóprogramok",
     text: "Programozási nyelvek és fordítóprogramok"
   },
-  { key: "Média és oktatásinformatika", text: "Média és oktatásinformatika" }
+  { key: "Média és oktatásinformatika", text: "Média és oktatásinformatika" },
+  { key: "Valószínűségelméleti és Statisztika", text: "Valószínűségelméleti és Statisztika" }
 ];
 items = items.sort((a, b) => (a.text > b.text ? 1 : -1));
 
@@ -72,6 +73,10 @@ teachersToDepartments.set("Média és oktatásinformatika", [
   "Dr. Bernát Péter",
   "Dr. Horváth Győző",
   "Visnovitz Márton"
+]);
+teachersToDepartments.set("Valószínűségelméleti és Statisztika", [
+  "Arató Miklós",
+  "Zempléni András"
 ]);
 
 // STÍLUSOK
@@ -135,9 +140,8 @@ const DepartmentTeacherDropdown: React.FC<Prop> = (props) => {
         disabled={disableTeacherDropdown}
         selectedKey={selectedItem}
         onChange={onChangeTeacher}
-        required
       />
-      {!disableTeacherDropdown && !selectedItem && (
+      {/* {!disableTeacherDropdown && !selectedItem && (
         <span
           style={{
             fontSize: "12px",
@@ -149,7 +153,7 @@ const DepartmentTeacherDropdown: React.FC<Prop> = (props) => {
         >
           Kötelező tanárt választani a tanszékhez!
         </span>
-      )}
+      )} */}
     </>
   );
 };

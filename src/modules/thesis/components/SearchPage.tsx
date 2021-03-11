@@ -111,6 +111,59 @@ const topics: Topic[] = [
     language: [Language.Hungarian]
   }
 ];
+
+let teachersToDepartments = new Map<String, String[]>();
+teachersToDepartments.set("Algoritmusok és alkalmazásaik", [
+  "Pusztai Kinga",
+  "Ásványi Tibor",
+  "Nagy Sára",
+  "Veszprémi Anna",
+  "Dr. Csuhaj Varjú Erzsébet",
+  "Vadász Péter"
+]);
+teachersToDepartments.set("Numerikus analízis", [
+  "Chripkó Ágnes",
+  "Csörgõ István",
+  "Filipp Zoltán",
+  "Dr. Gergó Lajos",
+  "Dr. Szarvas Kristóf"
+]);
+teachersToDepartments.set("Információs rendszerek", [
+  "Dr. Kiss Attila",
+  "Dr. Hajas Csilla",
+  "Dr. Laki Sándor",
+  "Dr. Nikovits Tibor",
+  "Dr. Vincellér Zoltán",
+  "Brányi László",
+  "Dr. Vörös Péter"
+]);
+teachersToDepartments.set("Komputeralgebra", ["Burcsi Péter", "Dr. Járai Antal", "Tóth Viktória"]);
+teachersToDepartments.set("Programozáselmélet és szoftvertechnológia", [
+  "Dr. Gregorics Tibor",
+  "Borsi Zsolt",
+  "Cserép Máté",
+  "Dr. Szendrei Rudolf",
+  "Dr. Várkonyi Teréz Anna"
+]);
+teachersToDepartments.set("Programozási nyelvek és fordítóprogramok", [
+  "Dr. Horváth Zoltán",
+  "Kitlei Róbert",
+  "Dr. Kozsik Tamás",
+  "Dr. Pataki Norbert",
+  "Dr. Porkoláb Zoltán",
+  "Dr. Tejfel Máté"
+]);
+teachersToDepartments.set("Média és oktatásinformatika", [
+  "Dr. Abonyi-Tóth Andor",
+  "Dr. Zsakó László",
+  "Dr. Bernát Péter",
+  "Dr. Horváth Győző",
+  "Visnovitz Márton"
+]);
+teachersToDepartments.set("Valószínűségelméleti és Statisztika", [
+  "Arató Miklós",
+  "Zempléni András"
+]);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // STÍLUSOK
@@ -549,10 +602,10 @@ class SearchPage extends React.Component<{}, State> {
                 <MySubmitButton
                   onClick={this.onClickSearch}
                   disabled={
-                    !this.state.isGoodDate ||
-                    (this.state.byDepartment &&
-                      this.state.selectedTeacher === "" &&
-                      this.state.selectedDepartment !== "")
+                    !this.state.isGoodDate
+                    // || (this.state.byDepartment &&
+                    //   this.state.selectedTeacher === "" &&
+                    //   this.state.selectedDepartment !== "")
                   }
                 ></MySubmitButton>
               </div>
@@ -663,25 +716,36 @@ class SearchPage extends React.Component<{}, State> {
 
     // más ha alapból üres s más ha azért üres mert a filter miatt üres lett!
 
-    // TODO: TANSZÉK ALAPJÁN KERESNI
+    // TANSZÉK ALAPJÁN KERESNI
+    let wasSearchByDepartment = false;
+    let searchResultByDepartment: Topic[] = [];
+    if (this.state.selectedDepartment !== "" && this.state.selectedTeacher === "") {
+      console.log("CSAK TANSZÉK ALAPJÁN KERESÜNK: ", this.state.selectedDepartment);
+      const teacherIds = teachersToDepartments.get(this.state.selectedDepartment);
+      searchResultByDepartment = searchResult.filter((topic) =>
+        teacherIds?.includes(topic.teacherId)
+      );
+      wasSearchByDepartment = true;
+    }
+    console.log("TANSZÉKES KERESÉS UTÁNI TÉMÁK: ", searchResultByDepartment);
 
     /// KERESÉS TANÁR ALAPJÁN
-    console.log("A témavezetőtanár, akit keresünk: ", this.state.selectedTeacher);
     let searchResultByTeacher: Topic[] = [];
     let wasSearchByTeacher = false;
     if (this.state.byDepartment && this.state.selectedTeacher) {
+      console.log("A témavezetőtanár, akit keresünk: ", this.state.selectedTeacher);
       searchResultByTeacher = searchResult.filter(
         (topic) => topic.teacherId == this.state.selectedTeacher
       );
       wasSearchByTeacher = true;
     }
     if (!this.state.byDepartment && this.state.selectedTeacher2.length > 0) {
+      console.log("VÁLASZTOTT TANÁROK: ", this.state.selectedTeacher2);
       searchResultByTeacher = searchResult.filter((topic) =>
         this.state.selectedTeacher2.includes(topic.teacherId)
       );
       wasSearchByTeacher = true;
     }
-    console.log("VÁLASZTOTT TANÁROK", this.state.selectedTeacher2);
     console.log("TANÁROS KERESÉS UTÁNI TÉMÁK: ", searchResultByTeacher);
 
     // KERESÉS FÉLÉV ALAPJÁN
@@ -748,6 +812,10 @@ class SearchPage extends React.Component<{}, State> {
     if (searchResultByTeacher.length > 0 || wasSearchByTeacher) {
       searchResult = searchResult.filter((value) => searchResultByTeacher.includes(value));
       console.log("VOLT TANÁR");
+    }
+    if (searchResultByDepartment.length > 0 || wasSearchByDepartment) {
+      searchResult = searchResult.filter((value) => searchResultByDepartment.includes(value));
+      console.log("VOLT TANSZÉK");
     }
     if (searchResultBySemester.length > 0 || wasSearchBySemester) {
       searchResult = searchResult.filter((value) => searchResultBySemester.includes(value));
