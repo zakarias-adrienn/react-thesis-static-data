@@ -1,8 +1,8 @@
-const Joi = require("joi");
-
 import { Teacher, teacherSchema } from "../model/teachers.model";
 
-// dropdownokban kell megjelenítenem
+const Joi = require("joi");
+
+// teacherApi.getAll()
 export type getTeachersAction = {
   type: "get-teachers";
   payload: {};

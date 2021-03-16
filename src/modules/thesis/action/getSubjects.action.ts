@@ -1,8 +1,8 @@
-const Joi = require("joi");
-
 import { Subject, subjectSchema } from "../model/subjects.model";
 
-// dropdownokban kell megjelenítenem
+const Joi = require("joi");
+
+// subjectApi.getAll()
 export type getSubjectsAction = {
   type: "get-subjects";
   payload: {};

@@ -1,5 +1,6 @@
 const Joi = require("joi");
 
+// technologyApi.delete(id)
 export type deleteTechnologyAction = {
   type: "delete-technology";
   payload: {

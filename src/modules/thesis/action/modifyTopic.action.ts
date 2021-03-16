@@ -2,6 +2,7 @@ import { Topic, topicSchema } from "../model/topics.model";
 
 const Joi = require("joi");
 
+// topicApi.update(id, {})
 export type modifyTopicAction = {
   type: "modify-topic";
   payload: {

@@ -2,6 +2,7 @@ import { Application, applicationSchema } from "../model/application.model";
 
 const Joi = require("joi");
 
+// applicationApi.getAll().where(studentId = id)
 export type getStudentApplicationsAction = {
   type: "get-student-topics";
   payload: {

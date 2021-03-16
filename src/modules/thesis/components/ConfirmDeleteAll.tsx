@@ -16,12 +16,13 @@ const dragOptions = {
   keepInBounds: true
 };
 
+// csak akkor teheti meg, ha nincs függőben levő jelentkezés - applicationApi.getAll().where(topicId=id)
 const dialogContentProps = (number: number) => {
   return {
     type: DialogType.normal,
     title: "Lejárt témák törlése",
     closeButtonAriaLabel: "Close",
-    subText: `Biztosan töröl ${number} darab témát? A hozzá(juk) tartozó jelentkezések státusza TÖRÖLTRE állítódik!`
+    subText: `Biztosan töröl ${number} darab témát? A hozzá tartozó elfogadott/elutasított jelentkezések is törlődnek!`
   };
 };
 

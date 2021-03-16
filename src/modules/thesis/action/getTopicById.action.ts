@@ -2,6 +2,7 @@ import { Topic, topicSchema } from "../model/topics.model";
 
 const Joi = require("joi");
 
+// topicApi.get(id)
 export type getTopicByIdAction = {
   type: "get-topic";
   payload: {

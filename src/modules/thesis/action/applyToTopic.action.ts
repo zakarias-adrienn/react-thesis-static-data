@@ -1,10 +1,6 @@
 const Joi = require("joi");
 
-/**
- * @param studentId - The student who is logged in
- * @param topicId - The chosen topic
- * @return success
- */
+// applicationApi.add({studentId, topicId, status: pending})
 export type applyToTopicAction = {
   type: "apply-topic";
   payload: {

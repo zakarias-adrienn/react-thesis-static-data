@@ -1,5 +1,6 @@
 const Joi = require("joi");
 
+// topicApi.delete(id) - hozzátartozó jelentkezések is törlődjenek
 export type deleteTopicAction = {
   type: "delete-topic";
   payload: {

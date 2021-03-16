@@ -2,6 +2,7 @@ import { Topic, topicSchema } from "../model/topics.model";
 
 const Joi = require("joi");
 
+// topicApi.add({type, title, description, teacherId, connectedSubjectIds, connectedTechnologyIds, numberOfPlaces, schoolSemester, appliedStudentIds, language});
 export type createNewTopicAction = {
   type: "create-topic";
   payload: {

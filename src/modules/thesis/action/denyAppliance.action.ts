@@ -1,5 +1,6 @@
 const Joi = require("joi");
 
+// applicationApi.update(id, {status: ApplicationStatus.DENIED, denyReason: something})
 export type denyApplianceAction = {
   type: "deny-appliance";
   payload: {

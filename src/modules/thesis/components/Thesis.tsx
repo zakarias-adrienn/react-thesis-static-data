@@ -1,6 +1,6 @@
 import React from "react";
 import "semantic-ui-css/semantic.min.css";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, BrowserRouter } from "react-router-dom";
 
 // saját importok
 import SearchPage from "./SearchPage";
@@ -14,9 +14,9 @@ import TeachersTopic from "./TeacherTopics";
 import WelcomeMessage from "./WelcomeMessage";
 import Contact from "./Contact";
 
-const Root: React.FunctionComponent = () => {
+const Thesis: React.FunctionComponent = () => {
   return (
-    <Router>
+    <BrowserRouter>
       <React.StrictMode>
         <Header></Header>
         <div className="ms-Grid" dir="ltr">
@@ -59,8 +59,8 @@ const Root: React.FunctionComponent = () => {
           </div>
         </div>
       </React.StrictMode>
-    </Router>
+    </BrowserRouter>
   );
 };
 
-export default Root;
+export default Thesis;

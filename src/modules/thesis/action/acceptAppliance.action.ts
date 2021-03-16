@@ -1,5 +1,6 @@
 const Joi = require("joi");
 
+// api-san hogy néz majd ki? applicationApi.update(applicationId, {status: ApplicationStatus.Accepted, acceptReason: }) ?
 export type acceptApplianceAction = {
   type: "accept-appliance";
   payload: {

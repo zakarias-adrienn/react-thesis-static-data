@@ -2,6 +2,7 @@ import { Application, applicationSchema } from "../model/application.model";
 
 const Joi = require("joi");
 
+// applicationApi.get(id)
 export type getApplianceByIdAction = {
   type: "get-appliance";
   payload: {

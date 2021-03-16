@@ -1,7 +1,8 @@
-const Joi = require("joi");
-
 import { technologiesSchema, Technology } from "../model/technologies.model";
 
+const Joi = require("joi");
+
+// technologyApi.update(id, {name:"JAVAFX"})
 export type modifyTechnologyAction = {
   type: "modify-technology";
   payload: {

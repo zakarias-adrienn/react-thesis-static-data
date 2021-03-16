@@ -2,6 +2,7 @@ import { Subject, subjectSchema } from "../model/subjects.model";
 
 const Joi = require("joi");
 
+// subjectApi.get(id)
 export type getSubjectByIdAction = {
   type: "get-subject";
   payload: {

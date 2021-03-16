@@ -1,7 +1,8 @@
-const Joi = require("joi");
-
 import { technologiesSchema, Technology } from "../model/technologies.model";
 
+const Joi = require("joi");
+
+// apisan: technologyApi.add({name: something});
 export type addNewTechnologyAction = {
   type: "add-technology";
   payload: {

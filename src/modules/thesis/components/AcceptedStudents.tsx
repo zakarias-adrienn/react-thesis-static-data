@@ -18,6 +18,8 @@ import { Language, Semester, Topic, TopicType } from "../model/topics.model";
 import { convertSchoolSemesterToString } from "../helperFunctions";
 
 // MINTA ADAT AHOGYAN MAJD AZ ADATBÁZISBÓL JÖN... REMÉLHETŐLEG
+// const applicationApi = broker.getApi("application");
+// await applicationApi.update(id, {applicationStatus: 'ACCPETED') ? enumok?
 const myApplications: Application[] = [
   {
     id: "első",

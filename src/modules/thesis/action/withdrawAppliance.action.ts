@@ -1,5 +1,6 @@
 const Joi = require("joi");
 
+// applicationApi.delete(id)
 export type withdrawApplianceAction = {
   type: "withdraw-appliance";
   payload: {

@@ -1,6 +1,8 @@
 import * as React from "react";
-import { Nav, INavLink, INavStyles, INavLinkGroup } from "office-ui-fabric-react/lib/Nav";
+import { Nav, INavStyles, INavLinkGroup } from "office-ui-fabric-react/lib/Nav";
 import { useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+import { useEffect } from "react";
 
 const navStyles: Partial<INavStyles> = {
   root: {
@@ -57,6 +59,8 @@ const navLinkGroups: INavLinkGroup[] = [
 const MenuNavigate: React.FunctionComponent = () => {
   const location = useLocation();
   console.log(location.pathname);
+  const [selectedKey, setSelectedKey] = React.useState("");
+  let history = useHistory();
 
   let pathToCheck = location.pathname;
   if (location.pathname.indexOf("/", 2) != -1) {
@@ -83,8 +87,30 @@ const MenuNavigate: React.FunctionComponent = () => {
     }
   };
 
+  // oldal újratöltésekor ne vesszen el a kiválasztott kulcs
+  useEffect(() => {
+    setSelectedKey(getSelectedKey());
+  });
+
+  function linkClickHandler(
+    event: React.MouseEvent<HTMLElement, MouseEvent> | undefined,
+    item: any
+  ) {
+    if (event) {
+      event.preventDefault();
+      history.push(item.url);
+      setSelectedKey(item.key);
+    }
+  }
+
   return (
-    <Nav ariaLabel="Nav" styles={navStyles} groups={navLinkGroups} selectedKey={getSelectedKey()} />
+    <Nav
+      ariaLabel="Nav"
+      styles={navStyles}
+      groups={navLinkGroups}
+      selectedKey={selectedKey}
+      onLinkClick={linkClickHandler}
+    />
   );
 };
 

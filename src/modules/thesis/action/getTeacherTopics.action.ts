@@ -2,6 +2,7 @@ import { Topic, topicSchema } from "../model/topics.model";
 
 const Joi = require("joi");
 
+// topicApi.getAll().where(teacherId="ss3")
 export type getTeacherTopicsAction = {
   type: "get-teacher-topics";
   payload: {

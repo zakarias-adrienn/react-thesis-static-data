@@ -34,10 +34,10 @@ import { modifyTechnologyActionSchema } from "./action/modifyTechnology.action";
 import { modifyTopicActionSchema } from "./action/modifyTopic.action";
 import { searchTopicActionSchema } from "./action/searchTopic.action";
 import { withdrawApplianceActionSchema } from "./action/withdrawAppliance.action";
-import Root from "./components/Root";
+import Thesis from "./components/Thesis";
 
 export const ThesisModule: Module = {
-  root: Root,
+  root: Thesis,
   model: [
     studentSchema,
     subjectSchema,

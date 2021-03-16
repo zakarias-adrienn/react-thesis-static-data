@@ -1,8 +1,8 @@
-const Joi = require("joi");
-
 import { technologiesSchema, Technology } from "../model/technologies.model";
 
-// dropdownokban kell megjelenítenem
+const Joi = require("joi");
+
+// technologiesApi.getAll()
 export type getTechnologiesAction = {
   type: "get-technologies";
   payload: {};

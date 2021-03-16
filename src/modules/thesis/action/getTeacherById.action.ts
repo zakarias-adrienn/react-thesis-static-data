@@ -2,6 +2,7 @@ import { Teacher, teacherSchema } from "../model/teachers.model";
 
 const Joi = require("joi");
 
+// teacherApi.get(id)
 export type getTeacherByIdAction = {
   type: "get-teacher";
   payload: {

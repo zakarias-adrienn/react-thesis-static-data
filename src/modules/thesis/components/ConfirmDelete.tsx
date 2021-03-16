@@ -23,7 +23,7 @@ interface ConfirmDeleteProps {
 }
 
 // TECHNOLÓGIA ÉS TÉMA TÖRLÉSÉRE IS HASZNÁLVA VAN
-// TÉMA CSAK AKKOR TÖRLŐDJÖN HA NINCS RÁ FÜGGŐBEN LEVŐ JELENTKEZÉS?
+// TÉMA CSAK AKKOR TÖRLŐDJÖN HA NINCS RÁ FÜGGŐBEN LEVŐ JELENTKEZÉS?!! applicationApi.getAll().where(topicId=id)
 const ConfirmDelete: React.FunctionComponent<ConfirmDeleteProps> = (props) => {
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true);
   const [isDraggable, { toggle: toggleIsDraggable }] = useBoolean(false);
@@ -37,7 +37,7 @@ const ConfirmDelete: React.FunctionComponent<ConfirmDeleteProps> = (props) => {
     subText:
       props.type === "technology"
         ? `Biztosan törölni szeretné a "${props.name}" nevű technológiát? Amennyiben vannak már hozzákapcsolt témák, akkor megszűnik a kapcsolatuk.`
-        : `Biztosan törölni szeretné a "${props.name}" nevű témát?`
+        : `Biztosan törölni szeretné a "${props.name}" nevű témát? A hozzá tartozó elfogadott/elutasított jelentkezések is törlődnek!`
   };
 
   const modalProps = React.useMemo(

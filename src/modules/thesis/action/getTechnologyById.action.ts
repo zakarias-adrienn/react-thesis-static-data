@@ -2,6 +2,7 @@ import { Technology, technologiesSchema } from "../model/technologies.model";
 
 const Joi = require("joi");
 
+// technologiesApi.get(id)
 export type getTechnologyByIdAction = {
   type: "get-technology";
   payload: {
