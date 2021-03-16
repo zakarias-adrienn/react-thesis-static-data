@@ -1,12 +1,12 @@
 import React from "react";
 import "semantic-ui-css/semantic.min.css";
-import { BrowserRouter as Router, Switch, Route, BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 // saját importok
 import SearchPage from "./SearchPage";
 import Header from "./Header";
 import MenuNavigate from "./MenuNavigate";
-import UserTopics from "./UserTopics";
+import StudentApplications from "./StudentApplications";
 import TopicForm from "./TopicForm";
 import TechnologyTable from "./TechnologyTable";
 import AppliedStudents from "./AppliedStudents";
@@ -40,7 +40,7 @@ const Thesis: React.FunctionComponent = () => {
                   <TeachersTopic />
                 </Route>
                 <Route path="/myTopics">
-                  <UserTopics />
+                  <StudentApplications />
                 </Route>
                 <Route path="/addNewTechnology">
                   <TechnologyTable></TechnologyTable>

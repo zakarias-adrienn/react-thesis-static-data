@@ -1,41 +1,42 @@
 const Joi = require("joi");
 
-// amilyen APIK kellenek ezekhez nekünk: departmentApi, studentApi, teacherApi, adminApi?
-// vagy userApi s abból mi kiszűrjük hogy tanár-e stb? INSTANCEOF NEM MEGY TYPE-RA! csak ha class lenne!
-
-// Gábor: permissions[] is legyen külön Teacher, Student-hez? az alapján jogosultságkezelés? - vagy fölösleges ez?
-
 export type Department = {
   id: string;
   name: string;
   shortName: string;
 };
 
+export enum Role {
+  Student,
+  Teacher,
+  Admin
+}
+
 export type User = {
   id: string;
   name: string;
   neptunId: string;
   infId: string;
+  roles: Role[];
 };
 
-export type Student = User & {
+export type Student = {
+  userId: string;
   courseIds: number[];
-  // enum Specialization = { NULL, Szoftverfejlesztő, Szoftvertervező, Modellező } ?
+  specializationId: number;
+  startYear: number;
+  maxSemester: number;
 };
 
-export type Teacher = User & {
-  // Móninak
+export type Teacher = {
+  userId: string;
   courseIds: number[];
   profActivity: Date[];
   zeroAdminIds: number[];
-  // Adrinak
   departmentId: string;
   announcedTopicIds: string[];
-}; // s itt még lehetne email-je?, weboldala? szobája?
+};
 
-export type Admin = User;
-
-// JOI SÉMÁK:
 export const userSchema = Joi.object({
   id: Joi.string().required(),
   name: Joi.string().required(),
@@ -44,11 +45,11 @@ export const userSchema = Joi.object({
 });
 
 export const studentSchema = Joi.object({
-  id: Joi.string().required(),
-  name: Joi.string().required(),
-  neptunId: Joi.string().required(),
-  infId: Joi.string().required(),
-  courseIds: Joi.array().items(Joi.number())
+  userId: Joi.string().required(),
+  courseIds: Joi.array().items(Joi.number()),
+  specializationId: Joi.number(),
+  startYear: Joi.number(),
+  maxSemester: Joi.number()
 });
 
 export const departmentSchema = Joi.object({
@@ -58,12 +59,10 @@ export const departmentSchema = Joi.object({
 }).required();
 
 export const teacherSchema = Joi.object({
-  id: Joi.string().required(),
-  name: Joi.string().required(),
-  neptunId: Joi.string().required(),
-  infId: Joi.string().required(),
-  departmentId: Joi.string().required(),
-  announcedTopicIds: Joi.array().items(Joi.string()),
+  userId: Joi.string().required(),
   courseIds: Joi.array().items(Joi.number()),
-  zeroAdminIds: Joi.array().items(Joi.number())
+  profActivity: Joi.array().items(Joi.string()),
+  zeroAdminIds: Joi.array().items(Joi.number()),
+  departmentId: Joi.string().required(),
+  announcedTopicIds: Joi.array().items(Joi.string())
 });

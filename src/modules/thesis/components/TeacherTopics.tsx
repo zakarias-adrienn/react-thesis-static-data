@@ -1,7 +1,7 @@
 import * as React from "react";
 import ValidTeacherTopics from "./ValidTeacherTopics";
 import ExpiredTeacherTopics from "./ExpiredTeacherTopics";
-import { Topic, TopicType, SchoolSemester, Language, Semester } from "../model/topics.model";
+import { Topic, TopicType, Language, Semester } from "../model/topics.model";
 
 const exampleTopics: Topic[] = [
   {

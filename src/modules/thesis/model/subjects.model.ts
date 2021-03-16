@@ -1,22 +1,9 @@
-// ez lehetne egybe a Móniéval? s akkor csak egy classApi vagy subjectApi-kellene, mindketten használhatnánk?
-// vagy legyen két külön api?
-
 const Joi = require("joi");
 
-export type Subject = {
-  id: string;
-  name: string;
-};
-
-// tantárgyak annak függvényében jelenjenek meg hogy milyen tanterven van?, mikor kezdte?
-export const subjectSchema = Joi.object({
-  id: Joi.string().required(),
-  name: Joi.string().required()
-});
-
-// Móni
-/*
-import Joi from "joi";
+export enum Semester {
+  spring,
+  autumn
+}
 
 export enum ClassType {
   compulsory,
@@ -24,29 +11,30 @@ export enum ClassType {
   optional
 }
 
-export enum Term {
-  spring,
-  autumn,
-  both
-}
-
-export type Class = {
-  id: string; //like IKP-...
+export type Subject = {
+  neptunId: string;
   name: string;
-  type: ClassType;
-  term: Term;
+  semester: Semester[];
+  classType: ClassType;
+  preferredSemester: number;
+  subjectGroupId: number;
+  credit: number;
+  preconditionIds: string[];
+  equivalenceIds: string[]; //kérdéses
 };
 
-export const TermSchema = Joi.string().valid("spring", "autumn", "both").required();
+export const semesterSchema = Joi.string().valid("spring", "autumn").required();
 
-export const ClassTypeSchema = Joi.string().valid("compulsory", "elective", "optional").required();
+export const classTypeSchema = Joi.string().valid("compulsory", "elective", "optional").required();
 
-export const ClassSchema = Joi.object({
-  id: Joi.string().required(),
-  //should be unique
+export const subjectSchema = Joi.object({
+  neptunId: Joi.string().required(),
   name: Joi.string().required(),
-  type: ClassTypeSchema,
-  term: TermSchema
-  //useful?
+  semester: Joi.array().item(semesterSchema).max(2).min(1).required(),
+  classType: Joi.enum().item(classTypeSchema).required(),
+  preferredSemester: Joi.number().required(),
+  subjectGroupId: Joi.number().required(),
+  credit: Joi.number().required(),
+  preconditionIds: Joi.array().item(Joi.string()).required(),
+  equivalenceIds: Joi.array().item(Joi.string()).required()
 });
-*/

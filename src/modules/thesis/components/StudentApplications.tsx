@@ -16,7 +16,6 @@ import { Icon, ScrollablePane, ScrollbarVisibility } from "@fluentui/react";
 import { SelectionMode } from "@fluentui/react";
 import { Application, ApplicationStatus } from "../model/application.model";
 import { Language, Semester, Topic, TopicType } from "../model/topics.model";
-import { ALPN_ENABLED } from "constants";
 import { convertSchoolSemesterToString } from "../helperFunctions";
 
 // MINTA ADAT AHOGYAN MAJD AZ ADATBÁZISBÓL JÖN... REMÉLHETŐLEG
@@ -86,7 +85,7 @@ const classNames = mergeStyleSets({
   }
 });
 
-class UserTopics extends React.Component<{}, IDetailsListBasicExampleState> {
+class StudentApplications extends React.Component<{}, IDetailsListBasicExampleState> {
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
   private hoverCard: any;
@@ -298,4 +297,4 @@ function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boo
     .sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
 }
 
-export default UserTopics;
+export default StudentApplications;

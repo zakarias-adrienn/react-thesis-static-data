@@ -12,18 +12,13 @@ import { Text } from "office-ui-fabric-react/lib/Text";
 import { Stack } from "office-ui-fabric-react";
 import { IconButton } from "@fluentui/react/lib/Button";
 import { Link } from "react-router-dom";
-import { SelectionMode } from "@fluentui/react";
 import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
 import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
 
 // saját importok
 import { Topic } from "../model/topics.model";
 import ConfirmDelete from "./ConfirmDelete";
-import {
-  convertLanguagesToString,
-  convertSchoolSemesterToString,
-  convertTypeToString
-} from "../helperFunctions";
+import { convertSchoolSemesterToString } from "../helperFunctions";
 import ConfirmDeleteAll from "./ConfirmDeleteAll";
 
 const textFieldStyle = mergeStyles({

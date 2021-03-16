@@ -2,8 +2,8 @@ import * as React from "react";
 import { TextField, MaskedTextField } from "office-ui-fabric-react/lib/TextField";
 import { Stack, IStackStyles } from "office-ui-fabric-react/lib/Stack";
 import { Checkbox } from "office-ui-fabric-react/lib/Checkbox";
-import { Dropdown, IDropdownOption, IDropdownStyles } from "office-ui-fabric-react/lib/Dropdown";
-import { PrimaryButton, IIconProps, DefaultButton } from "office-ui-fabric-react";
+import { IDropdownStyles } from "office-ui-fabric-react/lib/Dropdown";
+import { PrimaryButton, IIconProps, DefaultButton, IComboBoxOption } from "office-ui-fabric-react";
 import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import { Language, Semester, Topic, TopicType } from "../model/topics.model";
@@ -12,7 +12,7 @@ import { RouteComponentProps } from "react-router";
 import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { ComboBox } from "office-ui-fabric-react/lib/index";
-import { IComboBox, IComboBoxStyles, IComboBoxOption } from "@fluentui/react";
+import { IComboBoxStyles } from "@fluentui/react";
 
 // BEÉGETETT ADATOK JELENLEG
 // majd - getSubjects().map(subj => subj.name)
@@ -56,12 +56,12 @@ const comboboxStyles2: Partial<IComboBoxStyles> = {
 };
 
 // DROPDOWN ELEMEK
-let subjectOptions: IDropdownOption[] = [];
+let subjectOptions: IComboBoxOption[] = [];
 subjects.forEach((name) => subjectOptions.push({ key: name, text: name }));
 
 subjectOptions = subjectOptions.sort((a, b) => (a.text > b.text ? 1 : -1));
 
-let technologyOptions: IDropdownOption[] = [];
+let technologyOptions: IComboBoxOption[] = [];
 technologies.forEach((name) => technologyOptions.push({ key: name, text: name }));
 
 technologyOptions = technologyOptions.sort((a, b) => (a.text > b.text ? 1 : -1));
@@ -744,7 +744,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                       ...this.state.values,
                       connectedSubjects: option?.selected
                         ? [...this.state.values.connectedSubjects, option.key.toString()]
-                        : this.state.values.connectedSubjects.filter((k) => k != option?.key)
+                        : this.state.values.connectedSubjects.filter((k) => k !== option?.key)
                     }
                   });
                 }}
@@ -765,7 +765,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                       ...this.state.values,
                       connectedTechnologies: option?.selected
                         ? [...this.state.values.connectedTechnologies, option.key.toString()]
-                        : this.state.values.connectedTechnologies.filter((k) => k != option?.key)
+                        : this.state.values.connectedTechnologies.filter((k) => k !== option?.key)
                     }
                   });
                 }}

@@ -1,7 +1,5 @@
 import { Module } from "../../broker/module.type";
-import { studentSchema } from "./model/students.model";
 import { subjectSchema } from "./model/subjects.model";
-import { teacherSchema } from "./model/teachers.model";
 import { technologiesSchema } from "./model/technologies.model";
 import { topicSchema } from "./model/topics.model";
 import { applicationSchema } from "./model/application.model";
@@ -20,12 +18,9 @@ import { deleteTechnologyActionSchema } from "./action/deleteTechnology.action";
 import { deleteTopicActionSchema } from "./action/deleteTopic.action";
 import { denyApplianceActionSchema } from "./action/denyAppliance.action";
 import { getStudentApplicationsActionSchema } from "./action/getStudentApplications.action";
-import { getStudentByIdActionSchema } from "./action/getStudentById.action";
 import { getSubjectByIdActionSchema } from "./action/getSubjectById.action";
 import { getSubjectsActionSchema } from "./action/getSubjects.action";
 import { getTeacherApplicationsActionSchema } from "./action/getTeacherApplications.action";
-import { getTeacherByIdActionSchema } from "./action/getTeacherById.action";
-import { getTeachersActionSchema } from "./action/getTeachers.action";
 import { getTeacherTopicsActionSchema } from "./action/getTeacherTopics.action";
 import { getTechnologiesActionSchema } from "./action/getTechnologies.action";
 import { getTechnologyByIdActionSchema } from "./action/getTechnologyById.action";
@@ -35,6 +30,7 @@ import { modifyTopicActionSchema } from "./action/modifyTopic.action";
 import { searchTopicActionSchema } from "./action/searchTopic.action";
 import { withdrawApplianceActionSchema } from "./action/withdrawAppliance.action";
 import Thesis from "./components/Thesis";
+import { departmentSchema, studentSchema, teacherSchema, userSchema } from "./model/user.model";
 
 export const ThesisModule: Module = {
   root: Thesis,
@@ -44,7 +40,9 @@ export const ThesisModule: Module = {
     teacherSchema,
     technologiesSchema,
     topicSchema,
-    applicationSchema
+    applicationSchema,
+    userSchema,
+    departmentSchema
   ],
   settings: [
     themeSetting,
@@ -62,12 +60,9 @@ export const ThesisModule: Module = {
     deleteTopicActionSchema,
     denyApplianceActionSchema,
     getStudentApplicationsActionSchema,
-    getStudentByIdActionSchema,
     getSubjectByIdActionSchema,
     getSubjectsActionSchema,
     getTeacherApplicationsActionSchema,
-    getTeacherByIdActionSchema,
-    getTeachersActionSchema,
     getTeacherTopicsActionSchema,
     getTechnologiesActionSchema,
     getTechnologyByIdActionSchema,

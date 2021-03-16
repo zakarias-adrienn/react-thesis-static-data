@@ -1,20 +1,22 @@
-import { Teacher, teacherSchema } from "../model/teachers.model";
+// import { Teacher, teacherSchema } from "../model/teachers.model";
 
-const Joi = require("joi");
+// const Joi = require("joi");
 
-// teacherApi.getAll()
-export type getTeachersAction = {
-  type: "get-teachers";
-  payload: {};
-  response: {
-    teachers: Teacher[];
-  };
-};
+// // teacherApi.getAll()
+// export type getTeachersAction = {
+//   type: "get-teachers";
+//   payload: {};
+//   response: {
+//     teachers: Teacher[];
+//   };
+// };
 
-export const getTeachersActionSchema = {
-  type: "get-teachers",
-  payload: {},
-  response: {
-    teachers: Joi.array().items(teacherSchema)
-  }
-};
+// export const getTeachersActionSchema = {
+//   type: "get-teachers",
+//   payload: {},
+//   response: {
+//     teachers: Joi.array().items(teacherSchema)
+//   }
+// };
+
+export {};

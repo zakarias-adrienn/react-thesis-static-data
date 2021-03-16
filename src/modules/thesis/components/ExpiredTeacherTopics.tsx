@@ -19,11 +19,7 @@ import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
 import ConfirmDeleteAll from "./ConfirmDeleteAll";
 import { Topic } from "../model/topics.model";
 import ConfirmDelete from "./ConfirmDelete";
-import {
-  convertLanguagesToString,
-  convertSchoolSemesterToString,
-  convertTypeToString
-} from "../helperFunctions";
+import { convertSchoolSemesterToString } from "../helperFunctions";
 
 // STÍLUSOK
 const textFieldStyle = mergeStyles({
