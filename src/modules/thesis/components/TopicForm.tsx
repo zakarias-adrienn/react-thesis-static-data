@@ -13,6 +13,7 @@ import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { ComboBox } from "office-ui-fabric-react/lib/index";
 import { IComboBoxStyles } from "@fluentui/react";
+import { rootPath } from "../path";
 
 // BEÉGETETT ADATOK JELENLEG
 // majd - getSubjects().map(subj => subj.name)
@@ -792,7 +793,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
                     ></PrimaryButton>
                   </div>
                   <div className="ms-Grid-col ms-sm6">
-                    <Link to="/publishedThesis">
+                    <Link to={rootPath + "/publishedThesis"}>
                       <DefaultButton
                         text="Mégse"
                         style={{ position: "relative", left: "20%" }}

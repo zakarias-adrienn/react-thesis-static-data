@@ -20,6 +20,7 @@ import { Topic } from "../model/topics.model";
 import ConfirmDelete from "./ConfirmDelete";
 import { convertSchoolSemesterToString } from "../helperFunctions";
 import ConfirmDeleteAll from "./ConfirmDeleteAll";
+import { rootPath } from "../path";
 
 const textFieldStyle = mergeStyles({
   display: "block",
@@ -145,7 +146,7 @@ class ValidTeacherTopics extends React.Component<Prop, DetailsListState> {
         subjects: topic.connectedSubjectIds.join(", "),
         places: topic.numberOfPlaces,
         view: (
-          <Link to={{ pathname: "/publishedThesis/editTopic/" + `${topic.id}` }}>
+          <Link to={{ pathname: rootPath + "/publishedThesis/editTopic/" + `${topic.id}` }}>
             <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
           </Link>
         ),

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
+import { rootPath } from "../path";
 
 const Header: React.FunctionComponent = () => {
   return (
@@ -14,7 +15,7 @@ const Header: React.FunctionComponent = () => {
         marginBottom: "5px"
       }}
     >
-      <Link to={{ pathname: "/" }}>
+      <Link to={{ pathname: rootPath }}>
         <h2
           style={{
             fontFamily: "Parkavenue, cursive",

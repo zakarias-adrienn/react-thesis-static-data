@@ -1,6 +1,7 @@
 import React from "react";
 import "semantic-ui-css/semantic.min.css";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import { rootPath } from "../path";
 
 // saját importok
 import SearchPage from "./SearchPage";
@@ -27,33 +28,34 @@ const Thesis: React.FunctionComponent = () => {
             </div>
             <div className="ms-Grid-col ms-sm12 ms-smPull ms-md12 ms-lg12 ms-xl9">
               <Switch>
-                <Route exact path="/">
+                {/* just for development, delete when merge with core */}
+                <Route exact path="/" component={() => <Redirect to="/thesis" />} />
+                <Route exact path={rootPath}>
                   <WelcomeMessage />
                 </Route>
-                <Route path="/searchPage">
+                <Route path={rootPath + "/searchPage"}>
                   <SearchPage />
                 </Route>
-                <Route path="/createThesis">
+                <Route path={rootPath + "/createThesis"}>
                   <TopicForm />
                 </Route>
-                <Route exact path="/publishedThesis">
+                <Route exact path={rootPath + "/publishedThesis"}>
                   <TeachersTopic />
                 </Route>
-                <Route path="/myTopics">
+                <Route path={rootPath + "/myTopics"}>
                   <StudentApplications />
                 </Route>
-                <Route path="/addNewTechnology">
+                <Route path={rootPath + "/addNewTechnology"}>
                   <TechnologyTable></TechnologyTable>
                 </Route>
-                <Route path="/publishedThesis/editTopic/:id">
+                <Route path={rootPath + "/publishedThesis/editTopic/:id"}>
                   <TopicForm />
                 </Route>
-                <Route path="/appliedStudents">
+                <Route path={rootPath + "/appliedStudents"}>
                   <AppliedStudents></AppliedStudents>
                 </Route>
-                <Route path="/contact">
-                  <Contact></Contact>
-                </Route>
+                {/* ha egyik route sem talál, visszairányítás egyelőre */}
+                <Route render={() => <Redirect to="/thesis" />} />
               </Switch>
             </div>
           </div>

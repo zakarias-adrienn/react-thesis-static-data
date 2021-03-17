@@ -3,6 +3,7 @@ import { Nav, INavStyles, INavLinkGroup } from "office-ui-fabric-react/lib/Nav";
 import { useLocation } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
+import { rootPath } from "../path";
 
 const navStyles: Partial<INavStyles> = {
   root: {
@@ -18,43 +19,49 @@ const navLinkGroups: INavLinkGroup[] = [
     links: [
       {
         name: "Új téma meghirdetése",
-        url: "/createThesis",
+        url: rootPath + "/createThesis",
         key: "key1"
       },
       {
         name: "Meghirdetett témáim",
-        url: "/publishedThesis",
+        url: rootPath + "/publishedThesis",
         key: "key2"
       },
       {
         name: "Beérkezett jelentkezések kezelése",
-        url: "/appliedStudents",
+        url: rootPath + "/appliedStudents",
         key: "key6"
       },
       {
         name: "Témaböngészés",
-        url: "/searchPage",
+        url: rootPath + "/searchPage",
         key: "key3"
       },
       {
         name: "Jelentkezéseim",
-        url: "/myTopics",
+        url: rootPath + "/myTopics",
         key: "key4"
       },
       {
         name: "Technológiák kezelése",
-        url: "/addNewTechnology",
+        url: rootPath + "/addNewTechnology",
         key: "key5"
         //disabled: true - ha nincs jogosultsága? nem is kellene megjelenjen inkább
-      },
-      {
-        name: "Elérhetőségek",
-        url: "/contact",
-        key: "key7"
       }
     ]
   }
 ];
+
+function nth_ocurrence(str: string, needle: string, nth: number) {
+  for (let i = 0; i < str.length; i++) {
+    if (str.charAt(i) == needle) {
+      if (!--nth) {
+        return i;
+      }
+    }
+  }
+  return false;
+}
 
 const MenuNavigate: React.FunctionComponent = () => {
   const location = useLocation();
@@ -63,25 +70,25 @@ const MenuNavigate: React.FunctionComponent = () => {
   let history = useHistory();
 
   let pathToCheck = location.pathname;
-  if (location.pathname.indexOf("/", 2) != -1) {
-    pathToCheck = location.pathname.substring(0, location.pathname.indexOf("/", 2));
+  // thesis/publishedThesis/editTopic/1
+  if (nth_ocurrence(pathToCheck, "/", 3)) {
+    pathToCheck = location.pathname.substring(0, nth_ocurrence(pathToCheck, "/", 3) || 0);
+    console.log(pathToCheck);
   }
 
   const getSelectedKey = (): string => {
-    if (pathToCheck === "/addNewTechnology") {
+    if (pathToCheck === "/thesis/addNewTechnology") {
       return "key5";
-    } else if (pathToCheck === "/myTopics") {
+    } else if (pathToCheck === "/thesis/myTopics") {
       return "key4";
-    } else if (pathToCheck === "/searchPage") {
+    } else if (pathToCheck === "/thesis/searchPage") {
       return "key3";
-    } else if (pathToCheck === "/appliedStudents") {
+    } else if (pathToCheck === "/thesis/appliedStudents") {
       return "key6";
-    } else if (pathToCheck === "/publishedThesis") {
+    } else if (pathToCheck === "/thesis/publishedThesis") {
       return "key2";
-    } else if (pathToCheck === "/createThesis") {
+    } else if (pathToCheck === "/thesis/createThesis") {
       return "key1";
-    } else if (pathToCheck === "/contact") {
-      return "key7";
     } else {
       return "";
     }
@@ -99,6 +106,7 @@ const MenuNavigate: React.FunctionComponent = () => {
     if (event) {
       event.preventDefault();
       history.push(item.url);
+      console.log(item.key);
       setSelectedKey(item.key);
     }
   }

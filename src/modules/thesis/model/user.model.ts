@@ -10,6 +10,7 @@ export enum Role {
   Student,
   Teacher,
   Admin
+  //Lecturer // dropdown-ból kiválaszthatja hogy milyen szerepkörből szeretné nézni?
 }
 
 export type User = {

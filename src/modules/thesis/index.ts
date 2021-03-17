@@ -34,6 +34,7 @@ import { departmentSchema, studentSchema, teacherSchema, userSchema } from "./mo
 
 export const ThesisModule: Module = {
   root: Thesis,
+  // path: rootPath
   model: [
     studentSchema,
     subjectSchema,

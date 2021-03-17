@@ -19,8 +19,8 @@ export type Subject = {
   preferredSemester: number;
   subjectGroupId: number;
   credit: number;
-  preconditionIds: string[];
-  equivalenceIds: string[]; //kérdéses
+  // preconditionIds: string[];
+  // equivalenceIds: string[]; //kérdéses
 };
 
 export const semesterSchema = Joi.string().valid("spring", "autumn").required();

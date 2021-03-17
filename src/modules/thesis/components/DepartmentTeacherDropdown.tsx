@@ -6,20 +6,27 @@ import { FormEvent } from "react";
 initializeIcons();
 
 let items: IDropdownOption[] = [
-  { key: "Algoritmusok és alkalmazásaik", text: "Algoritmusok és alkalmazásaik" },
-  { key: "Információs rendszerek", text: "Információs rendszerek" },
+  { key: "Algoritmusok és Alkalmazásaik", text: "Algoritmusok és Alkalmazásaik" },
+  { key: "Információs Rendszerek", text: "Információs Rendszerek" },
   { key: "Komputeralgebra", text: "Komputeralgebra" },
-  { key: "Numerikus analízis", text: "Numerikus analízis" },
+  { key: "Numerikus Analízis", text: "Numerikus Analízis" },
   {
-    key: "Programozáselmélet és szoftvertechnológia",
-    text: "Programozáselmélet és szoftvertechnológia"
+    key: "Programozáselmélet és Szoftvertechnológiai",
+    text: "Programozáselmélet és Szoftvertechnológiai"
   },
   {
-    key: "Programozási nyelvek és fordítóprogramok",
-    text: "Programozási nyelvek és fordítóprogramok"
+    key: "Programozási Nyelvek és Fordítóprogramok",
+    text: "Programozási Nyelvek és Fordítóprogramok"
   },
-  { key: "Média és oktatásinformatika", text: "Média és oktatásinformatika" },
-  { key: "Valószínűségelméleti és Statisztika", text: "Valószínűségelméleti és Statisztika" }
+  { key: "Média- és Oktatásinformatika", text: "Média- és Oktatásinformatika" },
+  { key: "Valószínűségelméleti és Statisztika", text: "Valószínűségelméleti és Statisztika" },
+  {
+    key: "Térképtudományi és Geoinformatikai Intézet",
+    text: "Térképtudományi és Geoinformatikai Intézet"
+  },
+  { key: "Adattudományi és Adattechnológiai", text: "Adattudományi és Adattechnológiai" },
+  { key: "Mesterséges Intelligencia", text: "Mesterséges Intelligencia" },
+  { key: "Savaria Műszaki Intézet", text: "Savaria Műszaki Intézet" }
 ];
 items = items.sort((a, b) => (a.text > b.text ? 1 : -1));
 
@@ -78,6 +85,14 @@ teachersToDepartments.set("Valószínűségelméleti és Statisztika", [
   "Arató Miklós",
   "Zempléni András"
 ]);
+teachersToDepartments.set("Térképtudományi és Geoinformatikai Intézet", ["Dr. Zentai László"]);
+teachersToDepartments.set("Adattudományi és Adattechnológiai", [
+  "Dr. Horváth Tamás",
+  "Tarcsi Ádám"
+]);
+teachersToDepartments.set("Mesterséges Intelligencia", ["Belics Éva"]);
+teachersToDepartments.set("Savaria Műszaki Intézet", ["Dr. Bak Árpád", "Dr. Borbély Tibor"]);
+// Prof. habil. <- ezek kiszűrése is esetleg?
 
 // STÍLUSOK
 const dropdownStyles: Partial<IDropdownStyles> = {

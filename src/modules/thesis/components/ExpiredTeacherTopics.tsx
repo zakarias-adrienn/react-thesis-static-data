@@ -14,6 +14,7 @@ import { IconButton } from "@fluentui/react/lib/Button";
 import { Link } from "react-router-dom";
 import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
 import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
+import { rootPath } from "../path";
 
 // saját importok
 import ConfirmDeleteAll from "./ConfirmDeleteAll";
@@ -147,7 +148,7 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
         subjects: topic.connectedSubjectIds.join(", "),
         places: topic.numberOfPlaces,
         view: (
-          <Link to={{ pathname: "/publishedThesis/editTopic/" + `${topic.id}` }}>
+          <Link to={{ pathname: rootPath + "/publishedThesis/editTopic/" + `${topic.id}` }}>
             <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
           </Link>
         ),
