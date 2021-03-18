@@ -20,6 +20,7 @@ import ConfirmAccept from "./ConfirmAccept";
 import AcceptedStudents from "./AcceptedStudents";
 import { Language, Semester, Topic, TopicType } from "../model/topics.model";
 import { convertSchoolSemesterToString } from "../helperFunctions";
+import { MessageBar, MessageBarType } from "@fluentui/react";
 
 // MINTA ADAT AHOGYAN MAJD AZ ADATBÁZISBÓL JÖN... REMÉLHETŐLEG
 const myApplications: Application[] = [
@@ -35,6 +36,12 @@ const myApplications: Application[] = [
     id: "második",
     studentId: "Zakariás Adrienn",
     topicId: "Application1",
+    status: ApplicationStatus.Pending
+  },
+  {
+    id: "harmadik",
+    studentId: "Zakariás Adrienn",
+    topicId: "Application2",
     status: ApplicationStatus.Pending
   }
 ];
@@ -70,6 +77,22 @@ const topics: Topic[] = [
     },
     appliedStudentIds: ["a"],
     language: [Language.Hungarian]
+  },
+  {
+    id: "Application2",
+    type: [TopicType.BScThesis],
+    title: "Application2",
+    description: "Valami...",
+    teacherId: "Visnovitz Márton",
+    connectedSubjectIds: [],
+    connectedTechnologyIds: [],
+    numberOfPlaces: 2,
+    schoolSemester: {
+      year: 2022,
+      half: Semester.Spring
+    },
+    appliedStudentIds: ["a"],
+    language: [Language.Hungarian]
   }
 ];
 
@@ -88,6 +111,18 @@ const textFieldStyle = mergeStyles({
 });
 const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "180px" } };
 
+// MEGERŐSÍTŐ ÜZENETEK
+const SuccessonAcceptMessage = () => (
+  <MessageBar messageBarType={MessageBarType.success} isMultiline={false}>
+    Sikeresen elfogadva lett egy jelentkezés!
+  </MessageBar>
+);
+const SuccessonDenyMessage = () => (
+  <MessageBar messageBarType={MessageBarType.error} isMultiline={false}>
+    Elutasítva lett egy jelentkezés!
+  </MessageBar>
+);
+
 // TÍPUSOK
 export interface DetailsListItemType {
   key: string;
@@ -102,6 +137,8 @@ export interface DetailsListState {
   items: DetailsListItemType[];
   columns: IColumn[];
   isFilter: boolean;
+  successOnAccept: boolean;
+  successOnDeny: boolean;
 }
 
 class AppliedStudents extends React.Component<{}, DetailsListState> {
@@ -193,7 +230,9 @@ class AppliedStudents extends React.Component<{}, DetailsListState> {
     this.state = {
       items: this._allItems,
       columns: this._columns,
-      isFilter: false
+      isFilter: false,
+      successOnAccept: false,
+      successOnDeny: false
     };
   }
 
@@ -217,15 +256,20 @@ class AppliedStudents extends React.Component<{}, DetailsListState> {
     // a jelentkezés statászt be kell állítani - hogy? lekérem a jelentkezést? getApplianceById.action? + beállítom a státuszt + felküldöm?
     // denyAppliance.action? - ha van denyReason azt is beállítom? - emailt küldtem, még nincs válasz
     this.setState({
-      items: this.state.items.filter((item) => item.key !== myId)
+      ...this.state,
+      items: this.state.items.filter((item) => item.key !== myId),
+      successOnDeny: true
     });
     this._allItems = this._allItems.filter((item) => item.key !== myId);
+    setTimeout(() => this.setState({ ...this.state, successOnDeny: false }), 4000);
   }
 
   public handleAccept(key: string, toggleHideDialog: Function) {
     toggleHideDialog();
     this.setState({
-      items: this.state.items.filter((item) => item.key !== key)
+      ...this.state,
+      items: this.state.items.filter((item) => item.key !== key),
+      successOnAccept: true
     });
     let title: string = this._allItems.filter((item) => item.key === key)[0].title;
     let student: string = this._allItems.filter((item) => item.key === key)[0].name;
@@ -233,6 +277,7 @@ class AppliedStudents extends React.Component<{}, DetailsListState> {
     this._allItems = this._allItems.filter((item) => item.key !== key);
     // a key-t kell majd csak átadnom, az alapján lekéri majd a komponens
     this.acceptedStudents.updateState(key, title, student, semester);
+    setTimeout(() => this.setState({ ...this.state, successOnAccept: false }), 4000);
   }
 
   private _onFilter = (
@@ -280,6 +325,10 @@ class AppliedStudents extends React.Component<{}, DetailsListState> {
             onChange={this._onFilter}
             styles={textFieldStyles}
           />
+          <div style={{ height: "30px" }}>
+            {this.state.successOnAccept ? <SuccessonAcceptMessage /> : null}
+            {this.state.successOnDeny ? <SuccessonDenyMessage /> : null}
+          </div>
           <div style={{ height: "200px", position: "relative" }}>
             <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
               <DetailsList

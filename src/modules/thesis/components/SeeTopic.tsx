@@ -91,7 +91,7 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
   };
 
   if (applied) {
-    return <Redirect to="/thesis/myTopics" />;
+    return <Redirect to={{ pathname: "/thesis/myTopics", state: { newApplication: true } }} />;
   }
 
   return (

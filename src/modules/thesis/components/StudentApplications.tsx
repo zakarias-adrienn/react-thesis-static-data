@@ -12,11 +12,19 @@ import ConfirmWithdraw from "./ConfirmWithdraw";
 import { Stack } from "office-ui-fabric-react";
 import { HoverCard, HoverCardType } from "office-ui-fabric-react/lib/HoverCard";
 import { mergeStyleSets } from "office-ui-fabric-react/lib/Styling";
-import { Icon, ScrollablePane, ScrollbarVisibility } from "@fluentui/react";
+import {
+  Icon,
+  MessageBar,
+  MessageBarType,
+  ScrollablePane,
+  ScrollbarVisibility
+} from "@fluentui/react";
 import { SelectionMode } from "@fluentui/react";
 import { Application, ApplicationStatus } from "../model/application.model";
 import { Language, Semester, Topic, TopicType } from "../model/topics.model";
 import { convertSchoolSemesterToString } from "../helperFunctions";
+import { RouteComponentProps } from "react-router";
+import { withRouter } from "react-router-dom";
 
 // MINTA ADAT AHOGYAN MAJD AZ ADATBÁZISBÓL JÖN... REMÉLHETŐLEG
 const myApplications: Application[] = [
@@ -56,6 +64,23 @@ const exampleChildClass = mergeStyles({
 
 const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "180px" } };
 
+// MEGERŐSÍTŐ ÜZENETEK
+const SuccessonWithdrawMessage = () => (
+  <div style={{ height: "30px", marginTop: "10px", marginBottom: "10px" }}>
+    <MessageBar messageBarType={MessageBarType.warning} isMultiline={false}>
+      Vissza lett vonva egy jelentkezés!
+    </MessageBar>
+  </div>
+);
+
+const SuccessonNewMessage = () => (
+  <div style={{ height: "30px", marginTop: "10px", marginBottom: "10px" }}>
+    <MessageBar messageBarType={MessageBarType.success} isMultiline={false}>
+      Új jelentkezés történt!
+    </MessageBar>
+  </div>
+);
+
 export interface IDetailsListBasicExampleItem {
   key: string;
   title: string;
@@ -69,6 +94,7 @@ export interface IDetailsListBasicExampleState {
   items: IDetailsListBasicExampleItem[];
   columns: IColumn[];
   isFilter: boolean;
+  successOnWithdraw: boolean;
 }
 
 const classNames = mergeStyleSets({
@@ -85,7 +111,14 @@ const classNames = mergeStyleSets({
   }
 });
 
-class StudentApplications extends React.Component<{}, IDetailsListBasicExampleState> {
+interface IReactRouterParams {
+  newApplication?: string;
+}
+
+class StudentApplications extends React.Component<
+  {} & RouteComponentProps<{}, any, IReactRouterParams | any>,
+  IDetailsListBasicExampleState
+> {
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
   private hoverCard: any;
@@ -111,7 +144,11 @@ class StudentApplications extends React.Component<{}, IDetailsListBasicExampleSt
     console.log("I am now hidden");
   };
 
-  constructor(props: {}) {
+  componentDidMount() {
+    window.history.replaceState(null, "");
+  }
+
+  constructor(props: any) {
     super(props);
 
     this.onDelete = this.onDelete.bind(this);
@@ -208,17 +245,20 @@ class StudentApplications extends React.Component<{}, IDetailsListBasicExampleSt
     this.state = {
       items: this._allItems,
       columns: this._columns,
-      isFilter: false
+      isFilter: false,
+      successOnWithdraw: false
     };
   }
 
   public onDelete(id: string, toggleHideDialog: Function) {
     toggleHideDialog();
     this.setState({
+      ...this.state,
       items: this.state.items.filter((item) => item.key !== id),
-      isFilter: this.state.isFilter
+      successOnWithdraw: true
     });
     this._allItems = this._allItems.filter((item) => item.key !== id);
+    setTimeout(() => this.setState({ ...this.state, successOnWithdraw: false }), 4000);
   }
 
   private _onFilter = (
@@ -258,6 +298,8 @@ class StudentApplications extends React.Component<{}, IDetailsListBasicExampleSt
 
     return (
       <Fabric style={{ marginTop: "10px" }}>
+        {this.props.location.state ? <SuccessonNewMessage /> : null}
+        {this.state.successOnWithdraw ? <SuccessonWithdrawMessage /> : null}
         <TextField
           className={exampleChildClass}
           label="Cím szerinti szűrés:"
@@ -297,4 +339,4 @@ function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boo
     .sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
 }
 
-export default StudentApplications;
+export default withRouter(StudentApplications);

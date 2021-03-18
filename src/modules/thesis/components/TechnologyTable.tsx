@@ -12,7 +12,7 @@ import { Stack } from "office-ui-fabric-react";
 import ConfirmDelete from "./ConfirmDelete";
 import DialogToEditTechnology from "./DialogToEditTechnology";
 import AddNewTechnology from "./AddNewTechnology";
-import { SelectionMode } from "@fluentui/react";
+import { MessageBar, MessageBarType, SelectionMode } from "@fluentui/react";
 import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
 import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
 
@@ -22,6 +22,23 @@ const exampleChildClass = mergeStyles({
 });
 
 const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "200px" } };
+
+// MEGERŐSÍTŐ ÜZENETEK
+const SuccessonDeleteMessage = () => (
+  <div style={{ height: "30px", marginTop: "10px", marginBottom: "10px" }}>
+    <MessageBar messageBarType={MessageBarType.warning} isMultiline={false}>
+      Törölve lett egy technológia!
+    </MessageBar>
+  </div>
+);
+
+const SuccessonNewMessage = () => (
+  <div style={{ height: "30px", marginTop: "10px", marginBottom: "10px" }}>
+    <MessageBar messageBarType={MessageBarType.success} isMultiline={false}>
+      Új technológia lett hozzáadva!
+    </MessageBar>
+  </div>
+);
 
 export interface IDetailsListBasicExampleItem {
   key: string;
@@ -33,6 +50,8 @@ export interface IDetailsListBasicExampleItem {
 export interface IDetailsListBasicExampleState {
   items: IDetailsListBasicExampleItem[];
   isFilter: boolean;
+  deleteTechnology: boolean;
+  newTechnology: boolean;
 }
 
 const exampleTechnologies = [
@@ -122,7 +141,9 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
 
     this.state = {
       items: this._allItems,
-      isFilter: false
+      isFilter: false,
+      deleteTechnology: false,
+      newTechnology: false
     };
   }
 
@@ -150,10 +171,12 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
   public onDelete(id: string, toggleHideDialog: Function) {
     toggleHideDialog();
     this.setState({
+      ...this.state,
       items: this.state.items.filter((item) => item.key !== id),
-      isFilter: this.state.isFilter
+      deleteTechnology: true
     });
     this._allItems = this._allItems.filter((item) => item.key !== id);
+    setTimeout(() => this.setState({ ...this.state, deleteTechnology: false }), 4000);
   }
 
   public addNewTechnology(name: string, toogleHideDialog: Function, updateTextField: Function) {
@@ -180,8 +203,10 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
     };
     this.setState({
       ...this.state,
-      items: [...this.state.items, newItem]
+      items: [...this.state.items, newItem],
+      newTechnology: true
     });
+    setTimeout(() => this.setState({ ...this.state, newTechnology: false }), 4000);
   }
 
   private _onFilter = (
@@ -213,6 +238,8 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
           onChange={this._onFilter}
           styles={textFieldStyles}
         />
+        {this.state.newTechnology ? <SuccessonNewMessage /> : null}
+        {this.state.deleteTechnology ? <SuccessonDeleteMessage /> : null}
         <div style={{ height: "350px", position: "relative" }}>
           <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
             <DetailsList

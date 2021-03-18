@@ -49,12 +49,7 @@ const ConfirmAction: React.FunctionComponent<ConfirmActionProps> = (props) => {
 
   return (
     <>
-      <DefaultButton
-        secondaryText="Opens the Sample Dialog"
-        onClick={toggleHideDialog}
-        text="Hozzáadás"
-        disabled={props.notEmpty}
-      />
+      <PrimaryButton onClick={toggleHideDialog} text="Hozzáadás" disabled={props.notEmpty} />
 
       <Dialog
         hidden={hideDialog}

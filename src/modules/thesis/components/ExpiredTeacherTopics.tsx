@@ -21,6 +21,7 @@ import ConfirmDeleteAll from "./ConfirmDeleteAll";
 import { Topic } from "../model/topics.model";
 import ConfirmDelete from "./ConfirmDelete";
 import { convertSchoolSemesterToString } from "../helperFunctions";
+import { MessageBar, MessageBarType } from "@fluentui/react";
 
 // STÍLUSOK
 const textFieldStyle = mergeStyles({
@@ -30,6 +31,23 @@ const textFieldStyle = mergeStyles({
 });
 
 const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "180px" } };
+
+// MEGERŐSÍTŐ ÜZENETEK
+const SuccessonDeleteMessage = () => (
+  <div style={{ height: "30px", marginTop: "10px" }}>
+    <MessageBar messageBarType={MessageBarType.warning} isMultiline={false}>
+      Törölve lett egy kiírt téma!
+    </MessageBar>
+  </div>
+);
+
+const SuccessonDeleteManyMessage = (props: any) => (
+  <div style={{ height: "30px", marginTop: "10px" }}>
+    <MessageBar messageBarType={MessageBarType.warning} isMultiline={false}>
+      Törölve lett {props.num} darab kiírt téma!
+    </MessageBar>
+  </div>
+);
 
 export interface DetailsListItemType {
   key: string;
@@ -47,6 +65,8 @@ export interface DetailsListState {
   columns: IColumn[];
   isFilter: boolean;
   selectionDetails: string;
+  successOnDelete: boolean;
+  successOnDeleteMany: number;
 }
 
 type Prop = {
@@ -167,7 +187,9 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
       items: this._allItems,
       columns: this._columns,
       isFilter: false,
-      selectionDetails: this._getSelectionDetails()
+      selectionDetails: this._getSelectionDetails(),
+      successOnDelete: false,
+      successOnDeleteMany: 0
     };
   }
 
@@ -204,9 +226,11 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
     toggleHideDialog();
     this.setState({
       ...this.state,
-      items: this.state.items.filter((item) => !this.getDeleteIds().includes(item.key))
+      items: this.state.items.filter((item) => !this.getDeleteIds().includes(item.key)),
+      successOnDeleteMany: this.getDeleteIds().length
     });
     this._allItems = this._allItems.filter((item) => !this.getDeleteIds().includes(item.key));
+    setTimeout(() => this.setState({ ...this.state, successOnDeleteMany: 0 }), 4000);
   }
 
   // adott sorban levő törlése
@@ -215,11 +239,13 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
     // adatbből is törölni kell!
     toggleHideDialog();
     this.setState({
+      ...this.state,
       items: this.state.items.filter((item) => item.key !== id),
-      isFilter: this.state.isFilter,
-      selectionDetails: this.state.selectionDetails
+      selectionDetails: this.state.selectionDetails,
+      successOnDelete: true
     });
     this._allItems = this._allItems.filter((item) => item.key !== id);
+    setTimeout(() => this.setState({ ...this.state, successOnDelete: false }), 4000);
   }
 
   private _onFilter = (
@@ -288,6 +314,10 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
               />
             </div>
           </div>
+          {this.state.successOnDelete ? <SuccessonDeleteMessage /> : null}
+          {this.state.successOnDeleteMany ? (
+            <SuccessonDeleteManyMessage num={this.state.successOnDeleteMany} />
+          ) : null}
         </div>
         <div style={{ height: "200px", position: "relative" }}>
           <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>

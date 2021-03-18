@@ -21,6 +21,7 @@ import ConfirmDelete from "./ConfirmDelete";
 import { convertSchoolSemesterToString } from "../helperFunctions";
 import ConfirmDeleteAll from "./ConfirmDeleteAll";
 import { rootPath } from "../path";
+import { MessageBar, MessageBarType } from "@fluentui/react";
 
 const textFieldStyle = mergeStyles({
   display: "block",
@@ -29,6 +30,23 @@ const textFieldStyle = mergeStyles({
 });
 
 const textFieldStyles: Partial<ITextFieldStyles> = { root: { maxWidth: "180px" } };
+
+// MEGERŐSÍTŐ ÜZENETEK
+const SuccessonDeleteMessage = () => (
+  <div style={{ height: "30px", marginTop: "10px" }}>
+    <MessageBar messageBarType={MessageBarType.warning} isMultiline={false}>
+      Törölve lett egy kiírt téma!
+    </MessageBar>
+  </div>
+);
+
+const SuccessonDeleteManyMessage = (props: any) => (
+  <div style={{ height: "30px", marginTop: "10px" }}>
+    <MessageBar messageBarType={MessageBarType.warning} isMultiline={false}>
+      Törölve lett {props.num} darab kiírt téma!
+    </MessageBar>
+  </div>
+);
 
 export interface DetailsListItem {
   key: string;
@@ -46,6 +64,8 @@ export interface DetailsListState {
   columns: IColumn[];
   isFilter: boolean;
   selectionDetails: string;
+  successOnDelete: boolean;
+  successOnDeleteMany: number;
 }
 
 type Prop = {
@@ -165,7 +185,9 @@ class ValidTeacherTopics extends React.Component<Prop, DetailsListState> {
       items: this._allItems,
       columns: this._columns,
       isFilter: false,
-      selectionDetails: this._getSelectionDetails()
+      selectionDetails: this._getSelectionDetails(),
+      successOnDelete: false,
+      successOnDeleteMany: 0
     };
   }
 
@@ -186,10 +208,12 @@ class ValidTeacherTopics extends React.Component<Prop, DetailsListState> {
     // csak akkor ha nincsen rá jelentkezés!!! - régebbit törölhessen? a diáktól is eltűnik
     toggleHideDialog();
     this.setState({
+      ...this.state,
       items: this.state.items.filter((item) => item.key !== id),
-      isFilter: this.state.isFilter
+      successOnDelete: true
     });
     this._allItems = this._allItems.filter((item) => item.key !== id);
+    setTimeout(() => this.setState({ ...this.state, successOnDelete: false }), 4000);
   }
 
   // SEGÉDFGV
@@ -211,9 +235,11 @@ class ValidTeacherTopics extends React.Component<Prop, DetailsListState> {
     toggleHideDialog();
     this.setState({
       ...this.state,
-      items: this.state.items.filter((item) => !this.getDeleteIds().includes(item.key))
+      items: this.state.items.filter((item) => !this.getDeleteIds().includes(item.key)),
+      successOnDeleteMany: this.getDeleteIds().length
     });
     this._allItems = this._allItems.filter((item) => !this.getDeleteIds().includes(item.key));
+    setTimeout(() => this.setState({ ...this.state, successOnDeleteMany: 0 }), 4000);
   }
 
   private _onFilter = (
@@ -281,6 +307,10 @@ class ValidTeacherTopics extends React.Component<Prop, DetailsListState> {
               />
             </div>
           </div>
+          {this.state.successOnDelete ? <SuccessonDeleteMessage /> : null}
+          {this.state.successOnDeleteMany ? (
+            <SuccessonDeleteManyMessage num={this.state.successOnDeleteMany} />
+          ) : null}
         </div>
         <div style={{ height: "200px", position: "relative" }}>
           <ScrollablePane scrollbarVisibility={ScrollbarVisibility.auto}>
