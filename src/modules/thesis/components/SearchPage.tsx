@@ -15,7 +15,7 @@ import MySpinner from "./MySpinner";
 import { MaskedTextField } from "office-ui-fabric-react/lib/TextField";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
-import { MessageBar, MessageBarType } from "office-ui-fabric-react";
+// import { MessageBar, MessageBarType } from "office-ui-fabric-react";
 import { Stack } from "office-ui-fabric-react/lib/Stack";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
