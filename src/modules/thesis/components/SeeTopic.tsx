@@ -8,6 +8,7 @@ import {
   convertSchoolSemesterToString,
   convertTypeToString
 } from "../helperFunctions";
+import { isStudent } from "../roles";
 
 let options: IDropdownOption[] = [
   { key: "Webprogramozás", text: "Webprogramozás" },
@@ -90,7 +91,7 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
   };
 
   if (applied) {
-    return <Redirect to="/myTopics" />;
+    return <Redirect to="/thesis/myTopics" />;
   }
 
   return (
@@ -210,13 +211,15 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
         <div className="ms-Grid-row" style={{ paddingBottom: "20px" }}>
           <div className="ms-Grid-col ms-sm2"></div>
           <div className="ms-Grid-col ms-sm10" style={{ width: "60%", padding: "0px" }}>
-            <PrimaryButton
-              text="Jelentkezés"
-              allowDisabledFocus
-              style={{ width: "30%" }}
-              disabled={props.topic.numberOfPlaces === 0}
-              onClick={handleApplication}
-            />
+            {isStudent && (
+              <PrimaryButton
+                text="Jelentkezés"
+                allowDisabledFocus
+                style={{ width: "30%" }}
+                disabled={props.topic.numberOfPlaces === 0}
+                onClick={handleApplication}
+              />
+            )}
             <DefaultButton
               style={{ float: "right" }}
               text="Vissza a böngészéshez"

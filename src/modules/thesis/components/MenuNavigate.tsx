@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useEffect } from "react";
 import { rootPath } from "../path";
+import { isAdmin, isStudent, isTeacher } from "../roles";
 
 const navStyles: Partial<INavStyles> = {
   root: {
@@ -17,40 +18,74 @@ const navStyles: Partial<INavStyles> = {
 const navLinkGroups: INavLinkGroup[] = [
   {
     links: [
-      {
-        name: "Új téma meghirdetése",
-        url: rootPath + "/createThesis",
-        key: "key1"
-      },
-      {
-        name: "Meghirdetett témáim",
-        url: rootPath + "/publishedThesis",
-        key: "key2"
-      },
-      {
-        name: "Beérkezett jelentkezések kezelése",
-        url: rootPath + "/appliedStudents",
-        key: "key6"
-      },
+      // {
+      //   name: "Új téma meghirdetése",
+      //   url: rootPath + "/createThesis",
+      //   key: "key1"
+      // },
+      // {
+      //   name: "Meghirdetett témáim",
+      //   url: rootPath + "/publishedThesis",
+      //   key: "key2"
+      // },
+      // {
+      //   name: "Beérkezett jelentkezések kezelése",
+      //   url: rootPath + "/appliedStudents",
+      //   key: "key6"
+      // },
       {
         name: "Témaböngészés",
         url: rootPath + "/searchPage",
         key: "key3"
-      },
-      {
-        name: "Jelentkezéseim",
-        url: rootPath + "/myTopics",
-        key: "key4"
-      },
-      {
-        name: "Technológiák kezelése",
-        url: rootPath + "/addNewTechnology",
-        key: "key5"
-        //disabled: true - ha nincs jogosultsága? nem is kellene megjelenjen inkább
       }
+      // {
+      //   name: "Jelentkezéseim",
+      //   url: rootPath + "/myTopics",
+      //   key: "key4"
+      // },
+      // {
+      //   name: "Technológiák kezelése",
+      //   url: rootPath + "/addNewTechnology",
+      //   key: "key5"
+      //   //disabled: true - ha nincs jogosultsága? nem is kellene megjelenjen inkább
+      // }
     ]
   }
 ];
+
+// egyelőre ezek beégetett konstansok
+if (isAdmin) {
+  navLinkGroups[0].links.push({
+    name: "Technológiák kezelése",
+    url: rootPath + "/addNewTechnology",
+    key: "key5"
+    //disabled: true - ha nincs jogosultsága? nem is kellene megjelenjen inkább
+  });
+}
+if (isStudent) {
+  navLinkGroups[0].links.push({
+    name: "Jelentkezéseim",
+    url: rootPath + "/myTopics",
+    key: "key4"
+  });
+}
+if (isTeacher) {
+  navLinkGroups[0].links.push({
+    name: "Új téma meghirdetése",
+    url: rootPath + "/createThesis",
+    key: "key1"
+  });
+  navLinkGroups[0].links.push({
+    name: "Meghirdetett témáim",
+    url: rootPath + "/publishedThesis",
+    key: "key2"
+  });
+  navLinkGroups[0].links.push({
+    name: "Beérkezett jelentkezések kezelése",
+    url: rootPath + "/appliedStudents",
+    key: "key6"
+  });
+}
 
 function nth_ocurrence(str: string, needle: string, nth: number) {
   for (let i = 0; i < str.length; i++) {

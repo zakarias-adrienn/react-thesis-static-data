@@ -504,7 +504,7 @@ class TopicForm extends React.Component<IMyProps & RouteComponentProps<IReactRou
     let redirectToPublishedThesis: boolean = this.state.redirectAfterSave;
 
     if (redirectToPublishedThesis) {
-      return <Redirect to="/publishedThesis" />;
+      return <Redirect to="/thesis/publishedThesis" />;
     }
 
     return (

@@ -13,7 +13,11 @@ import TechnologyTable from "./TechnologyTable";
 import AppliedStudents from "./AppliedStudents";
 import TeachersTopic from "./TeacherTopics";
 import WelcomeMessage from "./WelcomeMessage";
-import Contact from "./Contact";
+import AdminRoute from "./AdminRoute";
+import StudentRoute from "./StudentRoute";
+import TeacherRoute from "./TeacherRoute";
+
+import { isAdmin, isStudent, isTeacher } from "../roles";
 
 const Thesis: React.FunctionComponent = () => {
   return (
@@ -36,24 +40,55 @@ const Thesis: React.FunctionComponent = () => {
                 <Route path={rootPath + "/searchPage"}>
                   <SearchPage />
                 </Route>
-                <Route path={rootPath + "/createThesis"}>
+                {/* <Route path={rootPath + "/createThesis"}>
                   <TopicForm />
-                </Route>
-                <Route exact path={rootPath + "/publishedThesis"}>
+                </Route> */}
+                <TeacherRoute
+                  isTeacher={isTeacher}
+                  path={rootPath + "/createThesis"}
+                  component={TopicForm}
+                />
+                {/* <Route exact path={rootPath + "/publishedThesis"}>
                   <TeachersTopic />
-                </Route>
-                <Route path={rootPath + "/myTopics"}>
+                </Route> */}
+                <TeacherRoute
+                  isTeacher={isTeacher}
+                  exact
+                  path={rootPath + "/publishedThesis"}
+                  component={TeachersTopic}
+                />
+                {/* <Route path={rootPath + "/myTopics"}>
                   <StudentApplications />
-                </Route>
-                <Route path={rootPath + "/addNewTechnology"}>
+                </Route> */}
+                <StudentRoute
+                  isStudent={isStudent}
+                  path={rootPath + "/myTopics"}
+                  component={StudentApplications}
+                />
+                {/* <Route path={rootPath + "/addNewTechnology"}>
                   <TechnologyTable></TechnologyTable>
-                </Route>
-                <Route path={rootPath + "/publishedThesis/editTopic/:id"}>
+                </Route> */}
+                <AdminRoute
+                  isAdmin={isAdmin}
+                  path={rootPath + "/addNewTechnology"}
+                  component={TechnologyTable}
+                />
+                {/* <Route path={rootPath + "/publishedThesis/editTopic/:id"}>
                   <TopicForm />
-                </Route>
-                <Route path={rootPath + "/appliedStudents"}>
-                  <AppliedStudents></AppliedStudents>
-                </Route>
+                </Route> */}
+                <TeacherRoute
+                  isTeacher={isTeacher}
+                  path={rootPath + "/publishedThesis/editTopic/:id"}
+                  component={TopicForm}
+                />
+                {/* <Route path={rootPath + "/appliedStudents"}>
+                  <AppliedStudents/>
+                </Route> */}
+                <TeacherRoute
+                  isTeacher={isTeacher}
+                  path={rootPath + "/appliedStudents"}
+                  component={AppliedStudents}
+                />
                 {/* ha egyik route sem talál, visszairányítás egyelőre */}
                 <Route render={() => <Redirect to="/thesis" />} />
               </Switch>
