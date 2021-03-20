@@ -18,6 +18,8 @@ import StudentRoute from "./StudentRoute";
 import TeacherRoute from "./TeacherRoute";
 
 import { isAdmin, isStudent, isTeacher } from "../roles";
+import Practices from "./Practices";
+import PracticeForm from "./PracticeForm";
 
 const Thesis: React.FunctionComponent = () => {
   return (
@@ -27,7 +29,11 @@ const Thesis: React.FunctionComponent = () => {
         <div className="ms-Grid" dir="ltr">
           <div className="ms-Grid-row">
             <div className="ms-Grid-col ms-sm12 ms-smPull ms-md12 ms-lg12 ms-xl3">
-              <img src={process.env.PUBLIC_URL + "/logo.png"} alt="Logo" style={{ width: "60%" }} />
+              <img
+                src={process.env.PUBLIC_URL + "/logo.png"}
+                alt="Logo"
+                style={{ width: "240px" }}
+              />
               <MenuNavigate></MenuNavigate>
             </div>
             <div className="ms-Grid-col ms-sm12 ms-smPull ms-md12 ms-lg12 ms-xl9">
@@ -88,6 +94,19 @@ const Thesis: React.FunctionComponent = () => {
                   isTeacher={isTeacher}
                   path={rootPath + "/appliedStudents"}
                   component={AppliedStudents}
+                />
+                <Route exact path={rootPath + "/practices"}>
+                  <Practices />
+                </Route>
+                <AdminRoute
+                  isAdmin={isAdmin}
+                  path={rootPath + "/createPractice"}
+                  component={PracticeForm}
+                />
+                <AdminRoute
+                  isAdmin={isAdmin}
+                  path={rootPath + "/practices/editPractice/:id"}
+                  component={PracticeForm}
                 />
                 {/* ha egyik route sem talál, visszairányítás egyelőre */}
                 <Route render={() => <Redirect to="/thesis" />} />

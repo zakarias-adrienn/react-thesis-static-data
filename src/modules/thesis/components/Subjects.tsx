@@ -33,7 +33,6 @@ const comboboxStyles: Partial<IComboBoxStyles> = {
 
 let options: IComboBoxOption[] = [];
 subjects.forEach((name) => options.push({ key: name, text: name }));
-
 options = options.sort((a, b) => (a.text > b.text ? 1 : -1));
 
 const stackTokens: IStackTokens = { childrenGap: 20 };

@@ -134,7 +134,7 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
         key: name,
         name: name,
         edit: <DialogToEditTechnology name={name} myId={name} onSave={this.onChangeName} />,
-        delete: <ConfirmDelete type={name} onDelete={this.onDelete} id={name} name={name} />
+        delete: <ConfirmDelete type="technology" onDelete={this.onDelete} id={name} name={name} />
       })
     );
     this._allItems = this._allItems.sort((a, b) => (a.name > b.name ? 1 : -1));

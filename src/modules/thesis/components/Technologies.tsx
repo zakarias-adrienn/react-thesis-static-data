@@ -29,6 +29,7 @@ const technologies = [
 
 let technologyOptions: IComboBoxOption[] = [];
 technologies.forEach((name) => technologyOptions.push({ key: name, text: name }));
+technologyOptions = technologyOptions.sort((t1, t2) => (t1.key < t2.key ? -1 : 1));
 
 const stackTokens: IStackTokens = { childrenGap: 20 };
 

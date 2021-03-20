@@ -37,6 +37,11 @@ const navLinkGroups: INavLinkGroup[] = [
         name: "Témaböngészés",
         url: rootPath + "/searchPage",
         key: "key3"
+      },
+      {
+        name: "Szakmai gyakorlati helyek",
+        url: rootPath + "/practices",
+        key: "key7"
       }
       // {
       //   name: "Jelentkezéseim",
@@ -56,10 +61,14 @@ const navLinkGroups: INavLinkGroup[] = [
 // egyelőre ezek beégetett konstansok
 if (isAdmin) {
   navLinkGroups[0].links.push({
+    name: "Szakmai gyakorlati hely kiírása",
+    url: rootPath + "/createPractice",
+    key: "key8"
+  });
+  navLinkGroups[0].links.push({
     name: "Technológiák kezelése",
     url: rootPath + "/addNewTechnology",
     key: "key5"
-    //disabled: true - ha nincs jogosultsága? nem is kellene megjelenjen inkább
   });
 }
 if (isStudent) {
@@ -124,6 +133,10 @@ const MenuNavigate: React.FunctionComponent = () => {
       return "key2";
     } else if (pathToCheck === "/thesis/createThesis") {
       return "key1";
+    } else if (pathToCheck === "/thesis/practices") {
+      return "key7";
+    } else if (pathToCheck === "/thesis/createPractice") {
+      return "key8";
     } else {
       return "";
     }

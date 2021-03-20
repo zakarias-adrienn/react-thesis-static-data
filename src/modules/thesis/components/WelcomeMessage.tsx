@@ -6,7 +6,7 @@ const WelcomeMessage: React.FunctionComponent = () => {
       <h2 style={{ letterSpacing: "1.5px" }}>
         Üdvözlet a szakdolgozat és TDKdolgozat témakereső modulban!
       </h2>
-      <p>
+      <div>
         Szakdolgozat tudnivalók diákoknak:
         <ol style={{ lineHeight: "25px" }}>
           <li>
@@ -31,8 +31,8 @@ const WelcomeMessage: React.FunctionComponent = () => {
             <b>február 1-ig</b>, januári záróvizsga esetén <b>augusztus 31-ig</b> van lehetősége.
           </li>
         </ol>
-      </p>
-      <p>
+      </div>
+      <div>
         Miért érdemes TDK dolgozatot írni?
         <ol style={{ lineHeight: "25px" }}>
           <li>sok hasznos tapasztalatot nyújt a szakdolgozat elkészítéséhez;</li>
@@ -56,7 +56,7 @@ const WelcomeMessage: React.FunctionComponent = () => {
         <a href="http://tda.inf.elte.hu/" target="_blank">
           http://tda.inf.elte.hu/
         </a>
-      </p>
+      </div>
       <br />
     </div>
   );

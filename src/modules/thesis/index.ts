@@ -31,6 +31,7 @@ import { searchTopicActionSchema } from "./action/searchTopic.action";
 import { withdrawApplianceActionSchema } from "./action/withdrawAppliance.action";
 import Thesis from "./components/Thesis";
 import { departmentSchema, studentSchema, teacherSchema, userSchema } from "./model/user.model";
+import { practiceSchema } from "./model/practice.model";
 
 export const ThesisModule: Module = {
   root: Thesis,
@@ -43,7 +44,8 @@ export const ThesisModule: Module = {
     topicSchema,
     applicationSchema,
     userSchema,
-    departmentSchema
+    departmentSchema,
+    practiceSchema
   ],
   settings: [
     themeSetting,
@@ -52,6 +54,7 @@ export const ThesisModule: Module = {
     specializationMScSetting,
     startYearSetting
   ],
+  // nem lesznek használva
   actions: [
     acceptApplianceActionSchema,
     addNewTechnologyActionSchema,

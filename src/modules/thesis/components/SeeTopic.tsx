@@ -1,5 +1,4 @@
 import * as React from "react";
-import { IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 import { DefaultButton, PrimaryButton } from "office-ui-fabric-react";
 import { Redirect } from "react-router";
 import { Topic } from "../model/topics.model";
@@ -9,56 +8,6 @@ import {
   convertTypeToString
 } from "../helperFunctions";
 import { isStudent } from "../roles";
-
-let options: IDropdownOption[] = [
-  { key: "Webprogramozás", text: "Webprogramozás" },
-  { key: "Mesterséges intelligencia", text: "Mesterséges intelligencia" },
-  { key: "Telekommunikációs hálózatok", text: "Telekommunikációs hálózatok" },
-  { key: "Konkurens programozás", text: "Konkurens programozás" },
-  { key: "Algoritmusok és adatszerkezetek 1", text: "Algoritmusok és adatszerkezetek 1" }
-];
-
-options = options.sort((a, b) => (a.text > b.text ? 1 : -1));
-
-let options2: IDropdownOption[] = [
-  { key: "JAVA", text: "JAVA" },
-  { key: "C++", text: "C++" },
-  { key: "HTML5", text: "HTML5" },
-  { key: "CSS", text: "CSS" },
-  { key: "Javascript", text: "Javascript" },
-  { key: "React", text: "React" }
-];
-
-options2 = options2.sort((a, b) => (a.text > b.text ? 1 : -1));
-
-// const colors = [
-//   "#FFB900",
-//   "#E74856",
-//   "#0078D7",
-//   "#767676",
-//   "#FF8C00",
-//   "#E81123",
-//   "#0063B1",
-//   "#2D7D9A",
-//   "#F7630C",
-//   "#EA005E",
-//   "#8E8CD8",
-//   "#00B7C3",
-//   "#038387",
-//   "#00B294",
-//   "#018574",
-//   "#EF6950",
-//   "#BF0077",
-//   "#744DA9",
-//   "#567C73",
-//   "#647C64",
-//   "#4C4A48",
-//   "#0063B1"
-// ];
-
-// function getRandomColor() {
-//   return colors[Math.floor(Math.random() * colors.length)];
-// }
 
 const myLiStyle: React.CSSProperties = {
   padding: "3px",
@@ -116,7 +65,7 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
           <div className="ms-Grid-col ms-sm2">
             <b>Leírás: </b>
           </div>
-          <div className="ms-Grid-col ms-sm10" style={rightStyle}>
+          <div className="ms-Grid-col ms-sm10" style={{ ...rightStyle, whiteSpace: "pre-wrap" }}>
             {props.topic.description}
           </div>
         </div>
@@ -181,7 +130,9 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
               {props.topic.connectedTechnologyIds.length === 0
                 ? "Nincsen megadva kapcsolódó technológia."
                 : props.topic.connectedTechnologyIds.map((id) => (
-                    <li style={{ ...myLiStyle }}>{id}</li>
+                    <li key={id} style={{ ...myLiStyle }}>
+                      {id}
+                    </li>
                   ))}
             </ul>
           </div>
@@ -202,7 +153,9 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
               {props.topic.connectedSubjectIds.length === 0
                 ? "Nincsen megadva kapcsolódó tantárgy."
                 : props.topic.connectedSubjectIds.map((id) => (
-                    <li style={{ ...myLiStyle }}>{id}</li>
+                    <li key={id} style={{ ...myLiStyle }}>
+                      {id}
+                    </li>
                   ))}
             </ul>
           </div>
