@@ -60,7 +60,7 @@ const Technologies: React.FunctionComponent<Prop> = (props) => {
     <Stack tokens={stackTokens}>
       <ComboBox
         label="Témához kapcsolódó technológiák"
-        placeholder="Válassz technológiákat..."
+        placeholder="Válassz(on) technológiákat..."
         multiSelect
         allowFreeform
         autoComplete="on"

@@ -398,7 +398,7 @@ class Practices extends React.Component<{}, IDetailsListBasicExampleState> {
             <Stack tokens={stackTokens}>
               <ComboBox
                 label="Szakmai gyakorlati helyhez kapcsolódó technológiák"
-                placeholder="Válassz technológiákat..."
+                placeholder="Válassz(on) technológiákat..."
                 multiSelect
                 allowFreeform
                 autoComplete="on"

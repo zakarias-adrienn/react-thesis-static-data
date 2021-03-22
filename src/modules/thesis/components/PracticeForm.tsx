@@ -266,7 +266,7 @@ class PracticeForm extends React.Component<
       },
       values: {
         ...this.state.values,
-        languages: this.state.values.language.includes(Language.English)
+        language: this.state.values.language.includes(Language.English)
           ? this.state.values.language.filter((type) => type !== Language.English)
           : [...this.state.values.language, Language.English]
       }
@@ -282,7 +282,7 @@ class PracticeForm extends React.Component<
       },
       values: {
         ...this.state.values,
-        languages: this.state.values.language.includes(Language.Hungarian)
+        language: this.state.values.language.includes(Language.Hungarian)
           ? this.state.values.language.filter((type) => type !== Language.Hungarian)
           : [...this.state.values.language, Language.Hungarian]
       }

@@ -113,7 +113,7 @@ const topics: Topic[] = [
 ];
 
 let teachersToDepartments = new Map<String, String[]>();
-teachersToDepartments.set("Algoritmusok és alkalmazásaik", [
+teachersToDepartments.set("Algoritmusok és Alkalmazásaik", [
   "Pusztai Kinga",
   "Ásványi Tibor",
   "Nagy Sára",
@@ -121,14 +121,14 @@ teachersToDepartments.set("Algoritmusok és alkalmazásaik", [
   "Dr. Csuhaj Varjú Erzsébet",
   "Vadász Péter"
 ]);
-teachersToDepartments.set("Numerikus analízis", [
+teachersToDepartments.set("Numerikus Analízis", [
   "Chripkó Ágnes",
   "Csörgõ István",
   "Filipp Zoltán",
   "Dr. Gergó Lajos",
   "Dr. Szarvas Kristóf"
 ]);
-teachersToDepartments.set("Információs rendszerek", [
+teachersToDepartments.set("Információs Rendszerek", [
   "Dr. Kiss Attila",
   "Dr. Hajas Csilla",
   "Dr. Laki Sándor",
@@ -138,14 +138,14 @@ teachersToDepartments.set("Információs rendszerek", [
   "Dr. Vörös Péter"
 ]);
 teachersToDepartments.set("Komputeralgebra", ["Burcsi Péter", "Dr. Járai Antal", "Tóth Viktória"]);
-teachersToDepartments.set("Programozáselmélet és szoftvertechnológia", [
+teachersToDepartments.set("Programozáselmélet és Szoftvertechnológia", [
   "Dr. Gregorics Tibor",
   "Borsi Zsolt",
   "Cserép Máté",
   "Dr. Szendrei Rudolf",
   "Dr. Várkonyi Teréz Anna"
 ]);
-teachersToDepartments.set("Programozási nyelvek és fordítóprogramok", [
+teachersToDepartments.set("Programozási Nyelvek és Fordítóprogramok", [
   "Dr. Horváth Zoltán",
   "Kitlei Róbert",
   "Dr. Kozsik Tamás",
@@ -153,7 +153,7 @@ teachersToDepartments.set("Programozási nyelvek és fordítóprogramok", [
   "Dr. Porkoláb Zoltán",
   "Dr. Tejfel Máté"
 ]);
-teachersToDepartments.set("Média és oktatásinformatika", [
+teachersToDepartments.set("Média- és Oktatásinformatika", [
   "Dr. Abonyi-Tóth Andor",
   "Dr. Zsakó László",
   "Dr. Bernát Péter",
@@ -164,6 +164,13 @@ teachersToDepartments.set("Valószínűségelméleti és Statisztika", [
   "Arató Miklós",
   "Zempléni András"
 ]);
+teachersToDepartments.set("Térképtudományi és Geoinformatikai Intézet", ["Dr. Zentai László"]);
+teachersToDepartments.set("Adattudományi és Adattechnológiai", [
+  "Dr. Horváth Tamás",
+  "Tarcsi Ádám"
+]);
+teachersToDepartments.set("Mesterséges Intelligencia", ["Belics Éva"]);
+teachersToDepartments.set("Savaria Műszaki Intézet", ["Dr. Bak Árpád", "Dr. Borbély Tibor"]);
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // STÍLUSOK
@@ -722,6 +729,7 @@ class SearchPage extends React.Component<{}, State> {
     if (this.state.selectedDepartment !== "" && this.state.selectedTeacher === "") {
       console.log("CSAK TANSZÉK ALAPJÁN KERESÜNK: ", this.state.selectedDepartment);
       const teacherIds = teachersToDepartments.get(this.state.selectedDepartment);
+      console.log(teacherIds);
       searchResultByDepartment = searchResult.filter((topic) =>
         teacherIds?.includes(topic.teacherId)
       );

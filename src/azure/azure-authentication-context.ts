@@ -45,7 +45,7 @@ export class AzureAuthenticationContext {
         //"GroupMember.Read.All"
         // "Organization.Read.All"
       ]
-      //prompt: "select_account"
+      // prompt: "none"
     };
     this.silentRequest = {
       account: +"",

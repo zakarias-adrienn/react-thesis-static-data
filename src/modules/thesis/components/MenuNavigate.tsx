@@ -8,7 +8,7 @@ import { isAdmin, isStudent, isTeacher } from "../roles";
 
 const navStyles: Partial<INavStyles> = {
   root: {
-    width: 285,
+    width: "90%",
     boxSizing: "border-box",
     border: "1px solid #eee",
     overflowY: "auto"

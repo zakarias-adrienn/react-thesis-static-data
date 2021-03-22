@@ -41,7 +41,7 @@ const AzureAuthenticationButton = ({ onAuthenticated }: any): JSX.Element => {
   const showLogInButton = (): any => {
     return (
       <PrimaryButton id="authenticationButton" onClick={() => logIn("loginPopup")}>
-        Bejelentkezés
+        Bejelentkezés Microsoft fiókkal
       </PrimaryButton>
     );
   };

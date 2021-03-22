@@ -64,7 +64,7 @@ const Subjects: React.FunctionComponent<Prop> = (props) => {
     <Stack tokens={stackTokens}>
       <ComboBox
         label="Témához kapcsolódó tantárgyak"
-        placeholder="Válassz tantárgyakat..."
+        placeholder="Válassz(on) tantárgyakat..."
         multiSelect
         allowFreeform
         autoComplete="on"

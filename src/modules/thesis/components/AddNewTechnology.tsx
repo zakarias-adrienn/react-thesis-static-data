@@ -39,9 +39,12 @@ const AddNewTechnology: React.FunctionComponent<AddProps> = (props) => {
       return "";
     } else {
       setEmpty(true);
-      return value.trim().length >= 1 && technologySmallNames.includes(value.trim().toLowerCase())
-        ? `Ilyen nevű technológia már szerepel az adatbázisban!`
-        : `Név megadása kötelező! Nem lehet üres!`;
+      if (value.trim().length >= 1 && technologySmallNames.includes(value.trim().toLowerCase())) {
+        return `Ilyen nevű technológia már szerepel az adatbázisban!`;
+      } else {
+        setSimilarTechnologies([]);
+        return `Név megadása kötelező! Nem lehet üres`;
+      }
     }
   };
 
@@ -82,7 +85,7 @@ const AddNewTechnology: React.FunctionComponent<AddProps> = (props) => {
               value={name}
               onChange={handleChange}
             />
-            {similarTechnologies.length > 0 && !empty && (
+            {similarTechnologies.length > 0 && (
               <>
                 <br />
                 <MessageBar

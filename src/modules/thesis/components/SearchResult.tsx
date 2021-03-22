@@ -20,6 +20,7 @@ import {
   convertSchoolSemesterToString,
   convertTypeToString
 } from "../helperFunctions";
+import { isStudent } from "../roles";
 
 export interface IDetailsListBasicExampleItem {
   key: string;
@@ -118,8 +119,9 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
         name: "Félév",
         fieldName: "semester",
         minWidth: 10,
-        maxWidth: 100,
+        maxWidth: 80,
         isResizable: true,
+        isMultiline: true,
         onColumnClick: this._onColumnClick
       },
       {
@@ -233,7 +235,7 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
       <Fabric>
         {!this.state.seeTheme ? (
           <>
-            {this.state.items.length ? (
+            {this.state.items.length && isStudent ? (
               <MessageBar>Jelentkezni a téma részleteinek megtekintése során lehet.</MessageBar>
             ) : (
               ""

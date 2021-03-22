@@ -15,6 +15,19 @@ import AddNewTechnology from "./AddNewTechnology";
 import { MessageBar, MessageBarType, SelectionMode } from "@fluentui/react";
 import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
 import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
+import { Technology } from "../model/technologies.model";
+
+// beégetett adatok
+const exampleTechnologies: Technology[] = [
+  { id: "JAVA", name: "JAVA" },
+  { id: "C", name: "C" },
+  { id: "C++", name: "C++" },
+  { id: "C#", name: "C#" },
+  { id: "Python", name: "Python" },
+  { id: "SQL", name: "SQL" },
+  { id: "React", name: "React" },
+  { id: "Angular", name: "Angular" }
+];
 
 const exampleChildClass = mergeStyles({
   display: "block",
@@ -53,19 +66,6 @@ export interface IDetailsListBasicExampleState {
   deleteTechnology: boolean;
   newTechnology: boolean;
 }
-
-const exampleTechnologies = [
-  "JAVA",
-  "C",
-  "C++",
-  "Python",
-  "React",
-  "Angular",
-  "HTML5",
-  "C#",
-  "JavaScript",
-  "TypeScript"
-];
 
 class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState> {
   private _allItems: IDetailsListBasicExampleItem[];
@@ -129,12 +129,12 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
     this.addNewTechnology = this.addNewTechnology.bind(this);
 
     this._allItems = [];
-    exampleTechnologies.forEach((name) =>
+    exampleTechnologies.forEach((t) =>
       this._allItems.push({
-        key: name,
-        name: name,
-        edit: <DialogToEditTechnology name={name} myId={name} onSave={this.onChangeName} />,
-        delete: <ConfirmDelete type="technology" onDelete={this.onDelete} id={name} name={name} />
+        key: t.id,
+        name: t.name,
+        edit: <DialogToEditTechnology name={t.name} myId={t.id} onSave={this.onChangeName} />,
+        delete: <ConfirmDelete type="technology" onDelete={this.onDelete} id={t.id} name={t.name} />
       })
     );
     this._allItems = this._allItems.sort((a, b) => (a.name > b.name ? 1 : -1));

@@ -34,7 +34,7 @@ let options: IDropdownOption[] = [];
 
 // most egyelőre egy map-ben tárolom az adatokat ////////////////////////////////////////////////////////////////
 let teachersToDepartments = new Map<String, String[]>();
-teachersToDepartments.set("Algoritmusok és alkalmazásaik", [
+teachersToDepartments.set("Algoritmusok és Alkalmazásaik", [
   "Pusztai Kinga",
   "Ásványi Tibor",
   "Nagy Sára",
@@ -42,14 +42,14 @@ teachersToDepartments.set("Algoritmusok és alkalmazásaik", [
   "Dr. Csuhaj Varjú Erzsébet",
   "Vadász Péter"
 ]);
-teachersToDepartments.set("Numerikus analízis", [
+teachersToDepartments.set("Numerikus Analízis", [
   "Chripkó Ágnes",
   "Csörgõ István",
   "Filipp Zoltán",
   "Dr. Gergó Lajos",
   "Dr. Szarvas Kristóf"
 ]);
-teachersToDepartments.set("Információs rendszerek", [
+teachersToDepartments.set("Információs Rendszerek", [
   "Dr. Kiss Attila",
   "Dr. Hajas Csilla",
   "Dr. Laki Sándor",
@@ -59,14 +59,14 @@ teachersToDepartments.set("Információs rendszerek", [
   "Dr. Vörös Péter"
 ]);
 teachersToDepartments.set("Komputeralgebra", ["Burcsi Péter", "Dr. Járai Antal", "Tóth Viktória"]);
-teachersToDepartments.set("Programozáselmélet és szoftvertechnológia", [
+teachersToDepartments.set("Programozáselmélet és Szoftvertechnológia", [
   "Dr. Gregorics Tibor",
   "Borsi Zsolt",
   "Cserép Máté",
   "Dr. Szendrei Rudolf",
   "Dr. Várkonyi Teréz Anna"
 ]);
-teachersToDepartments.set("Programozási nyelvek és fordítóprogramok", [
+teachersToDepartments.set("Programozási Nyelvek és Fordítóprogramok", [
   "Dr. Horváth Zoltán",
   "Kitlei Róbert",
   "Dr. Kozsik Tamás",
@@ -74,7 +74,7 @@ teachersToDepartments.set("Programozási nyelvek és fordítóprogramok", [
   "Dr. Porkoláb Zoltán",
   "Dr. Tejfel Máté"
 ]);
-teachersToDepartments.set("Média és oktatásinformatika", [
+teachersToDepartments.set("Média- és Oktatásinformatika", [
   "Dr. Abonyi-Tóth Andor",
   "Dr. Zsakó László",
   "Dr. Bernát Péter",
