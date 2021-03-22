@@ -12,7 +12,7 @@ import { Stack } from "office-ui-fabric-react";
 import ConfirmDelete from "./ConfirmDelete";
 import DialogToEditTechnology from "./DialogToEditTechnology";
 import AddNewTechnology from "./AddNewTechnology";
-import { MessageBar, MessageBarType, SelectionMode } from "@fluentui/react";
+import { MessageBar, MessageBarType, SelectionMode, Separator } from "@fluentui/react";
 import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
 import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
 import { Technology } from "../model/technologies.model";
@@ -231,6 +231,7 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
           technologies={this.state.items}
           name=""
         />
+        <Separator></Separator>
         <h3>Adatbázisban levő technológiák</h3>
         <TextField
           className={exampleChildClass}
