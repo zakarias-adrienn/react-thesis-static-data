@@ -3,11 +3,8 @@ import {
   AuthenticationResult,
   AccountInfo,
   EndSessionRequest,
-  RedirectRequest,
-  PopupRequest,
-  SilentRequest
+  RedirectRequest
 } from "@azure/msal-browser";
-import { boolean } from "joi";
 
 import { MSAL_CONFIG } from "./azure-authentication-config";
 
@@ -94,7 +91,7 @@ export class AzureAuthenticationContext {
 
     this.silentRequest.account = this.getAccount();
     let tokenResponse: any = await this.myMSALObj.acquireTokenSilent(this.silentRequest);
-    let payload = await fetch("https://graph.microsoft.com/beta/me/memberOf", {
+    let payload = await fetch("https://graph.microsoft.com/v1.0/me/memberOf", {
       headers: {
         Authorization: "Bearer " + tokenResponse.accessToken
       }
@@ -105,6 +102,7 @@ export class AzureAuthenticationContext {
     let isStudentArr = json.value.filter(
       (e: any) => e.id === "57704862-4735-465b-8a04-40e913599005"
     );
+    // ugyanilyet lehetne az oktatok csoportra -> doktorandusz - mindkettő
     if (isStudentArr.length > 0) {
       roles.isStudent = true;
     } else {

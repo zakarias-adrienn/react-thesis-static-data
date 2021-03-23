@@ -26,77 +26,16 @@ import {
 import { SelectionMode } from "@fluentui/react";
 import { Practice } from "../model/practice.model";
 import SeePractice from "./SeePractice";
-import { Language } from "../model/topics.model";
 import { convertLanguagesToString } from "../helperFunctions";
 import MySpinner from "./MySpinner";
 import { rootPath } from "../path";
 import { isAdmin } from "../roles";
 import { Link } from "react-router-dom";
 import ConfirmDelete from "./ConfirmDelete";
+import { examplePractices, examplePractices as practices, exampleTopics } from "../exampleData";
+import { exampleTechnologies } from "../exampleData";
 
-// MINTA ADAT AHOGYAN MAJD AZ ADATBÁZISBÓL JÖN... REMÉLHETŐLEG
-const practices: Practice[] = [
-  {
-    id: "a",
-    company: "AGILEXPERT KFT.",
-    contact: "E-mail: info@agilexpert.hu, Telefon: +36-70-609-1634",
-    connectedTechnologyIds: ["SQL"],
-    place: "Budapest",
-    language: [Language.Hungarian],
-    description: `A KÖVETKEZŐ FELTÉTELEKKEL VÁRUNK HALLGATÓKAT:
-      Analitikus gondolkodásmód.
-      Az objektum orientált programozás alapelveinek ismerete.
-      Java vagy valamely objektum orientált programozási nyelv haladó szintű ismerete.
-      Jártasság SQL lekérdezések készítésében.
-      Alap szintű angol nyelvismeret, technikai szövegek értelmezése.`
-  },
-  {
-    id: "b",
-    company: "AP SOLUTION HUNGARY KFT.",
-    contact: "danielk@apsolution.com.au, +36204559046",
-    connectedTechnologyIds: ["React", "Angular"],
-    place: "Budapest",
-    language: [Language.Hungarian, Language.English],
-    description:
-      "Az AP Solution Hungary Kft. gyakornoki programját elsősorban másodévet már elvégzett hallgatók számára ajánljuk, akik szeretnék megtanult tudásukat a gyakorlatban is alkalmazni, és  valódi mobil- és webes alkalmazásokat fejleszteni. Cégünk saját termékek fejlesztése mellett magyar és ausztrál megrendelőkkel dolgozik. Csapatunk fiatalos, és ügyelünk rá, hogy mindig a legkorszerűbb technológiákat és eszközöket használjuk fejlesztéseink során, ahogy arra is, hogy a projekthez válasszuk a legalkalmasabb nyelvet és eszközöket, és ne fordítva."
-  },
-  {
-    id: "c",
-    company: "CURSOR INSIGHT HUNGARY KFT.",
-    contact: "tamas@cursorinsight.com, +44 7785 227810",
-    connectedTechnologyIds: [],
-    place: "Budapest",
-    language: [Language.Hungarian, Language.English],
-    description:
-      "A londoni Cursor Insight budapesti kutató- és fejlesztőbázisa digitálisan rögzített emberi és ember irányította eszközök mozgásának tudományos elemzésével foglalkozik. \nA cég saját fejlesztésű, robosztus és rugalmas mozgáselemző algoritmusa megnyerte a German Research Centre for Artificial Intelligence által megrendezett online kézi aláírás-verifikációs világversenyt (SigWIComp2015), amely során mozgásdinamika elemzése volt a versenyfeladat.Egy magyarországi vezető pénzintézeti ügyfelünk számára évi 100 milliós nagyságrendben végezzük el digitálisan rögzített ügyfélaláírások automatikus ellenőrzését egy szintén általunk tervezett, implementált és szabadalmi bejegyzés alatt lévő biometrikus elektronikus aláírás megoldás részeként."
-  },
-  {
-    id: "d",
-    company: "FINATECK KFT.",
-    contact:
-      "Kapcsolattartó: Kovács Vivien, Email: vivien@finateck.com, Telefonszám: +36 30 365 0844",
-    connectedTechnologyIds: ["HTML", "PHP", "React", "Redux"],
-    place: "Budapest",
-    language: [Language.English],
-    description: `A Finateck Kft. aktív marketing, fejlesztés és grafikai területeken is. A cég teljes marketing-kampányok elkészítésétől, kisebb méretű projektekig sokféle feladatot vállal: kreatív tervezés és írás, grafikai munkák, honlapfejlesztés, bannerkészítés, egyéb kiegészítő anyagok készítése, animációs és élőszereplős reklámfilm forgatás, SEO, médiatervezés és vásárlás.\nProjektjeink és ügyfeleink szinte kizárólag külföldiek, így a munkaképes angol elengedhetetlen a munkához.`
-  }
-];
-
-// beégetett adat, majd map(item => item.name)
-const technologies = [
-  "Angular",
-  "JAVA",
-  "C++",
-  "HTML5",
-  "HTML",
-  "CSS",
-  "JavaScript",
-  "TypeScript",
-  "React",
-  "Oracle",
-  "MySQL",
-  "SQLite"
-];
+const technologies: string[] = exampleTechnologies.map((t) => t.name);
 
 let technologyOptions: IComboBoxOption[] = [];
 technologies.forEach((name) => technologyOptions.push({ key: name, text: name }));
@@ -169,13 +108,26 @@ class Practices extends React.Component<{}, IDetailsListBasicExampleState> {
     this.onChange = this.onChange.bind(this);
     this.onDelete = this.onDelete.bind(this);
 
+    // TOPICHOZ MEGFELELŐ TECHNOLÓGIANEVEK - TODO: lekérni
+    let technologyNamesToPractice = new Map<String, String[]>();
+    examplePractices.forEach((t) => {
+      let technologiesHere = exampleTechnologies.filter((tech) =>
+        t.connectedTechnologyIds.includes(tech.id)
+      );
+      let technologyNames = technologiesHere.map((tech) => tech.name);
+      technologyNames = technologyNames.sort(function (a, b) {
+        return a.localeCompare(b);
+      });
+      technologyNamesToPractice.set(t.id, technologyNames);
+    });
+
     this._allItems = [];
     practices.forEach((p) => {
       this._allItems.push({
         key: p.id,
         company: p.company,
         contact: p.contact,
-        connectedTechnologyIds: p.connectedTechnologyIds.join(", "),
+        connectedTechnologyIds: technologyNamesToPractice.get(p.id)?.join(", ") || "",
         place: p.place,
         language: convertLanguagesToString(p.language),
         view: (

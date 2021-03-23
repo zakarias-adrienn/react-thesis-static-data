@@ -16,18 +16,7 @@ import { MessageBar, MessageBarType, SelectionMode, Separator } from "@fluentui/
 import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
 import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
 import { Technology } from "../model/technologies.model";
-
-// beégetett adatok
-const exampleTechnologies: Technology[] = [
-  { id: "JAVA", name: "JAVA" },
-  { id: "C", name: "C" },
-  { id: "C++", name: "C++" },
-  { id: "C#", name: "C#" },
-  { id: "Python", name: "Python" },
-  { id: "SQL", name: "SQL" },
-  { id: "React", name: "React" },
-  { id: "Angular", name: "Angular" }
-];
+import { exampleTechnologies } from "../exampleData";
 
 const exampleChildClass = mergeStyles({
   display: "block",

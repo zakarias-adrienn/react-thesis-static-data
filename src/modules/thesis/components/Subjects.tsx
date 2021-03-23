@@ -2,24 +2,7 @@ import * as React from "react";
 import { IStackTokens, Stack } from "office-ui-fabric-react/lib/Stack";
 import { ComboBox } from "office-ui-fabric-react/lib/index";
 import { IComboBox, IComboBoxStyles, IComboBoxOption } from "@fluentui/react";
-
-// BEÉGETETT TANTÁRGYAK
-const subjects = [
-  "Mesterséges intelligencia",
-  "Webprogramozás",
-  "Webfejlesztés",
-  "Telekommunikációs hálózatok",
-  "Konkurens programozás",
-  "Algoritmusok és adatszerkezetek 1",
-  "Algoritmusok és adatszerkezetek 2",
-  "Programozás",
-  "Numerikus módszerek",
-  "A számításelmélet alapjai 1",
-  "A számításelmélet alapjai 2",
-  "Valószínűségszámítás és statisztika",
-  "Diszkrét modellek alkalmazásai",
-  "Szoftvertechnológia"
-];
+import { exampleSubjects } from "../exampleData";
 
 const comboboxStyles: Partial<IComboBoxStyles> = {
   root: { width: 300 },
@@ -32,7 +15,7 @@ const comboboxStyles: Partial<IComboBoxStyles> = {
 };
 
 let options: IComboBoxOption[] = [];
-subjects.forEach((name) => options.push({ key: name, text: name }));
+exampleSubjects.forEach((subj) => options.push({ key: subj.neptunId, text: subj.name }));
 options = options.sort((a, b) => (a.text > b.text ? 1 : -1));
 
 const stackTokens: IStackTokens = { childrenGap: 20 };

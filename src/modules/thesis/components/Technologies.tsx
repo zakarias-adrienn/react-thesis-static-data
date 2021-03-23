@@ -2,6 +2,7 @@ import * as React from "react";
 import { IStackTokens, Stack } from "office-ui-fabric-react/lib/Stack";
 import { ComboBox } from "office-ui-fabric-react/lib/index";
 import { IComboBox, IComboBoxStyles, IComboBoxOption } from "@fluentui/react";
+import { exampleTechnologies } from "../exampleData";
 
 const comboboxStyles: Partial<IComboBoxStyles> = {
   root: { width: 300 },
@@ -13,22 +14,8 @@ const comboboxStyles: Partial<IComboBoxStyles> = {
   }
 };
 
-// beégetett adat, majd map(item => item.name)
-const technologies = [
-  "JAVA",
-  "C++",
-  "HTML5",
-  "CSS",
-  "JavaScript",
-  "TypeScript",
-  "React",
-  "Oracle",
-  "MySQL",
-  "SQLite"
-];
-
 let technologyOptions: IComboBoxOption[] = [];
-technologies.forEach((name) => technologyOptions.push({ key: name, text: name }));
+exampleTechnologies.forEach((tech) => technologyOptions.push({ key: tech.id, text: tech.name }));
 technologyOptions = technologyOptions.sort((t1, t2) => (t1.key < t2.key ? -1 : 1));
 
 const stackTokens: IStackTokens = { childrenGap: 20 };

@@ -4,20 +4,8 @@ import { PrimaryButton, DefaultButton } from "office-ui-fabric-react/lib/Button"
 import { useBoolean } from "@uifabric/react-hooks";
 import { IconButton } from "@fluentui/react/lib/Button";
 import { TextField } from "office-ui-fabric-react/lib/TextField";
-import { Technology } from "../model/technologies.model";
-import { IDialogStyles, MessageBar, MessageBarType } from "@fluentui/react";
-
-// beégetett adatok
-const exampleTechnologies: Technology[] = [
-  { id: "JAVA", name: "JAVA" },
-  { id: "C", name: "C" },
-  { id: "C++", name: "C++" },
-  { id: "C#", name: "C#" },
-  { id: "Python", name: "Python" },
-  { id: "SQL", name: "SQL" },
-  { id: "React", name: "React" },
-  { id: "Angular", name: "Angular" }
-];
+import { MessageBar, MessageBarType } from "@fluentui/react";
+import { exampleTechnologies } from "../exampleData";
 
 const modelProps = {
   isBlocking: false,

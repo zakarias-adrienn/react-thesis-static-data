@@ -10,7 +10,7 @@ export const MSAL_CONFIG: Configuration = {
   },
   cache: {
     cacheLocation: "sessionStorage",
-    storeAuthStateInCookie: false
+    storeAuthStateInCookie: true
   },
   system: {
     loggerOptions: {

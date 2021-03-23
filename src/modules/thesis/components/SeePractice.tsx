@@ -2,6 +2,7 @@ import * as React from "react";
 import { DefaultButton } from "office-ui-fabric-react";
 import { Practice } from "../model/practice.model";
 import { convertLanguagesToString } from "../helperFunctions";
+import { exampleTechnologies } from "../exampleData";
 
 const myLiStyle: React.CSSProperties = {
   padding: "3px",
@@ -96,11 +97,13 @@ const SeePractice: React.FunctionComponent<Prop> = (props) => {
             >
               {props.practice.connectedTechnologyIds.length === 0
                 ? "Nincsen megadva kapcsolódó technológia."
-                : props.practice.connectedTechnologyIds.map((id) => (
-                    <li key={id} style={{ ...myLiStyle }}>
-                      {id}
-                    </li>
-                  ))}
+                : exampleTechnologies // TODO: lekérni megfelelően adatbázisból
+                    .filter((tech) => props.practice.connectedTechnologyIds.includes(tech.id))
+                    .map((tech) => (
+                      <li key={tech.id} style={{ ...myLiStyle }}>
+                        {tech.name}
+                      </li>
+                    ))}
             </ul>
           </div>
         </div>

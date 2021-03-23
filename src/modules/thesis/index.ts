@@ -27,7 +27,6 @@ import { getTechnologyByIdActionSchema } from "./action/getTechnologyById.action
 import { getTopicByIdActionSchema } from "./action/getTopicById.action";
 import { modifyTechnologyActionSchema } from "./action/modifyTechnology.action";
 import { modifyTopicActionSchema } from "./action/modifyTopic.action";
-import { searchTopicActionSchema } from "./action/searchTopic.action";
 import { withdrawApplianceActionSchema } from "./action/withdrawAppliance.action";
 import Thesis from "./components/Thesis";
 import { departmentSchema, studentSchema, teacherSchema, userSchema } from "./model/user.model";
@@ -73,7 +72,6 @@ export const ThesisModule: Module = {
     getTopicByIdActionSchema,
     modifyTechnologyActionSchema,
     modifyTopicActionSchema,
-    searchTopicActionSchema,
     withdrawApplianceActionSchema
   ]
 };

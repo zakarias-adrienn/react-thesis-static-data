@@ -46,10 +46,14 @@ export const schoolSemesterSchema = Joi.object({
 
 export const topicTypeSchema = Joi.array()
   .items(Joi.string().valid("bsc-thesis", "bsc-tdk", "msc-thesis", "msc-tdk", "project"))
+  .max(5)
+  .min(1)
   .required();
 
 export const languageSchema = Joi.array()
   .items(Joi.string().valid("english", "hungarian"))
+  .max(2)
+  .min(1)
   .required();
 
 export const topicSchema = Joi.object({
@@ -63,6 +67,5 @@ export const topicSchema = Joi.object({
   numberOfPlaces: Joi.number().min(1).required(),
   schoolSemester: schoolSemesterSchema,
   appliedStudentIds: Joi.array().items(Joi.string()),
-  language: languageSchema,
-  denyReason: Joi.string()
+  language: languageSchema
 });

@@ -20,42 +20,12 @@ import {
   ScrollbarVisibility
 } from "@fluentui/react";
 import { SelectionMode } from "@fluentui/react";
-import { Application, ApplicationStatus } from "../model/application.model";
-import { Language, Semester, Topic, TopicType } from "../model/topics.model";
+import { ApplicationStatus } from "../model/application.model";
 import { convertSchoolSemesterToString } from "../helperFunctions";
 import { RouteComponentProps } from "react-router";
 import { withRouter } from "react-router-dom";
-
-// MINTA ADAT AHOGYAN MAJD AZ ADATBÁZISBÓL JÖN... REMÉLHETŐLEG
-const myApplications: Application[] = [
-  {
-    id: "első",
-    studentId: "a",
-    topicId: "Youniversity",
-    status: ApplicationStatus.Accepted,
-    acceptReason:
-      "Kérlek mihamarabb jelezz vissza, hogy mikor lenne megfelelő neked egy megbeszélés!"
-  }
-];
-const topics: Topic[] = [
-  {
-    id: "Youniversity",
-    type: [TopicType.BScThesis],
-    title: "Youniversity",
-    description: "Valami...",
-    teacherId: "Visnovitz Márton",
-    connectedSubjectIds: [],
-    connectedTechnologyIds: [],
-    numberOfPlaces: 2,
-    schoolSemester: {
-      year: 2020,
-      half: Semester.Spring
-    },
-    appliedStudentIds: ["a"],
-    language: [Language.Hungarian]
-  }
-];
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+import { exampleApplications as myApplications } from "../exampleData";
+import { exampleTopics as topics } from "../exampleData";
 
 const exampleChildClass = mergeStyles({
   display: "block",

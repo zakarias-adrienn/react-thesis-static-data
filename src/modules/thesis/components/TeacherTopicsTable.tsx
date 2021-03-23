@@ -3,8 +3,8 @@ import { TextField, ITextFieldStyles } from "office-ui-fabric-react/lib/TextFiel
 import {
   DetailsList,
   DetailsListLayoutMode,
-  IColumn,
-  Selection
+  Selection,
+  IColumn
 } from "office-ui-fabric-react/lib/DetailsList";
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
@@ -14,16 +14,15 @@ import { IconButton } from "@fluentui/react/lib/Button";
 import { Link } from "react-router-dom";
 import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
 import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
-import { rootPath } from "../path";
 
 // saját importok
-import ConfirmDeleteAll from "./ConfirmDeleteAll";
 import { Topic } from "../model/topics.model";
 import ConfirmDelete from "./ConfirmDelete";
 import { convertSchoolSemesterToString } from "../helperFunctions";
+import ConfirmDeleteAll from "./ConfirmDeleteAll";
+import { rootPath } from "../path";
 import { MessageBar, MessageBarType } from "@fluentui/react";
 
-// STÍLUSOK
 const textFieldStyle = mergeStyles({
   display: "block",
   marginBottom: "10px",
@@ -49,7 +48,7 @@ const SuccessonDeleteManyMessage = (props: any) => (
   </div>
 );
 
-export interface DetailsListItemType {
+export interface DetailsListItem {
   key: string;
   title: string;
   semester: string;
@@ -61,7 +60,7 @@ export interface DetailsListItemType {
 }
 
 export interface DetailsListState {
-  items: DetailsListItemType[];
+  items: DetailsListItem[];
   columns: IColumn[];
   isFilter: boolean;
   selectionDetails: string;
@@ -73,9 +72,9 @@ type Prop = {
   topics: Topic[];
 };
 
-class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
+class TeacherTopicsTable extends React.Component<Prop, DetailsListState> {
   private _selection: Selection;
-  private _allItems: DetailsListItemType[];
+  private _allItems: DetailsListItem[];
   private _columns: IColumn[];
 
   constructor(props: any) {
@@ -87,8 +86,8 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
     });
 
     this.onDelete = this.onDelete.bind(this);
-    this.getDeleteIds = this.getDeleteIds.bind(this);
     this.onDeleteAll = this.onDeleteAll.bind(this);
+    this.getDeleteIds = this.getDeleteIds.bind(this);
 
     this._columns = [
       {
@@ -154,7 +153,6 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
       }
     ];
 
-    // TOPIC[]-ok jönnek propban s azokhoz kellene ezeket kigenerálni
     this._allItems = [];
     this.props.topics.forEach((topic) =>
       this._allItems.push({
@@ -193,7 +191,6 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
     };
   }
 
-  // fix pozicióban maradó header görgetéskor
   private onRenderDetailsHeader(props: any, defaultRender: any) {
     if (!props) {
       return null;
@@ -205,6 +202,18 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
         })}
       </Sticky>
     );
+  }
+
+  public onDelete(id: string, toggleHideDialog: Function) {
+    // csak akkor ha nincsen rá jelentkezés!!! - régebbit törölhessen? a diáktól is eltűnik
+    toggleHideDialog();
+    this.setState({
+      ...this.state,
+      items: this.state.items.filter((item) => item.key !== id),
+      successOnDelete: true
+    });
+    this._allItems = this._allItems.filter((item) => item.key !== id);
+    setTimeout(() => this.setState({ ...this.state, successOnDelete: false }), 4000);
   }
 
   // SEGÉDFGV
@@ -233,27 +242,11 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
     setTimeout(() => this.setState({ ...this.state, successOnDeleteMany: 0 }), 4000);
   }
 
-  // adott sorban levő törlése
-  public onDelete(id: string, toggleHideDialog: Function) {
-    // csak akkor ha nincsen rá jelentkezés?
-    // adatbből is törölni kell!
-    toggleHideDialog();
-    this.setState({
-      ...this.state,
-      items: this.state.items.filter((item) => item.key !== id),
-      selectionDetails: this.state.selectionDetails,
-      successOnDelete: true
-    });
-    this._allItems = this._allItems.filter((item) => item.key !== id);
-    setTimeout(() => this.setState({ ...this.state, successOnDelete: false }), 4000);
-  }
-
   private _onFilter = (
     ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
     text: string | undefined
   ): void => {
     this.setState({
-      ...this.state,
       items: text
         ? this._allItems.filter((i) => i.title.toLowerCase().indexOf(text.toLowerCase()) > -1)
         : this._allItems,
@@ -293,7 +286,7 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
   };
 
   public render(): JSX.Element {
-    const { items, selectionDetails } = this.state;
+    const { items } = this.state;
 
     return (
       <Fabric>
@@ -326,16 +319,13 @@ class ExpiredTeacherTopics extends React.Component<Prop, DetailsListState> {
               columns={this._columns}
               layoutMode={DetailsListLayoutMode.justified}
               setKey="set"
-              onRenderDetailsHeader={this.onRenderDetailsHeader}
               selection={this._selection}
               selectionPreservedOnEmptyClick={true}
-              ariaLabelForSelectionColumn="Toggle selection"
-              ariaLabelForSelectAllCheckbox="Toggle selection for all items"
-              checkButtonAriaLabel="Row checkbox"
+              onRenderDetailsHeader={this.onRenderDetailsHeader}
             />
             {!this.state.items.length && !this.state.isFilter && (
               <Stack horizontalAlign="center">
-                <Text>Nincsenek lejárt témák!</Text>
+                <Text>Nincsenek ilyen kategóriájú témák!</Text>
               </Stack>
             )}
             {!this.state.items.length && this.state.isFilter && (
@@ -357,4 +347,4 @@ function _copyAndSort<T>(items: T[], columnKey: string, isSortedDescending?: boo
     .sort((a: T, b: T) => ((isSortedDescending ? a[key] < b[key] : a[key] > b[key]) ? 1 : -1));
 }
 
-export default ExpiredTeacherTopics;
+export default TeacherTopicsTable;

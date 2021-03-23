@@ -17,160 +17,27 @@ import { Text } from "office-ui-fabric-react/lib/Text";
 import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
 // import { MessageBar, MessageBarType } from "office-ui-fabric-react";
 import { Stack } from "office-ui-fabric-react/lib/Stack";
+import {
+  exampleDepartments,
+  exampleTeachers,
+  exampleUsers,
+  exampleTopics as topics
+} from "../exampleData";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// KERESÉSI ALGORITMUS ÍRÁSÁHOZ PÉLDA TÉMÁK:
-const topics: Topic[] = [
-  {
-    id: "a",
-    type: [TopicType.BScThesis],
-    title: "Youniversity",
-    description: "Oktatásszervezési csomag fejlesztése egyetemünk számára",
-    teacherId: "Visnovitz Márton",
-    connectedSubjectIds: [
-      "Webprogramozás",
-      "Kliensoldali webprogramozás",
-      "Szerveroldali webprogramozás"
-    ],
-    connectedTechnologyIds: ["Javascript", "React"],
-    numberOfPlaces: 3,
-    schoolSemester: {
-      year: 2020,
-      half: Semester.Spring
-    },
-    appliedStudentIds: [],
-    language: [Language.Hungarian]
-  },
-  {
-    id: "b",
-    type: [TopicType.BScThesis, TopicType.BScTDK],
-    title: "Téma1",
-    description: "Oktatásszervezési csomag fejlesztése egyetemünk számára",
-    teacherId: "Vadász Péter",
-    connectedSubjectIds: [
-      "Konkurens programozás",
-      "Számítógépes rendszerek",
-      "Telekommunikációs hálózatok"
-    ],
-    connectedTechnologyIds: ["JAVA"],
-    numberOfPlaces: 1,
-    schoolSemester: null,
-    appliedStudentIds: [],
-    language: [Language.Hungarian]
-  },
-  {
-    id: "c",
-    type: [TopicType.BScThesis],
-    title: "Téma2",
-    description: "Oktatásszervezési csomag fejlesztése egyetemünk számára",
-    teacherId: "Dr. Csuhaj Varjú Erzsébet",
-    connectedSubjectIds: ["Algoritmusok és adatszerkezetek 1"],
-    connectedTechnologyIds: ["C"],
-    numberOfPlaces: 2,
-    schoolSemester: null,
-    appliedStudentIds: [],
-    language: [Language.Hungarian, Language.English]
-  },
-  {
-    id: "d",
-    type: [TopicType.MScTDK],
-    title: "Téma3",
-    description: "Oktatásszervezési csomag fejlesztése egyetemünk számára",
-    teacherId: "Dr. Csuhaj Varjú Erzsébet",
-    connectedSubjectIds: [],
-    connectedTechnologyIds: [],
-    numberOfPlaces: 0,
-    schoolSemester: null,
-    appliedStudentIds: [],
-    language: [Language.Hungarian, Language.English]
-  },
-  {
-    id: "e",
-    type: [TopicType.MScTDK],
-    title: "Téma4",
-    description: "Bonyolult",
-    teacherId: "Brányi László",
-    connectedSubjectIds: ["Algoritmusok és adatszerkezetek 2"],
-    connectedTechnologyIds: ["C++"],
-    numberOfPlaces: 1,
-    schoolSemester: null,
-    appliedStudentIds: [],
-    language: [Language.Hungarian]
-  },
-  {
-    id: "f",
-    type: [TopicType.BScThesis],
-    title: "Téma5",
-    description: "Bonyolult",
-    teacherId: "Brányi László",
-    connectedSubjectIds: ["Adatbázisok 1", "Adatbázisok 2"],
-    connectedTechnologyIds: ["Oracle", "MySQL", "SQLite"],
-    numberOfPlaces: 1,
-    schoolSemester: null,
-    appliedStudentIds: [],
-    language: [Language.Hungarian]
-  }
-];
 
 let teachersToDepartments = new Map<String, String[]>();
-teachersToDepartments.set("Algoritmusok és Alkalmazásaik", [
-  "Pusztai Kinga",
-  "Ásványi Tibor",
-  "Nagy Sára",
-  "Veszprémi Anna",
-  "Dr. Csuhaj Varjú Erzsébet",
-  "Vadász Péter"
-]);
-teachersToDepartments.set("Numerikus Analízis", [
-  "Chripkó Ágnes",
-  "Csörgõ István",
-  "Filipp Zoltán",
-  "Dr. Gergó Lajos",
-  "Dr. Szarvas Kristóf"
-]);
-teachersToDepartments.set("Információs Rendszerek", [
-  "Dr. Kiss Attila",
-  "Dr. Hajas Csilla",
-  "Dr. Laki Sándor",
-  "Dr. Nikovits Tibor",
-  "Dr. Vincellér Zoltán",
-  "Brányi László",
-  "Dr. Vörös Péter"
-]);
-teachersToDepartments.set("Komputeralgebra", ["Burcsi Péter", "Dr. Járai Antal", "Tóth Viktória"]);
-teachersToDepartments.set("Programozáselmélet és Szoftvertechnológia", [
-  "Dr. Gregorics Tibor",
-  "Borsi Zsolt",
-  "Cserép Máté",
-  "Dr. Szendrei Rudolf",
-  "Dr. Várkonyi Teréz Anna"
-]);
-teachersToDepartments.set("Programozási Nyelvek és Fordítóprogramok", [
-  "Dr. Horváth Zoltán",
-  "Kitlei Róbert",
-  "Dr. Kozsik Tamás",
-  "Dr. Pataki Norbert",
-  "Dr. Porkoláb Zoltán",
-  "Dr. Tejfel Máté"
-]);
-teachersToDepartments.set("Média- és Oktatásinformatika", [
-  "Dr. Abonyi-Tóth Andor",
-  "Dr. Zsakó László",
-  "Dr. Bernát Péter",
-  "Dr. Horváth Győző",
-  "Visnovitz Márton"
-]);
-teachersToDepartments.set("Valószínűségelméleti és Statisztika", [
-  "Arató Miklós",
-  "Zempléni András"
-]);
-teachersToDepartments.set("Térképtudományi és Geoinformatikai Intézet", ["Dr. Zentai László"]);
-teachersToDepartments.set("Adattudományi és Adattechnológiai", [
-  "Dr. Horváth Tamás",
-  "Tarcsi Ádám"
-]);
-teachersToDepartments.set("Mesterséges Intelligencia", ["Belics Éva"]);
-teachersToDepartments.set("Savaria Műszaki Intézet", ["Dr. Bak Árpád", "Dr. Borbély Tibor"]);
+// meg kell kapni az ugyanolyan tanszékű tanárok tömbjét
+exampleDepartments.forEach((dep) => {
+  let teachersHere = exampleTeachers.filter((t) => t.departmentId === dep.id);
+  // ezek egyelőre tanárok, de kellenek a neveik, ami a user táblában lesz
+  // 1-1 kapcsolat
+  let teacherNames = teachersHere.map((t) => exampleUsers.filter((u) => u.id === t.userId)[0].name);
+  teacherNames = teacherNames.sort(function (a, b) {
+    return a.localeCompare(b);
+  });
+  teachersToDepartments.set(dep.id, teacherNames);
+});
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // STÍLUSOK
@@ -271,8 +138,6 @@ class SearchPage extends React.Component<{}, State> {
     let first = parseInt(value.substring(2, 4));
     let second = parseInt(value.substring(5, 7));
     const regex = new RegExp("[0-9][0-9][0-9][0-9]/[0-9][0-9]");
-    let currentYear = new Date().getFullYear();
-    let enteredValueString = value.substring(0, 2) + value.substring(5, 7);
     if (!regex.test(value)) {
       this.setState((state) => ({
         ...this.state,
@@ -487,7 +352,6 @@ class SearchPage extends React.Component<{}, State> {
                           checked={this.state.chooseLanguageCheckBoxes}
                           onChange={this.changeLanguageCheckBox}
                         ></ChooseLanguage>
-                        {/* <SearchTeacher onChange={this.handleChange}></SearchTeacher> - RÉGEBBI VÁLTOZAT*/}
                         <SearchByTeacher
                           byDepartment={this.state.byDepartment}
                           setByDepartment={() =>
@@ -608,12 +472,7 @@ class SearchPage extends React.Component<{}, State> {
                 </div>
                 <MySubmitButton
                   onClick={this.onClickSearch}
-                  disabled={
-                    !this.state.isGoodDate
-                    // || (this.state.byDepartment &&
-                    //   this.state.selectedTeacher === "" &&
-                    //   this.state.selectedDepartment !== "")
-                  }
+                  disabled={!this.state.isGoodDate}
                 ></MySubmitButton>
               </div>
             </form>

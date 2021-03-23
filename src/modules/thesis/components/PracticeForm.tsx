@@ -1,13 +1,10 @@
 import * as React from "react";
-import { TextField, MaskedTextField } from "office-ui-fabric-react/lib/TextField";
+import { TextField } from "office-ui-fabric-react/lib/TextField";
 import { Stack, IStackStyles } from "office-ui-fabric-react/lib/Stack";
 import { Checkbox } from "office-ui-fabric-react/lib/Checkbox";
-import { IDropdownStyles } from "office-ui-fabric-react/lib/Dropdown";
 import { PrimaryButton, IIconProps, DefaultButton, IComboBoxOption } from "office-ui-fabric-react";
-import { ChoiceGroup, IChoiceGroupOption } from "office-ui-fabric-react/lib/ChoiceGroup";
 import { Text } from "office-ui-fabric-react/lib/Text";
-import { Language, Semester, Topic, TopicType } from "../model/topics.model";
-import { Redirect } from "react-router";
+import { Language } from "../model/topics.model";
 import { RouteComponentProps } from "react-router";
 import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -15,19 +12,10 @@ import { ComboBox } from "office-ui-fabric-react/lib/index";
 import { IComboBoxStyles } from "@fluentui/react";
 import { rootPath } from "../path";
 import { Practice } from "../model/practice.model";
+import { exampleTechnologies } from "../exampleData";
 
 // BEÉGETETT ADATOK JELENLEG ///////////////////////////////////////////////////////////////////////////////////////////
-const technologies = [
-  "JAVA",
-  "C++",
-  "HTML5",
-  "CSS",
-  "JavaScript",
-  "TypeScript",
-  "React",
-  "Angular",
-  "HTML"
-];
+const technologies: string[] = exampleTechnologies.map((t) => t.name);
 
 // STÍLUSOK
 const stackTokens = { childrenGap: 5 };
@@ -35,14 +23,7 @@ const stackStyles: Partial<IStackStyles> = { root: { width: "100%" } };
 const stackStyles2: Partial<IStackStyles> = {
   root: { width: "70%", margin: "auto", marginTop: "10px" }
 };
-const horizontalChoiceGroupStyles = {
-  flexContainer: { display: "flex", flexDirection: "row" },
-  marginTop: "0px",
-  paddingTop: "0px"
-};
-const dropdownStyles: Partial<IDropdownStyles> = {
-  dropdownItemsWrapper: { overflowY: "auto", overflowX: "hidden", maxHeight: "300px" }
-};
+
 const comboboxStyles2: Partial<IComboBoxStyles> = {
   root: { marginBottom: "10px" },
   optionsContainerWrapper: {

@@ -7,12 +7,9 @@ import {
   IInputProps,
   IBasePickerSuggestionsProps
 } from "office-ui-fabric-react/lib/Pickers";
-import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { useBoolean } from "@uifabric/react-hooks";
-
-const rootClass = mergeStyles({
-  maxWidth: 500
-});
+import { exampleUsers } from "../exampleData";
+import { Role } from "../model/user.model";
 
 const inputProps: IInputProps = {
   "onBlur": (ev: React.FocusEvent<HTMLInputElement>) => console.log("onBlur called"),
@@ -26,50 +23,11 @@ const pickerSuggestionsProps: IBasePickerSuggestionsProps = {
   noResultsFoundText: "Nincs találat"
 };
 
-let testTags: ITag[] = [
-  "Pusztai Kinga",
-  "Ásványi Tibor",
-  "Nagy Sára",
-  "Veszprémi Anna",
-  "Dr. Csuhaj Varjú Erzsébet",
-  "Chripkó Ágnes",
-  "Csörgõ István",
-  "Filipp Zoltán",
-  "Dr. Gergó Lajos",
-  "Dr. Szarvas Kristóf",
-  "Dr. Kiss Attila",
-  "Dr. Hajas Csilla",
-  "Dr. Laki Sándor",
-  "Dr. Nikovits Tibor",
-  "Dr. Vincellér Zoltán",
-  "Brányi László",
-  "Dr. Vörös Péter",
-  "Dr. Gregorics Tibor",
-  "Borsi Zsolt",
-  "Cserép Máté",
-  "Dr. Szendrei Rudolf",
-  "Dr. Várkonyi Teréz Anna",
-  "Dr. Horváth Zoltán",
-  "Kitlei Róbert",
-  "Dr. Kozsik Tamás",
-  "Dr. Pataki Norbert",
-  "Dr. Porkoláb Zoltán",
-  "Dr. Tejfel Máté",
-  "Dr. Abonyi-Tóth Andor",
-  "Dr. Zsakó László",
-  "Dr. Bernát Péter",
-  "Dr. Horváth Győző",
-  "Visnovitz Márton"
-].map((item) => ({ key: item, name: item }));
+let testTags: ITag[] = exampleUsers
+  .filter((u) => u.roles.includes(Role.Teacher))
+  .map((item) => ({ key: item.id, name: item.name }));
 
 testTags = testTags.sort((a, b) => (a.name > b.name ? 1 : -1));
-
-const listContainsTagList = (tag: ITag, tagList?: ITag[]) => {
-  if (!tagList || !tagList.length || tagList.length === 0) {
-    return false;
-  }
-  return tagList.some((compareTag) => compareTag.key === tag.key);
-};
 
 // érdekes folytatása
 const filterSelectedTags = (filterText: string): ITag[] => {
@@ -126,7 +84,7 @@ const TeacherByName: React.FunctionComponent<Prop> = (props) => {
         onResolveSuggestions={filterSelectedTags}
         getTextFromItem={getTextFromItem}
         pickerSuggestionsProps={pickerSuggestionsProps}
-        itemLimit={3} //legyen ennyi?
+        itemLimit={3}
         disabled={tagPicker}
         inputProps={inputProps}
         selectedItems={selectedItem}

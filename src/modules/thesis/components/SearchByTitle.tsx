@@ -14,7 +14,6 @@ const getStyles = () => {
   };
 };
 
-/* eslint-disable react/jsx-no-bind */
 const SearchByTitle = () => {
   return (
     <Stack tokens={stackTokens}>

@@ -14,23 +14,7 @@ import { Link } from "react-router-dom";
 import { ComboBox } from "office-ui-fabric-react/lib/index";
 import { IComboBoxStyles } from "@fluentui/react";
 import { rootPath } from "../path";
-
-// BEÉGETETT ADATOK JELENLEG
-// majd - getSubjects().map(subj => subj.name)
-const subjects = [
-  "Mesterséges intelligencia",
-  "Webprogramozás",
-  "Webfejlesztés",
-  "Telekommunikációs hálózatok",
-  "Konkurens programozás",
-  "Algoritmusok és adatszerkezetek 1",
-  "Algoritmusok és adatszerkezetek 2",
-  "A számításelmélet alapjai 1",
-  "A számításelmélet alapjai 2",
-  "Formális nyelvek és automaták"
-];
-// majd - getTechnologies().map(subj => subj.name)
-const technologies = ["JAVA", "C++", "HTML5", "CSS", "JavaScript", "TypeScript", "React"];
+import { exampleSubjects, exampleTechnologies } from "../exampleData";
 
 // STÍLUSOK
 const stackTokens = { childrenGap: 5 };
@@ -58,12 +42,12 @@ const comboboxStyles2: Partial<IComboBoxStyles> = {
 
 // DROPDOWN ELEMEK
 let subjectOptions: IComboBoxOption[] = [];
-subjects.forEach((name) => subjectOptions.push({ key: name, text: name }));
+exampleSubjects.forEach((subj) => subjectOptions.push({ key: subj.neptunId, text: subj.name }));
 
 subjectOptions = subjectOptions.sort((a, b) => (a.text > b.text ? 1 : -1));
 
 let technologyOptions: IComboBoxOption[] = [];
-technologies.forEach((name) => technologyOptions.push({ key: name, text: name }));
+exampleTechnologies.forEach((tech) => technologyOptions.push({ key: tech.id, text: tech.name }));
 
 technologyOptions = technologyOptions.sort((a, b) => (a.text > b.text ? 1 : -1));
 

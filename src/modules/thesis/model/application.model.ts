@@ -24,5 +24,6 @@ export const applicationSchema = Joi.object({
   studentId: Joi.string().required(),
   topicId: Joi.string().required(),
   status: applicationStatusSchema,
-  denyReason: Joi.string()
+  denyReason: Joi.string(),
+  acceptReason: Joi.string()
 });

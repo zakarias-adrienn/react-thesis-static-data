@@ -2,96 +2,29 @@ import * as React from "react";
 import { initializeIcons } from "office-ui-fabric-react/lib/Icons";
 import { Dropdown, IDropdownStyles, IDropdownOption } from "office-ui-fabric-react/lib/Dropdown";
 import { FormEvent } from "react";
+import { exampleDepartments, exampleTeachers, exampleUsers } from "../exampleData";
 
 initializeIcons();
 
-let items: IDropdownOption[] = [
-  { key: "Algoritmusok és Alkalmazásaik", text: "Algoritmusok és Alkalmazásaik" },
-  { key: "Információs Rendszerek", text: "Információs Rendszerek" },
-  { key: "Komputeralgebra", text: "Komputeralgebra" },
-  { key: "Numerikus Analízis", text: "Numerikus Analízis" },
-  {
-    key: "Programozáselmélet és Szoftvertechnológiai",
-    text: "Programozáselmélet és Szoftvertechnológiai"
-  },
-  {
-    key: "Programozási Nyelvek és Fordítóprogramok",
-    text: "Programozási Nyelvek és Fordítóprogramok"
-  },
-  { key: "Média- és Oktatásinformatika", text: "Média- és Oktatásinformatika" },
-  { key: "Valószínűségelméleti és Statisztika", text: "Valószínűségelméleti és Statisztika" },
-  {
-    key: "Térképtudományi és Geoinformatikai Intézet",
-    text: "Térképtudományi és Geoinformatikai Intézet"
-  },
-  { key: "Adattudományi és Adattechnológiai", text: "Adattudományi és Adattechnológiai" },
-  { key: "Mesterséges Intelligencia", text: "Mesterséges Intelligencia" },
-  { key: "Savaria Műszaki Intézet", text: "Savaria Műszaki Intézet" }
-];
+let items: IDropdownOption[] = [];
+exampleDepartments.forEach((dep) => items.push({ key: dep.id, text: dep.name }));
 items = items.sort((a, b) => (a.text > b.text ? 1 : -1));
 
 let options: IDropdownOption[] = [];
 
 // most egyelőre egy map-ben tárolom az adatokat ////////////////////////////////////////////////////////////////
 let teachersToDepartments = new Map<String, String[]>();
-teachersToDepartments.set("Algoritmusok és Alkalmazásaik", [
-  "Pusztai Kinga",
-  "Ásványi Tibor",
-  "Nagy Sára",
-  "Veszprémi Anna",
-  "Dr. Csuhaj Varjú Erzsébet",
-  "Vadász Péter"
-]);
-teachersToDepartments.set("Numerikus Analízis", [
-  "Chripkó Ágnes",
-  "Csörgõ István",
-  "Filipp Zoltán",
-  "Dr. Gergó Lajos",
-  "Dr. Szarvas Kristóf"
-]);
-teachersToDepartments.set("Információs Rendszerek", [
-  "Dr. Kiss Attila",
-  "Dr. Hajas Csilla",
-  "Dr. Laki Sándor",
-  "Dr. Nikovits Tibor",
-  "Dr. Vincellér Zoltán",
-  "Brányi László",
-  "Dr. Vörös Péter"
-]);
-teachersToDepartments.set("Komputeralgebra", ["Burcsi Péter", "Dr. Járai Antal", "Tóth Viktória"]);
-teachersToDepartments.set("Programozáselmélet és Szoftvertechnológia", [
-  "Dr. Gregorics Tibor",
-  "Borsi Zsolt",
-  "Cserép Máté",
-  "Dr. Szendrei Rudolf",
-  "Dr. Várkonyi Teréz Anna"
-]);
-teachersToDepartments.set("Programozási Nyelvek és Fordítóprogramok", [
-  "Dr. Horváth Zoltán",
-  "Kitlei Róbert",
-  "Dr. Kozsik Tamás",
-  "Dr. Pataki Norbert",
-  "Dr. Porkoláb Zoltán",
-  "Dr. Tejfel Máté"
-]);
-teachersToDepartments.set("Média- és Oktatásinformatika", [
-  "Dr. Abonyi-Tóth Andor",
-  "Dr. Zsakó László",
-  "Dr. Bernát Péter",
-  "Dr. Horváth Győző",
-  "Visnovitz Márton"
-]);
-teachersToDepartments.set("Valószínűségelméleti és Statisztika", [
-  "Arató Miklós",
-  "Zempléni András"
-]);
-teachersToDepartments.set("Térképtudományi és Geoinformatikai Intézet", ["Dr. Zentai László"]);
-teachersToDepartments.set("Adattudományi és Adattechnológiai", [
-  "Dr. Horváth Tamás",
-  "Tarcsi Ádám"
-]);
-teachersToDepartments.set("Mesterséges Intelligencia", ["Belics Éva"]);
-teachersToDepartments.set("Savaria Műszaki Intézet", ["Dr. Bak Árpád", "Dr. Borbély Tibor"]);
+// meg kell kapni az ugyanolyan tanszékű tanárok tömbjét
+exampleDepartments.forEach((dep) => {
+  let teachersHere = exampleTeachers.filter((t) => t.departmentId === dep.id);
+  // ezek egyelőre tanárok, de kellenek a neveik, ami a user táblában lesz
+  // 1-1 kapcsolat
+  let teacherNames = teachersHere.map((t) => exampleUsers.filter((u) => u.id === t.userId)[0].name);
+  teacherNames = teacherNames.sort(function (a, b) {
+    return a.localeCompare(b);
+  });
+  teachersToDepartments.set(dep.id, teacherNames);
+});
 // Prof. habil. <- ezek kiszűrése is esetleg?
 
 // STÍLUSOK
@@ -131,7 +64,7 @@ const DepartmentTeacherDropdown: React.FC<Prop> = (props) => {
         ?.map((s) => optionsToDepartment.push({ key: s.toString(), text: s.toString() }));
     }
     options = optionsToDepartment;
-    options = options.sort((a, b) => (a.text > b.text ? 1 : -1));
+    options = options.sort((a, b) => a.text.localeCompare(b.text));
     if (o) {
       setSelectedKey(o.key.toString());
       setSelectedItem("");
@@ -156,19 +89,6 @@ const DepartmentTeacherDropdown: React.FC<Prop> = (props) => {
         selectedKey={selectedItem}
         onChange={onChangeTeacher}
       />
-      {/* {!disableTeacherDropdown && !selectedItem && (
-        <span
-          style={{
-            fontSize: "12px",
-            fontWeight: 400,
-            color: "#A4262C",
-            marginTop: "7px",
-            display: "inline-block"
-          }}
-        >
-          Kötelező tanárt választani a tanszékhez!
-        </span>
-      )} */}
     </>
   );
 };

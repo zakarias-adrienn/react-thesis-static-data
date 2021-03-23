@@ -8,6 +8,7 @@ import {
   convertTypeToString
 } from "../helperFunctions";
 import { isStudent } from "../roles";
+import { exampleSubjects, exampleTechnologies, exampleUsers } from "../exampleData";
 
 const myLiStyle: React.CSSProperties = {
   padding: "3px",
@@ -75,7 +76,7 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
           </div>
           <div className="ms-Grid-col ms-sm10" style={rightStyle}>
             {" "}
-            {props.topic.teacherId}
+            {exampleUsers.filter((u) => u.id === props.topic.teacherId)[0].name}
           </div>
         </div>
         <div className="ms-Grid-row" style={{ paddingBottom: "20px" }}>
@@ -129,11 +130,13 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
             >
               {props.topic.connectedTechnologyIds.length === 0
                 ? "Nincsen megadva kapcsolódó technológia."
-                : props.topic.connectedTechnologyIds.map((id) => (
-                    <li key={id} style={{ ...myLiStyle }}>
-                      {id}
-                    </li>
-                  ))}
+                : exampleTechnologies // TODO: lekérni megfelelően adatbázisból
+                    .filter((tech) => props.topic.connectedTechnologyIds.includes(tech.id))
+                    .map((tech) => (
+                      <li key={tech.id} style={{ ...myLiStyle }}>
+                        {tech.name}
+                      </li>
+                    ))}
             </ul>
           </div>
         </div>
@@ -152,11 +155,13 @@ const SeeTopic: React.FunctionComponent<Prop> = (props) => {
             >
               {props.topic.connectedSubjectIds.length === 0
                 ? "Nincsen megadva kapcsolódó tantárgy."
-                : props.topic.connectedSubjectIds.map((id) => (
-                    <li key={id} style={{ ...myLiStyle }}>
-                      {id}
-                    </li>
-                  ))}
+                : exampleSubjects // TODO: lekérni megfelelően adatbázisból
+                    .filter((subj) => props.topic.connectedSubjectIds.includes(subj.neptunId))
+                    .map((subj) => (
+                      <li key={subj.neptunId} style={{ ...myLiStyle }}>
+                        {subj.name}
+                      </li>
+                    ))}
             </ul>
           </div>
         </div>

@@ -26,6 +26,7 @@ const AddNewTechnology: React.FunctionComponent<AddProps> = (props) => {
   const [name, setName] = React.useState(props.name);
   const [reset, setReset] = React.useState(false);
   const [similarTechnologies, setSimilarTechnologies] = React.useState([]);
+
   let technologiesOriginalNames = props.technologies.map((item: any) => item.name);
   let technologySmallNames = props.technologies.map((item: any) => item.name.toLowerCase());
 

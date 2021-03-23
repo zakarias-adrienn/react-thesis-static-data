@@ -114,7 +114,6 @@ const MenuNavigate: React.FunctionComponent = () => {
   let history = useHistory();
 
   let pathToCheck = location.pathname;
-  // thesis/publishedThesis/editTopic/1
   if (nth_ocurrence(pathToCheck, "/", 3)) {
     pathToCheck = location.pathname.substring(0, nth_ocurrence(pathToCheck, "/", 3) || 0);
     console.log(pathToCheck);

@@ -14,46 +14,9 @@ import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
 
 // saját importok
 import { Application, ApplicationStatus } from "../model/application.model";
-import { Language, Semester, Topic, TopicType } from "../model/topics.model";
 import { convertSchoolSemesterToString } from "../helperFunctions";
-
-// MINTA ADAT AHOGYAN MAJD AZ ADATBÁZISBÓL JÖN... REMÉLHETŐLEG
-// const applicationApi = broker.getApi("application");
-// await applicationApi.update(id, {applicationStatus: 'ACCPETED') ? enumok?
-const myApplications: Application[] = [
-  {
-    id: "első",
-    studentId: "Szemenyei Mónika Réka",
-    topicId: "Youniversity",
-    status: ApplicationStatus.Accepted,
-    acceptReason:
-      "Kérlek mihamarabb jelezz vissza, hogy mikor lenne megfelelő neked egy megbeszélés!"
-  },
-  {
-    id: "második",
-    studentId: "Zakariás Adrienn",
-    topicId: "Youniversity",
-    status: ApplicationStatus.Pending
-  }
-];
-const topics: Topic[] = [
-  {
-    id: "Youniversity",
-    type: [TopicType.BScThesis],
-    title: "Youniversity",
-    description: "Valami...",
-    teacherId: "Visnovitz Márton",
-    connectedSubjectIds: [],
-    connectedTechnologyIds: [],
-    numberOfPlaces: 2,
-    schoolSemester: {
-      year: 2020,
-      half: Semester.Spring
-    },
-    appliedStudentIds: ["a"],
-    language: [Language.Hungarian]
-  }
-];
+import { exampleApplications as myApplications } from "../exampleData";
+import { exampleTopics as topics } from "../exampleData";
 
 // elfogadott jelentkezések kiszűrése - TODO: használni majd
 const _getAcceptedApplications = (applications: Application[]): Application[] => {
@@ -61,7 +24,6 @@ const _getAcceptedApplications = (applications: Application[]): Application[] =>
 };
 
 const acceptedApplications = _getAcceptedApplications(myApplications);
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // MEZŐK STÍLUSAI
 const textFieldStyles: Partial<ITextFieldStyles> = {

@@ -21,6 +21,7 @@ import {
   convertTypeToString
 } from "../helperFunctions";
 import { isStudent } from "../roles";
+import { exampleTechnologies, exampleTopics, exampleUsers } from "../exampleData";
 
 export interface IDetailsListBasicExampleItem {
   key: string;
@@ -57,19 +58,32 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
     this.setSeeTheme = this.setSeeTheme.bind(this);
     this.onBackToSearch = this.onBackToSearch.bind(this);
 
+    // topic-hoz a megfelelő technológia nevek - TODO: le kell kérni a technológiákat
+    let technologyNamesToTopic = new Map<String, String[]>();
+    exampleTopics.forEach((t) => {
+      let technologiesHere = exampleTechnologies.filter((tech) =>
+        t.connectedTechnologyIds.includes(tech.id)
+      );
+      let technologyNames = technologiesHere.map((tech) => tech.name);
+      technologyNames = technologyNames.sort(function (a, b) {
+        return a.localeCompare(b);
+      });
+      technologyNamesToTopic.set(t.id, technologyNames);
+    });
+
     this._allItems = [];
     this.props.topicsToShow.forEach((topic) =>
       this._allItems.push({
         key: topic.id,
         title: topic.title,
-        teacher: topic.teacherId,
+        teacher: exampleUsers.filter((u) => u.id === topic.teacherId)[0].name, // TODO - le kell kérni a megfelelő tanárt majd
         type: convertTypeToString(topic.type),
         semester:
           topic.schoolSemester === null
             ? "tetszőleges"
             : convertSchoolSemesterToString(topic.schoolSemester),
         language: convertLanguagesToString(topic.language),
-        technologies: topic.connectedTechnologyIds.join(", "), //itt majd nem id-kat kell kiírni, hanem neveket
+        technologies: technologyNamesToTopic.get(topic.id)?.join(", ") || "",
         subjects: topic.connectedSubjectIds.join(", "),
         places: topic.numberOfPlaces === 0 ? "Betelt" : topic.numberOfPlaces,
         view: (

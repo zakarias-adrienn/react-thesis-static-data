@@ -1,79 +1,11 @@
 import * as React from "react";
-import ValidTeacherTopics from "./ValidTeacherTopics";
-import ExpiredTeacherTopics from "./ExpiredTeacherTopics";
-import { Topic, TopicType, Language, Semester } from "../model/topics.model";
-
-const exampleTopics: Topic[] = [
-  {
-    id: "a",
-    type: [TopicType.BScThesis],
-    title: "Példa1",
-    description: "Leírás1",
-    teacherId: "1",
-    connectedSubjectIds: [
-      "Mesterséges intelligencia",
-      "Formális nyelvek és automaták",
-      "Webfejlesztés",
-      "Webprogramozás"
-    ],
-    connectedTechnologyIds: ["JavaScript", "React"],
-    numberOfPlaces: 3,
-    schoolSemester: null, // tetszőleges
-    appliedStudentIds: [],
-    language: [Language.English, Language.Hungarian]
-  },
-  {
-    id: "b",
-    type: [TopicType.BScThesis],
-    title: "Példa2",
-    description: "Leírás2",
-    teacherId: "1",
-    connectedSubjectIds: ["Mesterséges intelligencia"],
-    connectedTechnologyIds: ["JavaScript", "React"],
-    numberOfPlaces: 3,
-    schoolSemester: {
-      year: 2020,
-      half: Semester.Autumn
-    },
-    appliedStudentIds: [],
-    language: [Language.English, Language.Hungarian]
-  },
-  {
-    id: "c",
-    type: [TopicType.BScThesis],
-    title: "Példa3",
-    description: "Leírás3",
-    teacherId: "1",
-    connectedSubjectIds: ["Mesterséges intelligencia"],
-    connectedTechnologyIds: ["JavaScript", "React"],
-    numberOfPlaces: 1,
-    schoolSemester: {
-      year: 2021,
-      half: Semester.Spring
-    },
-    appliedStudentIds: [],
-    language: [Language.English, Language.Hungarian]
-  },
-  {
-    id: "d",
-    type: [TopicType.BScThesis],
-    title: "Példa4",
-    description: "Leírás4",
-    teacherId: "1",
-    connectedSubjectIds: ["Mesterséges intelligencia"],
-    connectedTechnologyIds: ["JavaScript", "React"],
-    numberOfPlaces: 3,
-    schoolSemester: {
-      year: 2020,
-      half: Semester.Spring
-    },
-    appliedStudentIds: [],
-    language: [Language.English, Language.Hungarian]
-  }
-];
+import TeacherTopicsTable from "./TeacherTopicsTable";
+import { Topic, Semester } from "../model/topics.model";
+import { exampleTopics } from "../exampleData";
 
 // fel kellene gyűrűzzön a törlés ide?
 const TeachersTopic: React.FunctionComponent = () => {
+  // TODO: kiszűrni a bejelentekezett felhasználó témáit
   const [topics, setTopics] = React.useState(exampleTopics);
 
   const getValidTopics = (): Topic[] => {
@@ -97,10 +29,10 @@ const TeachersTopic: React.FunctionComponent = () => {
   return (
     <div className="ms-Grid" dir="ltr" style={{ marginTop: "10px" }}>
       <h3>Érvényben levő témák</h3>
-      <ValidTeacherTopics topics={getValidTopics()}></ValidTeacherTopics>
+      <TeacherTopicsTable topics={getValidTopics()}></TeacherTopicsTable>
       <br />
       <h3>Lejárt témák</h3>
-      <ExpiredTeacherTopics topics={getInvalidTopics()}></ExpiredTeacherTopics>
+      <TeacherTopicsTable topics={getInvalidTopics()}></TeacherTopicsTable>
     </div>
   );
 };

@@ -12,89 +12,16 @@ import { Stack } from "office-ui-fabric-react";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
 import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
+import { MessageBar, MessageBarType } from "@fluentui/react";
 
 // saját importok
 import { Application, ApplicationStatus } from "../model/application.model";
 import ConfirmDeny from "./ConfirmDeny";
 import ConfirmAccept from "./ConfirmAccept";
 import AcceptedStudents from "./AcceptedStudents";
-import { Language, Semester, Topic, TopicType } from "../model/topics.model";
 import { convertSchoolSemesterToString } from "../helperFunctions";
-import { MessageBar, MessageBarType } from "@fluentui/react";
-
-// MINTA ADAT AHOGYAN MAJD AZ ADATBÁZISBÓL JÖN... REMÉLHETŐLEG
-const myApplications: Application[] = [
-  {
-    id: "első",
-    studentId: "Szemenyei Mónika",
-    topicId: "Youniversity",
-    status: ApplicationStatus.Accepted,
-    acceptReason:
-      "Kérlek mihamarabb jelezz vissza, hogy mikor lenne megfelelő neked egy megbeszélés!"
-  },
-  {
-    id: "második",
-    studentId: "Zakariás Adrienn",
-    topicId: "Application1",
-    status: ApplicationStatus.Pending
-  },
-  {
-    id: "harmadik",
-    studentId: "Zakariás Adrienn",
-    topicId: "Application2",
-    status: ApplicationStatus.Pending
-  }
-];
-const topics: Topic[] = [
-  {
-    id: "Youniversity",
-    type: [TopicType.BScThesis],
-    title: "Youniversity",
-    description: "Valami...",
-    teacherId: "Visnovitz Márton",
-    connectedSubjectIds: [],
-    connectedTechnologyIds: [],
-    numberOfPlaces: 2,
-    schoolSemester: {
-      year: 2020,
-      half: Semester.Spring
-    },
-    appliedStudentIds: ["a"],
-    language: [Language.Hungarian]
-  },
-  {
-    id: "Application1",
-    type: [TopicType.BScThesis],
-    title: "Application1",
-    description: "Valami...",
-    teacherId: "Visnovitz Márton",
-    connectedSubjectIds: [],
-    connectedTechnologyIds: [],
-    numberOfPlaces: 2,
-    schoolSemester: {
-      year: 2022,
-      half: Semester.Spring
-    },
-    appliedStudentIds: ["a"],
-    language: [Language.Hungarian]
-  },
-  {
-    id: "Application2",
-    type: [TopicType.BScThesis],
-    title: "Application2",
-    description: "Valami...",
-    teacherId: "Visnovitz Márton",
-    connectedSubjectIds: [],
-    connectedTechnologyIds: [],
-    numberOfPlaces: 2,
-    schoolSemester: {
-      year: 2022,
-      half: Semester.Spring
-    },
-    appliedStudentIds: ["a"],
-    language: [Language.Hungarian]
-  }
-];
+import { exampleApplications as myApplications } from "../exampleData";
+import { exampleTopics as topics } from "../exampleData";
 
 // Függőben levő jelentkezések kiszűrése
 const _getPendingApplications = (applications: Application[]): Application[] => {

@@ -1,3 +1,5 @@
+// EZ A KOMPONENS NINCS A FELÜLETEN HASZNÁLVA
+
 import * as React from "react";
 import { TextField, ITextFieldStyles } from "office-ui-fabric-react/lib/TextField";
 import {
