@@ -9,14 +9,13 @@ import {
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { Text } from "office-ui-fabric-react/lib/Text";
 import { Stack } from "office-ui-fabric-react";
-import ConfirmDelete from "./ConfirmDelete";
 import DialogToEditTechnology from "./DialogToEditTechnology";
 import AddNewTechnology from "./AddNewTechnology";
 import { MessageBar, MessageBarType, SelectionMode, Separator } from "@fluentui/react";
 import { ScrollablePane, ScrollbarVisibility } from "office-ui-fabric-react/lib/ScrollablePane";
 import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
-import { Technology } from "../model/technologies.model";
 import { exampleTechnologies } from "../exampleData";
+import ConfirmActivity, { MyDialogType } from "./ConfirmActivity";
 
 const exampleChildClass = mergeStyles({
   display: "block",
@@ -60,29 +59,6 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
   private _allItems: IDetailsListBasicExampleItem[];
   private _columns: IColumn[];
 
-  componentDidMount() {
-    // async - await adatbhívás -> eredménye technologies[] -> id, name
-    /*
-
-    _allItems = technologies.map(item => {
-        key: item.name,
-        name: item.name,
-        edit: (
-          <DialogToEditTechnology
-            name=item.name
-            myId=item.id
-            onSave={this.onChangeName}
-          ></DialogToEditTechnology>
-        ),
-        delete: (
-          <ConfirmDelete text="technology" onDelete={this.onDelete} which={item.name}></ConfirmDelete>
-        )
-      });
-
-      console.log(_allItems);
-    */
-  }
-
   constructor(props: {}) {
     super(props);
 
@@ -123,7 +99,17 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
         key: t.id,
         name: t.name,
         edit: <DialogToEditTechnology name={t.name} myId={t.id} onSave={this.onChangeName} />,
-        delete: <ConfirmDelete type="technology" onDelete={this.onDelete} id={t.id} name={t.name} />
+        delete: (
+          <ConfirmActivity
+            type={MyDialogType.DELETE_TECHNOLOGY}
+            onPositive={this.onDelete}
+            id={t.id}
+            name={t.name}
+            notEmpty={true}
+            count={0}
+            updateTextField={() => {}}
+          />
+        )
       })
     );
     this._allItems = this._allItems.sort((a, b) => (a.name > b.name ? 1 : -1));
@@ -157,7 +143,7 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
     });
   }
 
-  public onDelete(id: string, toggleHideDialog: Function) {
+  public onDelete(id: string, toggleHideDialog: Function, updateTextField: Function) {
     toggleHideDialog();
     this.setState({
       ...this.state,
@@ -182,12 +168,15 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
         ></DialogToEditTechnology>
       ),
       delete: (
-        <ConfirmDelete
-          type="technology"
-          onDelete={this.onDelete}
+        <ConfirmActivity
+          type={MyDialogType.DELETE_TECHNOLOGY}
+          onPositive={this.onDelete}
           id={name}
           name={name}
-        ></ConfirmDelete>
+          count={0}
+          notEmpty={true}
+          updateTextField={() => {}}
+        ></ConfirmActivity>
       )
     };
     this.setState({

@@ -31,9 +31,9 @@ import MySpinner from "./MySpinner";
 import { rootPath } from "../path";
 import { isAdmin } from "../roles";
 import { Link } from "react-router-dom";
-import ConfirmDelete from "./ConfirmDelete";
-import { examplePractices, examplePractices as practices, exampleTopics } from "../exampleData";
+import { examplePractices, examplePractices as practices } from "../exampleData";
 import { exampleTechnologies } from "../exampleData";
+import ConfirmActivity, { MyDialogType } from "./ConfirmActivity";
 
 const technologies: string[] = exampleTechnologies.map((t) => t.name);
 
@@ -139,12 +139,20 @@ class Practices extends React.Component<{}, IDetailsListBasicExampleState> {
           />
         ),
         edit: (
-          <Link to={{ pathname: rootPath + "/practices/editPractice/" + `${p.id}` }}>
+          <Link to={{ pathname: rootPath + "/practices/editPractice/" + p.id }}>
             <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
           </Link>
         ),
         delete: (
-          <ConfirmDelete type={"practice"} id={p.id} name={p.company} onDelete={this.onDelete} />
+          <ConfirmActivity
+            type={MyDialogType.DELETE_PRACTICE}
+            id={p.id}
+            name={p.company}
+            onPositive={this.onDelete}
+            count={0}
+            notEmpty={true}
+            updateTextField={() => {}}
+          />
         )
       });
     });
@@ -256,7 +264,7 @@ class Practices extends React.Component<{}, IDetailsListBasicExampleState> {
     });
   };
 
-  public onDelete(id: string, toggleHideDialog: Function) {
+  public onDelete(id: string, toggleHideDialog: Function, updateTextField: Function) {
     toggleHideDialog();
     this.setState({
       ...this.state,
@@ -273,18 +281,16 @@ class Practices extends React.Component<{}, IDetailsListBasicExampleState> {
     index?: number | undefined,
     value?: string | undefined
   ) {
-    {
-      if (this.state.selectedTechnologyIds.includes(option?.key.toString() || "")) {
-        let keys = this.state.selectedTechnologyIds.filter(
-          (key) => key !== option?.key.toString() || ""
-        );
-        this.setState({ ...this.state, selectedTechnologyIds: keys });
-      } else {
-        this.setState({
-          ...this.state,
-          selectedTechnologyIds: [...this.state.selectedTechnologyIds, option?.key.toString() || ""]
-        });
-      }
+    if (this.state.selectedTechnologyIds.includes(option?.key.toString() || "")) {
+      let keys = this.state.selectedTechnologyIds.filter(
+        (key) => key !== option?.key.toString() || ""
+      );
+      this.setState({ ...this.state, selectedTechnologyIds: keys });
+    } else {
+      this.setState({
+        ...this.state,
+        selectedTechnologyIds: [...this.state.selectedTechnologyIds, option?.key.toString() || ""]
+      });
     }
   }
 

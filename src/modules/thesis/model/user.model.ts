@@ -39,10 +39,11 @@ export type Teacher = {
 };
 
 export const userSchema = Joi.object({
-  id: Joi.string().required(),
+  // id: Joi.string().required(), - szerveroldal kellene generálja
   name: Joi.string().required(),
   neptunId: Joi.string().required(),
   infId: Joi.string().required()
+  // roles?
 });
 
 export const studentSchema = Joi.object({

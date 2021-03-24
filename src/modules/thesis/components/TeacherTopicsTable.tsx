@@ -17,11 +17,10 @@ import { Sticky, StickyPositionType } from "office-ui-fabric-react/lib/Sticky";
 
 // saját importok
 import { Topic } from "../model/topics.model";
-import ConfirmDelete from "./ConfirmDelete";
 import { convertSchoolSemesterToString } from "../helperFunctions";
-import ConfirmDeleteAll from "./ConfirmDeleteAll";
 import { rootPath } from "../path";
 import { MessageBar, MessageBarType } from "@fluentui/react";
+import ConfirmActivity, { MyDialogType } from "./ConfirmActivity";
 
 const textFieldStyle = mergeStyles({
   display: "block",
@@ -166,17 +165,20 @@ class TeacherTopicsTable extends React.Component<Prop, DetailsListState> {
         subjects: topic.connectedSubjectIds.join(", "),
         places: topic.numberOfPlaces,
         view: (
-          <Link to={{ pathname: rootPath + "/publishedThesis/editTopic/" + `${topic.id}` }}>
+          <Link to={{ pathname: rootPath + "/publishedThesis/editTopic/" + topic.id }}>
             <IconButton iconProps={{ iconName: "Edit" }} title="Szerkeszt" ariaLabel="Szerkeszt" />
           </Link>
         ),
         delete: (
-          <ConfirmDelete
-            type="topic"
+          <ConfirmActivity
+            type={MyDialogType.DELETE_TOPIC}
             id={topic.id}
             name={topic.title}
-            onDelete={this.onDelete}
-          ></ConfirmDelete>
+            onPositive={this.onDelete}
+            count={0}
+            updateTextField={() => {}}
+            notEmpty={true}
+          ></ConfirmActivity>
         )
       })
     );
@@ -204,7 +206,7 @@ class TeacherTopicsTable extends React.Component<Prop, DetailsListState> {
     );
   }
 
-  public onDelete(id: string, toggleHideDialog: Function) {
+  public onDelete(id: string, toggleHideDialog: Function, updateTextField: Function) {
     // csak akkor ha nincsen rá jelentkezés!!! - régebbit törölhessen? a diáktól is eltűnik
     toggleHideDialog();
     this.setState({
@@ -229,7 +231,7 @@ class TeacherTopicsTable extends React.Component<Prop, DetailsListState> {
   }
 
   // összes kijelölt törlése
-  private onDeleteAll(toggleHideDialog: Function) {
+  private onDeleteAll(id: string, toggleHideDialog: Function, updateTextField: Function) {
     // akkor is törölheti ha van rá jelentkezés?
     // adatbből is törölni kell!
     toggleHideDialog();
@@ -301,9 +303,14 @@ class TeacherTopicsTable extends React.Component<Prop, DetailsListState> {
               />
             </div>
             <div className="ms-Grid-col ms-sm3">
-              <ConfirmDeleteAll
+              <ConfirmActivity
                 count={this._selection.getSelectedCount()}
-                onDelete={this.onDeleteAll}
+                onPositive={this.onDeleteAll}
+                type={MyDialogType.DELETE_ALL_TOPICS}
+                name={""}
+                id={""}
+                notEmpty={true}
+                updateTextField={() => {}}
               />
             </div>
           </div>

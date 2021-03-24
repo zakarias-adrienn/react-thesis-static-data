@@ -35,7 +35,7 @@ const Subjects: React.FunctionComponent<Prop> = (props) => {
     value?: string | undefined
   ) => {
     if (selectedKeys.includes(option?.key.toString() || "")) {
-      let keys = selectedKeys.filter((key) => key != option?.key.toString() || "");
+      let keys = selectedKeys.filter((key) => key !== option?.key.toString() || "");
       setSelectedKeys(keys);
     } else {
       setSelectedKeys([...selectedKeys, option?.key.toString() || ""]);

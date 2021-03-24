@@ -1,8 +1,8 @@
 import * as React from "react";
 import { TextField } from "office-ui-fabric-react/lib/TextField";
 import { IStackProps, IStackStyles, Stack } from "@fluentui/react";
-import ConfirmAction from "./ConfirmAction";
 import { MessageBar, MessageBarType } from "office-ui-fabric-react";
+import ConfirmActivity, { MyDialogType } from "./ConfirmActivity";
 
 // STÍLUSOK
 const stackTokens = { childrenGap: 50 };
@@ -102,12 +102,15 @@ const AddNewTechnology: React.FunctionComponent<AddProps> = (props) => {
               </>
             )}
           </form>
-          <ConfirmAction
+          <ConfirmActivity
             notEmpty={empty || reset}
-            onAddNew={props.onAddNew}
+            onPositive={props.onAddNew}
             name={name}
             updateTextField={updateState}
-          ></ConfirmAction>
+            id={""}
+            count={0}
+            type={MyDialogType.ADD_NEW_TECHNOLOGY}
+          ></ConfirmActivity>
         </Stack>
       </Stack>
     </div>

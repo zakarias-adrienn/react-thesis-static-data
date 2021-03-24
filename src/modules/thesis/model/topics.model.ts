@@ -57,7 +57,7 @@ export const languageSchema = Joi.array()
   .required();
 
 export const topicSchema = Joi.object({
-  id: Joi.string().required(),
+  // id: Joi.string().required(), - szerveroldal generálja
   type: topicTypeSchema,
   title: Joi.string().required(),
   description: Joi.string().required(),

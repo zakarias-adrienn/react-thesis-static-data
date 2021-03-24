@@ -6,6 +6,6 @@ export type Technology = {
 };
 
 export const technologiesSchema = Joi.object({
-  id: Joi.string().required(),
+  // id: Joi.string().required(), szerveroldal generálja
   name: Joi.string().required()
 });

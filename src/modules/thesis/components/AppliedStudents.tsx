@@ -16,12 +16,11 @@ import { MessageBar, MessageBarType } from "@fluentui/react";
 
 // saját importok
 import { Application, ApplicationStatus } from "../model/application.model";
-import ConfirmDeny from "./ConfirmDeny";
-import ConfirmAccept from "./ConfirmAccept";
 import AcceptedStudents from "./AcceptedStudents";
 import { convertSchoolSemesterToString } from "../helperFunctions";
 import { exampleApplications as myApplications } from "../exampleData";
 import { exampleTopics as topics } from "../exampleData";
+import ConfirmActivity, { MyDialogType } from "./ConfirmActivity";
 
 // Függőben levő jelentkezések kiszűrése
 const _getPendingApplications = (applications: Application[]): Application[] => {
@@ -95,13 +94,27 @@ class AppliedStudents extends React.Component<{}, DetailsListState> {
             ? "tetszőleges"
             : convertSchoolSemesterToString(topicToApplication.schoolSemester),
         accept: (
-          <ConfirmAccept
+          <ConfirmActivity
             name={appl.studentId}
-            myId={appl.id}
-            onAccept={this.handleAccept}
-          ></ConfirmAccept>
+            id={appl.id}
+            onPositive={this.handleAccept}
+            type={MyDialogType.ACCEPT_APPLICATION}
+            notEmpty={true}
+            count={0}
+            updateTextField={() => {}}
+          ></ConfirmActivity>
         ),
-        deny: <ConfirmDeny name={appl.studentId} myId={appl.id} onDeny={this.onDeny}></ConfirmDeny>
+        deny: (
+          <ConfirmActivity
+            name={appl.studentId}
+            id={appl.id}
+            onPositive={this.onDeny}
+            type={MyDialogType.DENY_APPLICATION}
+            count={0}
+            updateTextField={() => {}}
+            notEmpty={true}
+          ></ConfirmActivity>
+        )
       });
     });
     this._allItems.sort((a, b) => (a.title > b.title ? 1 : -1));
@@ -178,32 +191,32 @@ class AppliedStudents extends React.Component<{}, DetailsListState> {
     );
   }
 
-  public onDeny(myId: string, toggleHideDialog: any) {
+  public onDeny(id: string, toggleHideDialog: Function, updateTextField: Function) {
     toggleHideDialog();
     // a jelentkezés statászt be kell állítani - hogy? lekérem a jelentkezést? getApplianceById.action? + beállítom a státuszt + felküldöm?
     // denyAppliance.action? - ha van denyReason azt is beállítom? - emailt küldtem, még nincs válasz
     this.setState({
       ...this.state,
-      items: this.state.items.filter((item) => item.key !== myId),
+      items: this.state.items.filter((item) => item.key !== id),
       successOnDeny: true
     });
-    this._allItems = this._allItems.filter((item) => item.key !== myId);
+    this._allItems = this._allItems.filter((item) => item.key !== id);
     setTimeout(() => this.setState({ ...this.state, successOnDeny: false }), 4000);
   }
 
-  public handleAccept(key: string, toggleHideDialog: Function) {
+  public handleAccept(id: string, toggleHideDialog: Function, updateTextField: Function) {
     toggleHideDialog();
     this.setState({
       ...this.state,
-      items: this.state.items.filter((item) => item.key !== key),
+      items: this.state.items.filter((item) => item.key !== id),
       successOnAccept: true
     });
-    let title: string = this._allItems.filter((item) => item.key === key)[0].title;
-    let student: string = this._allItems.filter((item) => item.key === key)[0].name;
-    let semester: string = this._allItems.filter((item) => item.key === key)[0].semester;
-    this._allItems = this._allItems.filter((item) => item.key !== key);
+    let title: string = this._allItems.filter((item) => item.key === id)[0].title;
+    let student: string = this._allItems.filter((item) => item.key === id)[0].name;
+    let semester: string = this._allItems.filter((item) => item.key === id)[0].semester;
+    this._allItems = this._allItems.filter((item) => item.key !== id);
     // a key-t kell majd csak átadnom, az alapján lekéri majd a komponens
-    this.acceptedStudents.updateState(key, title, student, semester);
+    this.acceptedStudents.updateState(id, title, student, semester);
     setTimeout(() => this.setState({ ...this.state, successOnAccept: false }), 4000);
   }
 

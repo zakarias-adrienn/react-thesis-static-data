@@ -98,7 +98,7 @@ if (isTeacher) {
 
 function nth_ocurrence(str: string, needle: string, nth: number) {
   for (let i = 0; i < str.length; i++) {
-    if (str.charAt(i) == needle) {
+    if (str.charAt(i) === needle) {
       if (!--nth) {
         return i;
       }

@@ -8,7 +8,6 @@ import {
 import { Fabric } from "office-ui-fabric-react/lib/Fabric";
 import { mergeStyles } from "office-ui-fabric-react/lib/Styling";
 import { Text } from "office-ui-fabric-react/lib/Text";
-import ConfirmWithdraw from "./ConfirmWithdraw";
 import { Stack } from "office-ui-fabric-react";
 import { HoverCard, HoverCardType } from "office-ui-fabric-react/lib/HoverCard";
 import { mergeStyleSets } from "office-ui-fabric-react/lib/Styling";
@@ -24,8 +23,9 @@ import { ApplicationStatus } from "../model/application.model";
 import { convertSchoolSemesterToString } from "../helperFunctions";
 import { RouteComponentProps } from "react-router";
 import { withRouter } from "react-router-dom";
-import { exampleApplications as myApplications } from "../exampleData";
+import { exampleApplications as myApplications, exampleUsers } from "../exampleData";
 import { exampleTopics as topics } from "../exampleData";
+import ConfirmActivity, { MyDialogType } from "./ConfirmActivity";
 
 const exampleChildClass = mergeStyles({
   display: "block",
@@ -131,7 +131,7 @@ class StudentApplications extends React.Component<
       this._allItems.push({
         key: appl.id,
         title: topicToApplication.title,
-        teacher: topicToApplication.teacherId,
+        teacher: exampleUsers.filter((u) => u.id === topicToApplication.teacherId)[0].name,
         semester:
           topicToApplication.schoolSemester === null
             ? "tetszőleges"
@@ -154,11 +154,15 @@ class StudentApplications extends React.Component<
           </HoverCard>
         ),
         remove: (
-          <ConfirmWithdraw
-            myId={appl.id}
-            onWithdraw={this.onDelete}
+          <ConfirmActivity
+            id={appl.id}
+            onPositive={this.onDelete}
             name={topicToApplication.title}
-          ></ConfirmWithdraw>
+            type={MyDialogType.WITHDRAW_APPLICATION}
+            notEmpty={true}
+            count={0}
+            updateTextField={() => {}}
+          ></ConfirmActivity>
         )
       });
     });
@@ -220,7 +224,7 @@ class StudentApplications extends React.Component<
     };
   }
 
-  public onDelete(id: string, toggleHideDialog: Function) {
+  public onDelete(id: string, toggleHideDialog: Function, updateTextField: Function) {
     toggleHideDialog();
     this.setState({
       ...this.state,

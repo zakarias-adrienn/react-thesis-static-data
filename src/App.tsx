@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import "semantic-ui-css/semantic.min.css";
 import AzureAuthenticationButton from "./azure/azure-authentication-component";

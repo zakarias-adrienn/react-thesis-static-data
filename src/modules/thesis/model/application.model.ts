@@ -20,7 +20,7 @@ export const applicationStatusSchema = Joi.string()
   .required();
 
 export const applicationSchema = Joi.object({
-  id: Joi.string().required(),
+  // id: Joi.string().required(), - szerveroldal generálja
   studentId: Joi.string().required(),
   topicId: Joi.string().required(),
   status: applicationStatusSchema,

@@ -13,7 +13,7 @@ export type Practice = {
 };
 
 export const practiceSchema = Joi.object({
-  id: Joi.string().required(),
+  // id: Joi.string().required(), - szerveroldal generálja
   connectedTechnologyIds: Joi.array().items(Joi.string()),
   company: Joi.string().required(),
   contact: Joi.string().required(),
