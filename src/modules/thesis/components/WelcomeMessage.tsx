@@ -26,6 +26,17 @@ const deadlineText = (
       A HKR 77. § szerint a szakdolgozat témájának <b>módosítására</b> júniusi záróvizsga esetén{" "}
       <b>február 1-ig</b>, januári záróvizsga esetén <b>augusztus 31-ig</b> van lehetősége.
     </li>
+    <li>
+      Szakdolgozat és konzultációs lap leadásának határideje:
+      <ul>
+        <li>
+          tavaszi félév esetén: <b>május 15.</b>
+        </li>
+        <li>
+          őszi félév esetén: <b>december 15.</b>
+        </li>
+      </ul>
+    </li>
   </ol>
 );
 
@@ -184,6 +195,13 @@ const practiceText = (
           adnia a hallgatónak
         </li>
       </ul>
+    </p>
+    <p>
+      További információk a{" "}
+      <a href="https://www.inf.elte.hu/szakmaigyakorlat" target="_blank" rel="norefferer">
+        kari oldalon
+      </a>{" "}
+      olvashatóak.
     </p>
   </>
 );
