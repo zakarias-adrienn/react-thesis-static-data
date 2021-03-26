@@ -1,4 +1,4 @@
-import { Module } from "./module.type";
+import { Module } from "./types/module.type";
 
 export function registerModule(module: Module) {}
 

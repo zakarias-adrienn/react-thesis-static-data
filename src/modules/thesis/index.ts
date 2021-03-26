@@ -1,5 +1,4 @@
-import { Module } from "../../broker/module.type";
-import { subjectSchema } from "./model/subjects.model";
+import { Module } from "../../broker/types/module.type";
 import { technologiesSchema } from "./model/technologies.model";
 import { topicSchema } from "./model/topics.model";
 import { applicationSchema } from "./model/application.model";
@@ -29,22 +28,16 @@ import { modifyTechnologyActionSchema } from "./action/modifyTechnology.action";
 import { modifyTopicActionSchema } from "./action/modifyTopic.action";
 import { withdrawApplianceActionSchema } from "./action/withdrawAppliance.action";
 import Thesis from "./components/Thesis";
-import { departmentSchema, studentSchema, teacherSchema, userSchema } from "./model/user.model";
 import { practiceSchema } from "./model/practice.model";
 
 export const ThesisModule: Module = {
   root: Thesis,
-  // path: rootPath
+  //path: rootPath,
   model: [
-    studentSchema,
-    subjectSchema,
-    teacherSchema,
-    technologiesSchema,
-    topicSchema,
-    applicationSchema,
-    userSchema,
-    departmentSchema,
-    practiceSchema
+    { name: "Technology", schema: technologiesSchema },
+    { name: "Topic", schema: topicSchema },
+    { name: "Application", schema: applicationSchema },
+    { name: "Practice", schema: practiceSchema }
   ],
   settings: [
     themeSetting,

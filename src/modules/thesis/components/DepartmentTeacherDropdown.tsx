@@ -25,7 +25,6 @@ exampleDepartments.forEach((dep) => {
   });
   teachersToDepartments.set(dep.id, teacherNames);
 });
-// Prof. habil. <- ezek kiszűrése is esetleg?
 
 // STÍLUSOK
 const dropdownStyles: Partial<IDropdownStyles> = {

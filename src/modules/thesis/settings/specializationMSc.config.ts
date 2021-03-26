@@ -1,4 +1,4 @@
-import { ModuleSetting } from "../../../broker/module.type";
+import { ModuleSetting } from "../../../broker/types/module.type";
 
 // angol mesterik?
 export const specializationMScSetting: ModuleSetting = {
