@@ -242,6 +242,8 @@ class TechnologyTable extends React.Component<{}, IDetailsListBasicExampleState>
             )}
           </ScrollablePane>
         </div>
+        <br />
+        <br />
       </>
     );
   }

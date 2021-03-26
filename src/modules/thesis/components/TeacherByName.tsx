@@ -29,13 +29,24 @@ let testTags: ITag[] = exampleUsers
 
 testTags = testTags.sort((a, b) => (a.name > b.name ? 1 : -1));
 
+const listContainsTagList = (tag: ITag, tagList?: ITag[]) => {
+  if (!tagList || !tagList.length || tagList.length === 0) {
+    return false;
+  }
+  return tagList.some((compareTag) => compareTag.key === tag.key);
+};
+
 // érdekes folytatása
-const filterSelectedTags = (filterText: string): ITag[] => {
+const filterSelectedTags = (
+  filterText: string,
+  tagList: ITag[] | undefined
+): ITag[] | PromiseLike<ITag[]> => {
   return filterText
     ? testTags.filter(
         (tag) =>
-          tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0 ||
-          tag.name.toLowerCase().substring(4).indexOf(filterText.toLowerCase()) === 0
+          (tag.name.toLowerCase().indexOf(filterText.toLowerCase()) === 0 ||
+            tag.name.toLowerCase().substring(4).indexOf(filterText.toLowerCase()) === 0) &&
+          !listContainsTagList(tag, tagList)
       )
     : [];
 };
@@ -54,7 +65,10 @@ type Prop = {
 const TeacherByName: React.FunctionComponent<Prop> = (props) => {
   const getSelectedTeachers = (): ITag[] => {
     let result: ITag[] = [];
-    props.selectedTeacher.forEach((sT) => result.push({ key: sT, name: sT }));
+    // a key alapján kell a name-is
+    props.selectedTeacher.forEach((sT) =>
+      result.push({ key: sT, name: exampleUsers.filter((u) => u.id === sT)[0].name })
+    );
     return result;
   };
 

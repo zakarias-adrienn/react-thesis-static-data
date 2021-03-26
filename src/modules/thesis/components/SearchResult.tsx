@@ -272,6 +272,7 @@ class SearchResult extends React.Component<Prop, IDetailsListBasicExampleState> 
                 )}
               </ScrollablePane>
             </div>
+            <br />
           </>
         ) : (
           <SeeTheme

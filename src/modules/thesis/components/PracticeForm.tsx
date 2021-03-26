@@ -382,7 +382,7 @@ class PracticeForm extends React.Component<
                 }
               />
               <ComboBox
-                label="Technológiák"
+                label="Munka során használt technológiák"
                 placeholder="Válassza ki a kapcsolódó technológiákat..."
                 multiSelect
                 allowFreeform

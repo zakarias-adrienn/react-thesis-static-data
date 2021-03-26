@@ -439,18 +439,6 @@ class SearchPage extends React.Component<{}, State> {
                                   />
                                 </div>
                               </div>
-                              {/* <div className="ms-Grid-row" style={{ width: "95%" }}>
-                                <MessageBar
-                                  messageBarType={MessageBarType.warning}
-                                  isMultiline={false}
-                                  dismissButtonAriaLabel="Close"
-                                >
-                                  Kitöltés nélkül az aktuális félévre szóló és a tetszőleges
-                                  időtartamú témák jelenítődnek meg.
-                                </MessageBar>
-                                {/* Akkor is ha simán keresés? Ha nincs aktuális félévben téma?
-                              Honnan jön az aktuális félév? aktuális dátumból
-                              </div> */}
                               <br />
                             </>
                           )}
